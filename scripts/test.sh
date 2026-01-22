@@ -1,24 +1,22 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 # Rust Test Runner
 # Run unit tests, integration tests, and doc tests
 
 echo "🧪 Running Rust tests..."
 
-# Library tests
-echo "📚 Library tests:"
-cargo test --lib --message-format=short "$@"
-
-# Doc tests
-echo "📖 Documentation tests:"
-cargo test --doc --message-format=short "$@"
-
-# Integration tests (if any)
-if [ -d "tests" ]; then
-    echo "🔗 Integration tests:"
-    cargo test --test '*' --message-format=short "$@"
+# Get available CPU threads for parallel testing
+if command -v nproc &> /dev/null; then
+    THREADS=$(nproc)
+elif command -v sysctl &> /dev/null; then
+    THREADS=$(sysctl -n hw.ncpu)
+else
+    THREADS=4
 fi
 
-echo "✅ All tests passed!"
+# Run all tests in parallel
+echo "🚀 Running tests in parallel (${THREADS} threads)..."
+cargo test --workspace --all-targets -- --test-threads="$THREADS" "$@"
 
+echo "✅ All tests passed!"

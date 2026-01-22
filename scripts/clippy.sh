@@ -1,16 +1,10 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 # Rust Clippy Linter
 # Strict linting for code quality
 
 echo "🔎 Running clippy with strict warnings..."
-cargo clippy -- -D warnings "$@"
+cargo clippy --all-targets -- -D warnings "$@"
 
-if [ $? -eq 0 ]; then
-    echo "✅ Clippy passed with no warnings!"
-else
-    echo "❌ Clippy found issues!"
-    exit 1
-fi
-
+echo "✅ Clippy passed with no warnings!"

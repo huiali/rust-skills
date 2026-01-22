@@ -1,16 +1,10 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 # Rust Code Compilation Checker
 # Fast type checking without full compilation
 
 echo "🔍 Running cargo check..."
-cargo check --message-format=short "$@"
+cargo check --all-targets --message-format=short "$@"
 
-if [ $? -eq 0 ]; then
-    echo "✅ All checks passed!"
-else
-    echo "❌ Check failed!"
-    exit 1
-fi
-
+echo "✅ All checks passed!"

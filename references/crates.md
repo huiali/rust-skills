@@ -206,6 +206,8 @@ criterion = "0.5"       # Benchmarks
 | `rand` | Random numbers | Games, testing |
 | `fastrand` | Fast random | Performance critical |
 | `dashmap` | Concurrent HashMap | High-performance caching |
+| `parking_lot` | Faster mutex | Performance critical |
+| `ahash` | Fast HashMap | Hash-heavy workloads |
 
 ## Validation
 

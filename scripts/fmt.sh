@@ -1,15 +1,16 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 # Rust Code Formatter
 # Check and format code according to rustfmt
 
 echo "📐 Checking code format..."
-if cargo fmt --check "$@"; then
+
+# Check all targets (lib, bins, tests, examples)
+if cargo fmt --check --all-targets "$@"; then
     echo "✅ Code is properly formatted!"
 else
     echo "⚠️  Code needs formatting. Running formatter..."
-    cargo fmt "$@"
+    cargo fmt --all-targets "$@"
     echo "✅ Code formatted successfully!"
 fi
-

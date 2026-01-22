@@ -370,6 +370,99 @@ async fn read_with_timeout(
 | 4+ constructor params | Builder |
 | Async operations | Async trait methods |
 | Collections | Iterator trait |
+## Advanced Patterns
+
+### Sealed Trait Pattern
+
+防止外部 crate 实现你的 trait。
+
+```rust
+/// Sealed trait - cannot be implemented outside this crate
+pub trait MyTrait: private::Sealed {
+    fn do_something(&self);
+}
+
+// Sealed - only implementable within this crate
+mod private {
+    use super::*;
+
+    pub trait Sealed {}
+
+    // Implement for types
+    impl Sealed for u32 {}
+    impl Sealed for String {}
+}
+
+// Allow users to use the trait but not implement it
+pub use private::Sealed;
+```
+
+### Newtype Pattern
+
+在类型外层包装，提供类型安全。
+
+```rust
+// Newtype for type safety
+struct UserId(u64);
+struct SessionId(u64);
+
+fn delete_user(user_id: UserId) { /* ... */ }
+fn create_session(session_id: SessionId) { /* ... */ }
+
+// Compile-time safety: cannot mix them up
+let user_id = UserId(123);
+let session_id = SessionId(456);
+delete_user(session_id); // ❌ Compile error!
+```
+
+### State Machine Pattern
+
+用类型系统保证状态转换。
+
+```rust
+// State machine using types
+mod state {
+    pub trait State {}
+
+    #[derive(Debug)]
+    pub struct Draft;
+    #[derive(Debug)]
+    pub struct Published {
+        pub published_at: chrono::DateTime<Utc>,
+    }
+
+    impl State for Draft {}
+    impl State for Published {}
+}
+
+struct Document<S: state::State> {
+    title: String,
+    content: String,
+    _state: std::marker::PhantomData<S>,
+}
+
+impl Document<state::Draft> {
+    pub fn new(title: String) -> Self {
+        Self {
+            title,
+            content: String::new(),
+            _state: std::marker::PhantomData,
+        }
+    }
+
+    pub fn publish(self) -> Document<state::Published> {
+        Document {
+            title: self.title,
+            content: self.content,
+            _state: std::marker::PhantomData,
+        }
+    }
+}
+
+// Usage: Cannot call publish on already published document
+let draft = Document::new("My Doc".to_string());
+let published = draft.publish(); // State transitions to Published
+```
 
 ## Checklist
 
