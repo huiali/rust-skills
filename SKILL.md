@@ -163,13 +163,14 @@ Check code formatting.
 - references/testing.md - Testing strategies
 - references/best-practices.md - General best practices
 - references/crates.md - Recommended crates
+- references/modern-crates.md - Modern crates (2024-2025)
 - references/api-design.md - API design guidelines
 
 ---
 
-## Sub-Skills (25 Skills Available)
+## Sub-Skills (31 Skills Available)
 
-This skill includes 25 sub-skills for different Rust domains. Use specific triggers to invoke specialized knowledge.
+This skill includes 31 sub-skills for different Rust domains. Use specific triggers to invoke specialized knowledge.
 
 ### Core Skills (Daily Use)
 
@@ -177,71 +178,80 @@ This skill includes 25 sub-skills for different Rust domains. Use specific trigg
 |-------|-------------|----------|
 | **rust-skill** | Main Rust expert entry point | Rust, cargo, compile error |
 | **rust-ownership** | Ownership & lifetime | ownership, borrow, lifetime |
+| **rust-mutability** | Interior mutability | mut, Cell, RefCell, borrow |
 | **rust-concurrency** | Concurrency & async | thread, async, tokio |
 | **rust-error** | Error handling | Result, Error, panic |
+| **rust-error-advanced** | Advanced error handling | thiserror, anyhow, context |
 | **rust-coding** | Coding standards | style, naming, clippy |
-| **rust-resource** | Smart pointers | Box, Rc, Arc, RefCell, Cell |
 
 ### Advanced Skills (Deep Understanding)
 
 | Skill | Description | Triggers |
 |-------|-------------|----------|
-| **rust-unsafe** | Unsafe code & FFI (47 rules) | unsafe, FFI, raw pointer |
+| **rust-unsafe** | Unsafe code & FFI | unsafe, FFI, raw pointer |
 | **rust-anti-pattern** | Anti-patterns | anti-pattern, clone, unwrap |
-| **rust-performance** | Performance optimization | performance, benchmark |
+| **rust-performance** | Performance optimization | performance, benchmark, false sharing |
 | **rust-web** | Web development | web, axum, HTTP, API |
 | **rust-learner** | Learning & ecosystem | version, new feature |
-| **rust-zero-cost** | Zero-cost abstraction | generics, trait, monomorphization |
-| **rust-type-driven** | Type-driven design | newtype, type state, PhantomData |
+| **rust-ecosystem** | Crate selection | crate, library, framework |
 
 ### Expert Skills (Specialized)
 
 | Skill | Description | Triggers |
 |-------|-------------|----------|
-| **rust-ffi** | Cross-language interop | FFI, C, C++, bindgen, PyO3 |
+| **rust-ffi** | Cross-language interop | FFI, C, C++, bindgen, C++ exception |
 | **rust-pin** | Pin & self-referential | Pin, Unpin, self-referential |
 | **rust-macro** | Macros & proc-macro | macro, derive, proc-macro |
 | **rust-async** | Async patterns | Stream, backpressure, select |
+| **rust-async-pattern** | Advanced async | tokio::spawn, plugin |
 | **rust-const** | Const generics | const, generics, compile-time |
-| **rust-embedded** | Embedded & no_std | no_std, embedded, ISR |
-| **rust-performance-advanced** | Advanced performance | false sharing, cache line, NUMA |
+| **rust-embedded** | Embedded & no_std | no_std, embedded, ISR, WASM, RISC-V |
 | **rust-lifetime-complex** | Complex lifetimes | HRTB, GAT, 'static, dyn trait |
-| **rust-async-pattern** | Advanced async | Stream, tokio::spawn, plugin |
 | **rust-skill-index** | Skill index | skill, index, 技能列表 |
+| **rust-linear-type** | Linear types & resource mgmt | Destructible, RAII, linear semantics |
+| **rust-coroutine** | Coroutines & green threads | generator, suspend/resume, coroutine |
+| **rust-ebpf** | eBPF & kernel programming | eBPF, kernel module, map, tail call |
+| **rust-gpu** | GPU memory & computing | CUDA, GPU memory, compute shader |
 
 ### Problem-Based Lookup
 
 | Problem Type | Skills to Use |
 |--------------|---------------|
 | Compile errors (ownership/lifetime) | rust-ownership, rust-lifetime-complex |
-| Smart pointer choice | rust-resource |
-| Generics vs trait objects | rust-zero-cost |
-| Type design patterns | rust-type-driven |
+| Borrow checker conflicts | rust-mutability |
 | Send/Sync issues | rust-concurrency |
-| Performance bottlenecks | rust-performance, rust-performance-advanced |
+| Performance bottlenecks | rust-performance |
 | Async code issues | rust-concurrency, rust-async, rust-async-pattern |
-| Unsafe code review (47 rules) | rust-unsafe |
+| Unsafe code review | rust-unsafe |
+| FFI & C++ interop | rust-ffi |
+| Embedded/no_std | rust-embedded |
+| eBPF kernel programming | rust-ebpf |
+| GPU computing | rust-gpu |
 | Advanced type system | rust-lifetime-complex, rust-macro, rust-const |
-| System programming | rust-unsafe, rust-ffi, rust-embedded |
-| Coding standards (80 rules) | rust-coding |
+| Coding standards | rust-coding |
 
 ### Skill Collaboration
 
 ```
 rust-skill (main entry)
     │
-    ├─► rust-ownership ──► rust-concurrency ──► rust-async
-    │         │                     │
-    │         └─► rust-unsafe ──────┘
+    ├─► rust-ownership ──► rust-mutability ──► rust-concurrency ──► rust-async
+    │         │                     │                     │
+    │         └─► rust-unsafe ──────┘                     │
+    │                   │                                  │
+    │                   └─► rust-ffi ─────────────────────► rust-ebpf
+    │                             │                         │
+    │                             └────────────────────────► rust-gpu
     │
-    ├─► rust-error ──► rust-anti-pattern
+    ├─► rust-error ──► rust-error-advanced ──► rust-anti-pattern
     │
-    ├─► rust-coding ──► rust-performance ──► rust-performance-advanced
+    ├─► rust-coding ──► rust-performance
     │
-    └─► rust-learner ──► rust-web / rust-embedded
+    └─► rust-learner ──► rust-web / rust-ecosystem / rust-embedded
               │
               └─► rust-pin / rust-macro / rust-const
                         │
                         └─► rust-lifetime-complex / rust-async-pattern
+                                  │
+                                  └─► rust-coroutine
 ```
-
