@@ -1,271 +1,278 @@
-# Rust Skill 使用指南
+# Rust Skill User Guide
 
-> 如何在 AI 编程工具中使用 Rust Skill 系统
+> How to use the Rust Skill system in AI programming tools
+
+---
+[中文](./USER_GUIDE_zh.md) | [English](./USER_GUIDE.md)
 
 ---
 
-## 简介
+## Introduction
 
-Rust Skill 是一个 AI 专家技能系统，专为 Rust 编程设计。它将 Rust 知识拆分为 **35 个子技能**，覆盖从入门到专家的全部领域。
+Rust Skill is an AI expert skill system designed for Rust programming. It divides Rust knowledge into **35 sub-skills** covering all areas from beginner to expert.
 
-**核心价值**：让 AI 在回答 Rust 相关问题时，能够调用对应领域的专业知识，提供更精准的解答。
-
----
-
-## 支持的 AI 工具
-
-| 工具 | 支持情况 | 配置方式 |
-|-----|---------|---------|
-| **Cursor** | ✅ 原生支持 | MCP 配置 |
-| **Claude Code** | ✅ 支持 | MCP 配置 |
-| **GitHub Copilot** | ⚠️ 有限支持 | 手动参考 |
-| **其他 Agent** | ✅ 支持 | 直接引用 |
+**Core Value**: Enabling AI to invoke domain-specific expertise when answering Rust-related questions for more accurate responses.
 
 ---
 
-## 快速开始
+## Supported AI Tools
 
-### 方式一：Cursor + MCP（推荐）
+| Tool | Support | Configuration |
+|-----|---------|---------------|
+| **Cursor** | ✅ Native support | MCP configuration |
+| **Claude Code** | ✅ Supported | MCP configuration |
+| **GitHub Copilot** | ⚠️ Limited | Manual reference |
+| **Other Agents** | ✅ Supported | Direct reference |
 
-#### 1. 配置 Cursor Rules
+---
 
-在项目根目录创建 `.cursor/rules.md` 文件：
+## Quick Start
+
+### Method 1: Cursor + MCP (Recommended)
+
+#### 1. Configure Cursor Rules
+
+Create `.cursor/rules.md` in the project root:
 
 ```markdown
 # Rust Skill Rules
 
-当遇到 Rust 编程问题时，AI 应自动匹配对应技能：
-- 所有权/生命周期错误 → `rust-ownership`
-- 并发/异步 → `rust-concurrency`
-- 错误处理 → `rust-error`
+When encountering Rust programming problems, AI should automatically match skills:
+- Ownership/lifetime errors → `rust-ownership`
+- Concurrency/async → `rust-concurrency`
+- Error handling → `rust-error`
 - unsafe/FFI → `rust-unsafe`
-- 性能优化 → `rust-performance`
-- Redis 缓存 → `rust-cache`
-- JWT 认证 → `rust-auth`
-- 中间件 → `rust-middleware`
-- 策略引擎 → `rust-xacml`
+- Performance optimization → `rust-performance`
+- Redis caching → `rust-cache`
+- JWT authentication → `rust-auth`
+- Middleware → `rust-middleware`
+- Policy engine → `rust-xacml`
 
-技能定义：`skills/*/SKILL.md`
+Skill definitions: `skills/*/SKILL.md`
 ```
 
-#### 2. 配置 MCP
+#### 2. Configure MCP
 
-在项目根目录创建 `.cursor/mcp.json` 文件：
+Create `.cursor/mcp.json` in the project root:
 
 ```json
 {
   "mcpServers": {
     "rust-skill": {
       "command": "builtin",
-      "description": "Rust Skill 系统"
+      "description": "Rust Skill System"
     }
   }
 }
 ```
 
-> **配置说明**：
-> - `.cursor/rules.md` - Cursor 规则文件
-> - `.cursor/mcp.json` - MCP 配置文件
-> - `skills/` 和 `references/` - 项目核心内容，无需移动
+> **Configuration Notes**:
+> - `.cursor/rules.md` - Cursor rules file
+> - `.cursor/mcp.json` - MCP configuration file
+> - `skills/` and `references/` - Project core content, no need to move
 
-#### 3. 重启 Cursor
+#### 3. Restart Cursor
 
-配置完成后，Cursor 会自动加载技能系统。
+After configuration, Cursor will automatically load the skill system.
 
-#### 3. 使用技能
+#### 4. Use Skills
 
-直接在对话中描述问题，系统会自动路由到对应技能：
-
-```
-"如何修复 E0382 借用检查器错误？"
-→ 自动触发 rust-ownership
-
-"tokio::spawn 需要 'static 但我有借用数据"
-→ 自动触发 rust-concurrency
-
-"如何实现 Redis 缓存管理？"
-→ 自动触发 rust-cache
-```
-
----
-
-### 方式二：直接引用
-
-如果 AI 工具不支持 MCP，可以直接告诉它技能文件的位置：
+Describe problems directly in conversation, system will automatically route:
 
 ```
-请参考 D:/space/rust-skill/skills/ 目录下的技能文件，
-特别是 rust-ownership/SKILL.md 和 rust-concurrency/SKILL.md。
+"How do I fix E0382 borrow checker error?"
+→ Auto-triggers rust-ownership
+
+"tokio::spawn requires 'static but I have borrowed data"
+→ Auto-triggers rust-concurrency
+
+"How do I implement Redis caching?"
+→ Auto-triggers rust-cache
 ```
 
 ---
 
-## 技能触发方式
+### Method 2: Direct Reference
 
-### 自动触发
-
-描述问题时包含触发词，AI 会自动匹配对应技能：
-
-| 问题示例 | 触发技能 |
-|---------|---------|
-| "所有权转移后原变量还能用吗？" | rust-ownership |
-| "Cell 和 RefCell 有什么区别？" | rust-mutability |
-| "Mutex 和 RwLock 怎么选？" | rust-concurrency |
-| "Result 和 Option 怎么处理？" | rust-error |
-| "async Stream 怎么实现？" | rust-async |
-| "unsafe 代码要注意什么？" | rust-unsafe |
-| "如何调用 C++ 库？" | rust-ffi |
-| "no_std 环境怎么开发？" | rust-embedded |
-| "Redis 缓存怎么设计？" | rust-cache |
-| "JWT 认证怎么做？" | rust-auth |
-
-### 手动指定
-
-如果自动匹配不准确，可以明确指定技能：
+If AI tools don't support MCP, directly tell it the skill file location:
 
 ```
-请使用 rust-ownership 技能回答：
-" Rc 和 Arc 有什么区别？ "
+Please reference the skill files in D:/space/rust-skill/skills/ directory,
+especially rust-ownership/SKILL.md and rust-concurrency/SKILL.md.
 ```
 
 ---
 
-## 技能分类速查
+## Skill Trigger Methods
 
-### Core Skills（核心技能 - 日常必用）
+### Auto-Trigger
 
-| 技能 | 描述 | 适用场景 |
+Include trigger words in problem description, AI will automatically match:
+
+| Problem Example | Triggered Skill |
+|-----------------|-----------------|
+| "Can I use the original variable after ownership transfer?" | rust-ownership |
+| "What's the difference between Cell and RefCell?" | rust-mutability |
+| "How to choose between Mutex and RwLock?" | rust-concurrency |
+| "How to handle Result and Option?" | rust-error |
+| "How to implement async Stream?" | rust-async |
+| "What should I note in unsafe code?" | rust-unsafe |
+| "How to call C++ libraries?" | rust-ffi |
+| "How to develop in no_std environment?" | rust-embedded |
+| "How to design Redis caching?" | rust-cache |
+| "How to implement JWT authentication?" | rust-auth |
+
+### Manual Specification
+
+If auto-matching is inaccurate, explicitly specify skills:
+
+```
+Please use rust-ownership skill to answer:
+"What's the difference between Rc and Arc?"
+```
+
+---
+
+## Skill Categories Quick Reference
+
+### Core Skills (Daily Use)
+
+| Skill | Description | Use Case |
 |-----|------|---------|
-| rust-ownership | 所有权与生命周期 | 借用检查错误、内存安全 |
-| rust-mutability | 可变性深入 | Cell、RefCell 选择 |
-| rust-concurrency | 并发与异步 | 线程、通道、tokio |
-| rust-error | 错误处理 | Result、Option 处理 |
+| rust-ownership | Ownership & lifetime | Borrow checker errors, memory safety |
+| rust-mutability | Interior mutability | Cell, RefCell selection |
+| rust-concurrency | Concurrency & async | Threads, channels, tokio |
+| rust-error | Error handling | Result, Option handling |
 
-### Advanced Skills（进阶技能 - 深入理解）
+### Advanced Skills (Deep Understanding)
 
-| 技能 | 描述 | 适用场景 |
+| Skill | Description | Use Case |
 |-----|------|---------|
-| rust-unsafe | 不安全代码 | FFI、原始指针 |
-| rust-performance | 性能优化 | 基准测试、SIMD |
-| rust-web | Web 开发 | axum、API 设计 |
-| rust-cache | 缓存管理 | Redis、TTL 策略 |
-| rust-auth | 认证授权 | JWT、API Key |
-| rust-middleware | 中间件 | CORS、限流、日志 |
-| rust-xacml | 策略引擎 | RBAC、权限决策 |
+| rust-unsafe | Unsafe code | FFI, raw pointers |
+| rust-performance | Performance optimization | Benchmarks, SIMD |
+| rust-web | Web development | axum, API design |
+| rust-cache | Caching management | Redis, TTL strategies |
+| rust-auth | Authentication/Authorization | JWT, API Key |
+| rust-middleware | Middleware | CORS, rate limiting, logging |
+| rust-xacml | Policy engine | RBAC, permission decisions |
 
-### Expert Skills（专家技能 - 疑难杂症）
+### Expert Skills (Specialized)
 
-| 技能 | 描述 | 适用场景 |
+| Skill | Description | Use Case |
 |-----|------|---------|
-| rust-ffi | 跨语言互操作 | C/C++ 调用 |
-| rust-embedded | 嵌入式开发 | no_std、WASM |
-| rust-ebpf | 内核编程 | eBPF、Linux 内核 |
-| rust-gpu | GPU 计算 | CUDA、并行计算 |
+| rust-ffi | Cross-language interop | C/C++ calls |
+| rust-embedded | Embedded development | no_std, WASM |
+| rust-ebpf | Kernel programming | eBPF, Linux kernel |
+| rust-gpu | GPU computing | CUDA, parallel computing |
 
 ---
 
-## 使用示例
+## Usage Examples
 
-### 示例 1：修复编译错误
+### Example 1: Fix Compilation Errors
 
-**提问**：
+**Question**:
 ```
 error[E0382]: use of moved value: `value`
 ```
 
-**AI 自动响应**：
-→ 触发 rust-ownership 技能
-→ 解释所有权转移规则
-→ 提供解决方案（借用、克隆、Arc）
+**AI Auto Response**:
+→ Triggers rust-ownership skill
+→ Explains ownership transfer rules
+→ Provides solutions (borrowing, cloning, Arc)
 
-### 示例 2：性能优化
+### Example 2: Performance Optimization
 
-**提问**：
+**Question**:
 ```
-这个 HashMap 操作太慢了，怎么优化？
-```
-
-**AI 自动响应**：
-→ 触发 rust-performance 技能
-→ 分析数据结构选择
-→ 建议并行化、SIMD 优化
-
-### 示例 3：Web 开发
-
-**提问**：
-```
-用 axum 写一个 REST API，需要认证和限流
+This HashMap operation is too slow, how to optimize?
 ```
 
-**AI 自动响应**：
-→ 触发 rust-web + rust-auth + rust-middleware
-→ 提供完整代码模板
-→ 包含 JWT 认证、中间件配置
+**AI Auto Response**:
+→ Triggers rust-performance skill
+→ Analyzes data structure selection
+→ Suggests parallelization, SIMD optimization
+
+### Example 3: Web Development
+
+**Question**:
+```
+Write a REST API with axum, need authentication and rate limiting
+```
+
+**AI Auto Response**:
+→ Triggers rust-web + rust-auth + rust-middleware
+→ Provides complete code template
+→ Includes JWT authentication, middleware configuration
 
 ---
 
-## 项目结构
+## Project Structure
 
 ```
 rust-skill/
-├── .cursor/                  # Cursor 配置目录
-│   ├── mcp.json             # MCP 配置文件
-│   └── rules.md             # Cursor 规则文件
-├── skills/                  # 技能目录（35 个子技能）
-│   ├── rust-ownership/      # 所有权
-│   ├── rust-concurrency/    # 并发
-│   ├── rust-cache/          # 缓存
-│   ├── rust-auth/           # 认证
-│   ├── rust-middleware/     # 中间件
-│   ├── rust-xacml/          # 策略引擎
-│   └── ...                  # 更多技能
-├── references/              # 参考资料
-│   ├── best-practices/      # 最佳实践
-│   ├── core-concepts/       # 核心概念
-│   └── ecosystem/           # 生态 crate
-├── scripts/                 # 工具脚本
-├── USER_GUIDE.md            # 本使用指南
-├── SKILL.md                 # 主入口
-└── README.md                # 项目说明
+├── .cursor/                  # Cursor configuration directory
+│   ├── mcp.json             # MCP configuration file
+│   └── rules.md             # Cursor rules file
+├── skills/                  # Skills directory (35 sub-skills)
+│   ├── rust-ownership/      # Ownership
+│   ├── rust-concurrency/    # Concurrency
+│   ├── rust-cache/          # Caching
+│   ├── rust-auth/           # Authentication
+│   ├── rust-middleware/     # Middleware
+│   ├── rust-xacml/          # Policy engine
+│   └── ...                  # More skills
+├── references/              # Reference materials
+│   ├── best-practices/      # Best practices
+│   ├── core-concepts/       # Core concepts
+│   └── ecosystem/           # Ecosystem crates
+├── scripts/                 # Utility scripts
+├── USER_GUIDE.md            # This guide (English)
+├── USER_GUIDE_zh.md         # This guide (Chinese)
+├── SKILL.md                 # Main entry (English)
+├── SKILL_zh.md              # Main entry (Chinese)
+└── README.md                # Project documentation (English)
 ```
 
 ---
 
-## 常见问题
+## FAQ
 
-### Q1: AI 没有自动触发对应技能？
+### Q1: AI doesn't auto-trigger the corresponding skill?
 
-**A**: 尝试在问题中包含更多关键词，或直接指定技能：
+**A**: Try including more keywords in the question, or directly specify the skill:
 
 ```
-请使用 rust-ownership 回答：Rc<T> 和 Arc<T> 的区别？
+Please use rust-ownership to answer: What's the difference between Rc<T> and Arc<T>?
 ```
 
-### Q2: 技能内容太详细，看不完？
+### Q2: Skill content is too detailed to read?
 
-**A**: 每个技能都有清晰的层级结构，可以直接跳转到需要的部分：
+**A**: Each skill has a clear hierarchical structure, jump directly to needed section:
 
 ```markdown
-## 核心模式    ← 先看这个
-## 最佳实践    ← 然后看这个
-## 常见问题    ← 遇到问题时查这个
+## Core Patterns    ← Read this first
+## Best Practices    ← Then read this
+## FAQ    ← Check this when encountering problems
 ```
 
-### Q3: 需要添加新的技能？
+### Q3: Need to add new skills?
 
-**A**: 在 `skills/` 目录下创建新文件夹，添加 `SKILL.md` 文件即可。参考现有技能的格式。
+**A**: Create a new folder in `skills/` directory and add a `SKILL.md` file. Refer to existing skill formats.
 
 ---
 
-## 相关链接
+## Related Links
 
 - **GitHub**: https://github.com/huiali/rust-skills
-- **问题反馈**: https://github.com/huiali/rust-skills/issues
-- **贡献指南**: 欢迎提交 PR 添加新技能
+- **Issue Reporting**: https://github.com/huiali/rust-skills/issues
+- **Contribution Guide**: PRs welcome for new skills
 
 ---
 
-## 许可证
+## License
 
 MIT License - Copyright (c) 2026 李偏偏
+
+---
 

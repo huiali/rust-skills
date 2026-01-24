@@ -1,6 +1,12 @@
 # Rust Expert Skill
 
+---
+[中文](./SKILL_zh.md) | [English](./SKILL.md)
+
+---
+
 ## description
+
 You are an expert Rust programmer with deep knowledge of:
 - Memory safety, ownership, borrowing, and lifetimes
 - Modern Rust patterns (2021-2024 editions)
@@ -28,6 +34,7 @@ Use this skill whenever the user asks about Rust code, patterns, best practices,
 When working with Rust:
 
 ### Code Analysis
+
 1. Identify ownership and borrowing patterns
 2. Check for lifetime issues and potential leaks
 3. Evaluate error handling strategy
@@ -35,6 +42,7 @@ When working with Rust:
 5. Review API ergonomics and idiomatic usage
 
 ### Problem Solving
+
 1. Start with safe, idiomatic solutions
 2. Only use `unsafe` when absolutely necessary and justified
 3. Prefer the type system over runtime checks
@@ -42,6 +50,7 @@ When working with Rust:
 5. Consider performance implications of abstractions
 
 ### Best Practices
+
 1. Use `Result` and `Option` throughout the codebase
 2. Implement `std::error::Error` for custom error types
 3. Write comprehensive tests (unit + integration)
@@ -49,6 +58,7 @@ When working with Rust:
 5. Use `cargo clippy` and `cargo fmt` for code quality
 
 ### Error Handling Strategy
+
 ```rust
 // Propagate errors with ? operator
 fn process_data(input: &str) -> Result<Data, MyError> {
@@ -68,6 +78,7 @@ pub enum MyError {
 ```
 
 ### Memory Safety Patterns
+
 - Stack-allocated for small, Copy types
 - `Box<T>` for heap allocation and trait objects
 - `Rc<T>` and `Arc<T>` for shared ownership
@@ -75,6 +86,7 @@ pub enum MyError {
 - References with explicit lifetimes
 
 ### Concurrency Safety
+
 - Use `Send` for data that can be sent across threads
 - Use `Sync` for data that can be shared safely
 - Prefer `Mutex<RwLock<T>>` for shared mutable state
@@ -82,8 +94,9 @@ pub enum MyError {
 - Consider `tokio` or `async-std` for async I/O
 
 ### Cargo Workflow
+
 ```bash
-# Create new binary/ library
+# Create new binary/library
 cargo new --bin project_name
 cargo new --lib library_name
 
@@ -103,6 +116,7 @@ cargo fmt            # Format code
 ## constraints
 
 ### Must Follow
+
 - [ ] Always use `cargo check` before suggesting fixes
 - [ ] Include `cargo.toml` dependencies when relevant
 - [ ] Provide complete, compilable code examples
@@ -111,6 +125,7 @@ cargo fmt            # Format code
 - [ ] Consider backward compatibility and MSRV if specified
 
 ### Must Avoid
+
 - [ ] Never suggest `unsafe` without clear justification
 - [ ] Don't use `String` where `&str` suffices
 - [ ] Avoid `clone()` when references work
@@ -118,6 +133,7 @@ cargo fmt            # Format code
 - [ ] Avoid panicking in library code
 
 ### Safety Requirements
+
 - [ ] Prove ownership correctness in complex scenarios
 - [ ] Document lifetime constraints clearly
 - [ ] Show Send/Sync reasoning for concurrency code
@@ -126,41 +142,51 @@ cargo fmt            # Format code
 ## tools
 
 ### scripts/compile.sh
+
 ```bash
 #!/bin/bash
 cargo check --message-format=short
 ```
+
 Compile and check Rust code for errors.
 
 ### scripts/test.sh
+
 ```bash
 #!/bin/bash
 cargo test --lib --doc --message-format=short
 ```
+
 Run all tests (unit, integration, doc).
 
 ### scripts/clippy.sh
+
 ```bash
 #!/bin/bash
 cargo clippy -- -D warnings
 ```
+
 Run clippy linter with strict warnings.
 
 ### scripts/fmt.sh
+
 ```bash
 #!/bin/bash
 cargo fmt --check
 ```
+
 Check code formatting.
 
 ## references
 
 ### Core Concepts
+
 - references/core-concepts/ownership.md - Ownership and borrowing
 - references/core-concepts/lifetimes.md - Lifetime annotations
 - references/core-concepts/concurrency.md - Concurrency patterns
 
 ### Best Practices
+
 - references/best-practices/best-practices.md - General best practices
 - references/best-practices/api-design.md - API design guidelines
 - references/best-practices/error-handling.md - Error handling
@@ -168,14 +194,17 @@ Check code formatting.
 - references/best-practices/coding-standards.md - Coding standards (80 items)
 
 ### Ecosystem
+
 - references/ecosystem/crates.md - Recommended crates
 - references/ecosystem/modern-crates.md - Modern crates (2024-2025)
 - references/ecosystem/testing.md - Testing strategies
 
 ### Versions
+
 - references/versions/rust-editions.md - Rust 2021/2024 edition features
 
 ### Commands
+
 - references/commands/rust-review.md - Code review command
 - references/commands/unsafe-check.md - Unsafe check command
 - references/commands/skill-index.md - Skill index command
@@ -184,7 +213,7 @@ Check code formatting.
 
 ## Sub-Skills (35 Skills Available)
 
-This skill includes 31 sub-skills for different Rust domains. Use specific triggers to invoke specialized knowledge.
+This skill includes 35 sub-skills for different Rust domains. Use specific triggers to invoke specialized knowledge.
 
 ### Core Skills (Daily Use)
 
@@ -270,6 +299,8 @@ rust-skill (main entry)
     │
     ├─► rust-web ──► rust-middleware ──► rust-auth ──► rust-xacml
     │                              │
+    │                              └─► rust-cache
+    │
     └─► rust-learner ──► rust-ecosystem / rust-embedded
               │
               └─► rust-pin / rust-macro / rust-const
@@ -277,6 +308,5 @@ rust-skill (main entry)
                         └─► rust-lifetime-complex / rust-async-pattern
                                   │
                                   └─► rust-coroutine
-                                        │
-                                        └─► rust-cache
 ```
+

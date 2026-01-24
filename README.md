@@ -1,166 +1,169 @@
-# Rust Skill - Rust 专家技能系统
+# Rust Skill - Rust Expert Skill System
 
-> 基于 Cursor Agent 的 Rust 编程专家技能系统，包含 **35 个子技能**，覆盖 Rust 从入门到专家的全部领域。
-
----
-
-## 概述
-
-Rust Skill 是一个专为 Rust 编程设计的 AI 助手技能系统，提供从基础到专家的全方位编程指导。每个技能都针对特定领域进行深度定制，确保能够精准解决各类 Rust 问题。
-
-### 核心特性
-
-- **分层设计**：Core（核心）→ Advanced（进阶）→ Expert（专家）
-- **问题导向**：根据问题类型自动路由到合适技能
-- **实战导向**：提供可直接使用的代码模式和最佳实践
-- **持续更新**：定期补充新技能和完善现有内容
+> A Rust programming expert skill system for Cursor Agent, containing **35 sub-skills** covering Rust from beginner to expert level.
 
 ---
 
-## 技能结构
+[中文](./README_zh.md) | [English](./README.md)
+
+---
+
+## Overview
+
+Rust Skill is an AI assistant skill system designed specifically for Rust programming, providing comprehensive programming guidance from basics to expert level. Each skill is deeply customized for specific domains to ensure precise solutions for various Rust problems.
+
+### Core Features
+
+- **Layered Design**: Core → Advanced → Expert
+- **Problem-Oriented**: Automatic routing based on problem type
+- **Practice-Oriented**: Direct-to-use code patterns and best practices
+- **Continuously Updated**: Regular skill additions and improvements
+
+---
+
+## Skill Structure
 
 ```
 ┌─────────────────────────────────────────────────────┐
 │                   rust-skill                         │
-│                    (主入口技能)                       │
+│                    (Main Entry)                      │
 └─────────────────────────────────────────────────────┘
                           │
      ┌────────────────────┼────────────────────┐
      ↓                    ↓                    ↓
 ┌─────────┐         ┌─────────┐         ┌─────────┐
 │  Core   │         │Advanced │         │ Expert  │
-│  核心   │         │ 进阶    │         │ 专家    │
-│  7 个   │         │  10 个  │         │ 18 个   │
+│   7     │         │   10    │         │   18    │
 └─────────┘         └─────────┘         └─────────┘
 ```
 
 ---
 
-## 技能列表
+## Skill List
 
-### Core Skills（核心技能 - 日常必用）
+### Core Skills (Daily Use)
 
-| 技能 | 描述 | 触发词 |
+| Skill | Description | Triggers |
 |:-----|:-----|:-------|
-| **rust-skill** | Rust 专家主入口 | Rust, cargo, 编译错误 |
-| **rust-ownership** | 所有权与生命周期 | ownership, borrow, lifetime |
-| **rust-mutability** | 可变性深入 | mut, Cell, RefCell, borrow |
-| **rust-concurrency** | 并发与异步 | thread, async, tokio |
-| **rust-error** | 错误处理 | Result, Error, panic |
-| **rust-error-advanced** | 深入错误处理 | thiserror, anyhow, context |
-| **rust-coding** | 编码规范 | style, naming, clippy |
+| **rust-skill** | Main Rust expert entry point | Rust, cargo, compile error |
+| **rust-ownership** | Ownership & lifetime | ownership, borrow, lifetime |
+| **rust-mutability** | Interior mutability | mut, Cell, RefCell, borrow |
+| **rust-concurrency** | Concurrency & async | thread, async, tokio |
+| **rust-error** | Error handling | Result, Error, panic |
+| **rust-error-advanced** | Advanced error handling | thiserror, anyhow, context |
+| **rust-coding** | Coding standards | style, naming, clippy |
 
-### Advanced Skills（进阶技能 - 深入理解）
+### Advanced Skills (Deep Understanding)
 
-| 技能 | 描述 | 触发词 |
+| Skill | Description | Triggers |
 |:-----|:-----|:-------|
-| **rust-unsafe** | 不安全代码与 FFI | unsafe, FFI, raw pointer |
-| **rust-anti-pattern** | 反模式与常见错误 | anti-pattern, clone, unwrap |
-| **rust-performance** | 性能优化（含高级优化） | performance, benchmark, false sharing |
-| **rust-web** | Web 开发 | web, axum, HTTP, API |
-| **rust-learner** | 学习与生态追踪 | version, new feature |
-| **rust-ecosystem** | crate 选择 | crate, library, framework |
-| **rust-cache** | Redis 缓存 | cache, redis, TTL |
-| **rust-auth** | JWT 与 API Key 认证 | auth, jwt, token, api-key |
-| **rust-middleware** | 中间件模式 | middleware, cors, rate-limit |
-| **rust-xacml** | 策略引擎 | xacml, policy, rbac, permission |
+| **rust-unsafe** | Unsafe code & FFI | unsafe, FFI, raw pointer |
+| **rust-anti-pattern** | Anti-patterns | anti-pattern, clone, unwrap |
+| **rust-performance** | Performance optimization | performance, benchmark, false sharing |
+| **rust-web** | Web development | web, axum, HTTP, API |
+| **rust-learner** | Learning & ecosystem | version, new feature |
+| **rust-ecosystem** | Crate selection | crate, library, framework |
+| **rust-cache** | Redis caching | cache, redis, TTL |
+| **rust-auth** | JWT & API Key auth | auth, jwt, token, api-key |
+| **rust-middleware** | Middleware patterns | middleware, cors, rate-limit |
+| **rust-xacml** | Policy engine | xacml, policy, rbac, permission |
 
-### Expert Skills（专家技能 - 疑难杂症）
+### Expert Skills (Specialized)
 
-| 技能 | 描述 | 触发词 |
+| Skill | Description | Triggers |
 |:-----|:-----|:-------|
-| **rust-ffi** | 跨语言互操作 | FFI, C, C++, bindgen, C++ exception |
-| **rust-pin** | Pin 与自引用 | Pin, Unpin, self-referential |
-| **rust-macro** | 宏与过程元编程 | macro, derive, proc-macro |
-| **rust-async** | 异步模式 | Stream, backpressure, select |
-| **rust-async-pattern** | 高级异步模式 | tokio::spawn, 插件 |
+| **rust-ffi** | Cross-language interop | FFI, C, C++, bindgen, C++ exception |
+| **rust-pin** | Pin & self-referential | Pin, Unpin, self-referential |
+| **rust-macro** | Macros & proc-macro | macro, derive, proc-macro |
+| **rust-async** | Async patterns | Stream, backpressure, select |
+| **rust-async-pattern** | Advanced async | tokio::spawn, plugin |
 | **rust-const** | Const generics | const, generics, compile-time |
-| **rust-embedded** | 嵌入式与 no_std | no_std, embedded, ISR, WASM, RISC-V |
-| **rust-lifetime-complex** | 复杂生命周期 | HRTB, GAT, 'static, dyn |
-| **rust-skill-index** | 技能索引 | skill, index, 技能列表 |
-| **rust-linear-type** | 线性类型与资源管理 | Destructible, RAII, linear semantics |
-| **rust-coroutine** | 协程与绿色线程 | generator, suspend/resume, coroutine |
-| **rust-ebpf** | eBPF 与内核编程 | eBPF, kernel module, map, tail call |
-| **rust-gpu** | GPU 内存与计算 | CUDA, GPU memory, compute shader |
+| **rust-embedded** | Embedded & no_std | no_std, embedded, ISR, WASM, RISC-V |
+| **rust-lifetime-complex** | Complex lifetimes | HRTB, GAT, 'static, dyn |
+| **rust-skill-index** | Skill index | skill, index |
+| **rust-linear-type** | Linear types & resource mgmt | Destructible, RAII, linear semantics |
+| **rust-coroutine** | Coroutines & green threads | generator, suspend/resume, coroutine |
+| **rust-ebpf** | eBPF & kernel programming | eBPF, kernel module, map, tail call |
+| **rust-gpu** | GPU memory & computing | CUDA, GPU memory, compute shader |
 
 ---
 
-## 问题类型速查
+## Problem-Based Lookup
 
-### 编译错误
+### Compilation Errors
 
-| 问题类型 | 推荐技能 |
+| Problem Type | Recommended Skill |
 |:---------|:---------|
-| 所有权/生命周期错误 | `rust-ownership` |
-| 借用冲突/可变性 | `rust-mutability` |
-| Send/Sync 错误 | `rust-concurrency` |
-| HRTB/GAT 复杂生命周期 | `rust-lifetime-complex` |
-| 泛型/常量泛型错误 | `rust-const` |
+| Ownership/lifetime errors | `rust-ownership` |
+| Borrow conflicts/mutability | `rust-mutability` |
+| Send/Sync errors | `rust-concurrency` |
+| HRTB/GAT complex lifetimes | `rust-lifetime-complex` |
+| Generic/const generic errors | `rust-const` |
 
-### 性能问题
+### Performance Issues
 
-| 问题类型 | 推荐技能 |
+| Problem Type | Recommended Skill |
 |:---------|:---------|
-| 基础优化、基准测试 | `rust-performance` |
-| 伪共享/NUMA/锁竞争 | `rust-performance` |
-| 并发性能优化 | `rust-concurrency` |
+| Basic optimization, benchmarks | `rust-performance` |
+| False sharing/NUMA/lock contention | `rust-performance` |
+| Concurrency optimization | `rust-concurrency` |
 
-### 异步代码
+### Async Code
 
-| 问题类型 | 推荐技能 |
+| Problem Type | Recommended Skill |
 |:---------|:---------|
-| 基础 async/await | `rust-concurrency` |
+| Basic async/await | `rust-concurrency` |
 | Stream/select/backpressure | `rust-async` |
-| 高级模式/生命周期 | `rust-async-pattern` |
-| Future 与 Pin | `rust-pin` |
+| Advanced patterns/lifetimes | `rust-async-pattern` |
+| Future & Pin | `rust-pin` |
 
-### 错误处理
+### Error Handling
 
-| 问题类型 | 推荐技能 |
+| Problem Type | Recommended Skill |
 |:---------|:---------|
-| 基础 Result/Option | `rust-error` |
+| Basic Result/Option | `rust-error` |
 | thiserror/anyhow | `rust-error-advanced` |
 
-### 高级类型系统
+### Advanced Type System
 
-| 问题类型 | 推荐技能 |
+| Problem Type | Recommended Skill |
 |:---------|:---------|
 | HRTB/GAT/'static | `rust-lifetime-complex` |
-| 过程宏 | `rust-macro` |
+| Procedural macros | `rust-macro` |
 | Const generics | `rust-const` |
 
-### 基础设施
+### Infrastructure
 
-| 问题类型 | 推荐技能 |
+| Problem Type | Recommended Skill |
 |:---------|:---------|
-| 缓存策略 | `rust-cache` |
-| 认证授权 | `rust-auth`, `rust-xacml` |
-| Web 中间件 | `rust-middleware`, `rust-web` |
+| Caching strategies | `rust-cache` |
+| Authentication/Authorization | `rust-auth`, `rust-xacml` |
+| Web middleware | `rust-middleware`, `rust-web` |
 
-### 系统编程
+### Systems Programming
 
-| 问题类型 | 推荐技能 |
+| Problem Type | Recommended Skill |
 |:---------|:---------|
-| unsafe/内存操作 | `rust-unsafe` |
-| C/C++/Python 互操作 | `rust-ffi` |
-| C++ 异常处理 | `rust-ffi` |
-| no_std/WASM 开发 | `rust-embedded` |
-| RISC-V 嵌入式 | `rust-embedded` |
-| eBPF 内核编程 | `rust-ebpf` |
-| GPU 计算 | `rust-gpu` |
+| unsafe/memory operations | `rust-unsafe` |
+| C/C++/Python interop | `rust-ffi` |
+| C++ exception handling | `rust-ffi` |
+| no_std/WASM development | `rust-embedded` |
+| RISC-V embedded | `rust-embedded` |
+| eBPF kernel programming | `rust-ebpf` |
+| GPU computing | `rust-gpu` |
 
-### 库选择
+### Library Selection
 
-| 问题类型 | 推荐技能 |
+| Problem Type | Recommended Skill |
 |:---------|:---------|
-| crate 推荐 | `rust-ecosystem` |
+| Crate recommendations | `rust-ecosystem` |
 
 ---
 
-## 技能协作关系
+## Skill Collaboration
 
 ```
-rust-skill (主入口)
+rust-skill (main entry)
     │
     ├─► rust-ownership ──► rust-mutability ──► rust-concurrency ──► rust-async
     │         │                     │                     │
@@ -189,149 +192,133 @@ rust-skill (主入口)
 
 ---
 
-## 使用方法
+## Usage
 
-在 Cursor 中直接描述你的 Rust 问题，系统会自动路由到合适的子技能：
+Describe your Rust problem directly in Cursor, and the system will automatically route to the appropriate sub-skill:
 
 ```rust
-// 示例问题
+// Example questions
 "How do I fix E0382 borrow checker error?"
-"如何优化这个 HashMap 的性能？"
+"How do I optimize this HashMap performance?"
 "tokio::spawn requires 'static but I have borrowed data"
-"实现 Stream trait 时遇到生命周期问题"
-"如何选择合适的 Web 框架？"
-"Cell 和 RefCell 有什么区别？"
-"如何在 Rust 中调用 C++ 代码并处理异常？"
-"如何为 RISC-V 嵌入式开发编写 no_std 代码？"
+"I encountered lifetime issues when implementing Stream trait"
+"How do I choose the right Web framework?"
+"What's the difference between Cell and RefCell?"
+"How do I call C++ code from Rust and handle exceptions?"
+"How do I write no_std code for RISC-V embedded development?"
 ```
 
 ---
 
-## 开发规范
+## Development Guidelines
 
-### 代码分析
+### Code Analysis
 
-1. 识别所有权和借用模式
-2. 检查生命周期问题
-3. 评估错误处理策略
-4. 评估并发安全性 (Send/Sync)
-5. 审查 API ergonomics
+1. Identify ownership and borrowing patterns
+2. Check for lifetime issues
+3. Evaluate error handling strategies
+4. Assess concurrency safety (Send/Sync)
+5. Review API ergonomics
 
-### 问题解决
+### Problem Solving
 
-1. 从安全、惯用的解决方案开始
-2. 仅在绝对必要时使用 `unsafe`
-3. 优先使用类型系统而非运行时检查
-4. 适当使用生态 crates
-5. 考虑抽象的性能影响
+1. Start with safe, idiomatic solutions
+2. Only use `unsafe` when absolutely necessary
+3. Prefer type system over runtime checks
+4. Use ecosystem crates appropriately
+5. Consider performance implications
 
-### 最佳实践
+### Best Practices
 
-1. 始终使用 `Result` 和 `Option`
-2. 为自定义错误类型实现 `std::error::Error`
-3. 编写全面的测试（单元+集成）
-4. 使用 rustdoc 记录公共 API
-5. 使用 `cargo clippy` 和 `cargo fmt`
+1. Always use `Result` and `Option`
+2. Implement `std::error::Error` for custom errors
+3. Write comprehensive tests (unit + integration)
+4. Document public APIs with rustdoc
+5. Use `cargo clippy` and `cargo fmt`
 
 ---
 
-## 性能工具
+## Performance Tools
 
 ```bash
-# 类型检查
+# Type checking
 cargo check
 
-# 发布构建
+# Release build
 cargo build --release
 
-# 运行测试
+# Run tests
 cargo test --lib --doc
 
-# 代码检查
+# Code checking
 cargo clippy
 
-# 代码格式化
+# Code formatting
 cargo fmt
 ```
 
 ---
 
-## 项目结构
+## Project Structure
 
 ```
 rust-skill/
-├── SKILL.md                    # 主入口（包含所有子技能索引）
-├── README.md                   # 本文件
-├── LICENSE                     # MIT 许可证
+├── SKILL.md                    # Main entry (skill index)
+├── README.md                   # This file
+├── LICENSE                     # MIT License
+├── USER_GUIDE.md               # User guide for AI tools
 ├── scripts/
-│   ├── compile.sh              # 编译检查
-│   ├── test.sh                 # 运行测试
-│   ├── clippy.sh               # 代码检查
-│   └── fmt.sh                  # 格式化检查
-├── skills/                     # 子技能目录
-│   ├── rust-skill/             # Rust 主技能
-│   ├── rust-ownership/         # 所有权
-│   ├── rust-mutability/        # 可变性
-│   ├── rust-concurrency/       # 并发
-│   ├── rust-async/             # 异步
-│   ├── rust-async-pattern/     # 高级异步
-│   ├── rust-error/             # 错误处理
-│   ├── rust-error-advanced/    # 深入错误处理
-│   ├── rust-coding/            # 编码规范
-│   ├── rust-unsafe/            # 不安全代码
-│   ├── rust-anti-pattern/      # 反模式
-│   ├── rust-performance/       # 性能优化（含高级）
-│   ├── rust-web/               # Web 开发
-│   ├── rust-learner/           # 学习追踪
-│   ├── rust-ecosystem/         # 生态选择
-│   ├── rust-ffi/               # FFI（含 C++ 异常）
-│   ├── rust-pin/               # Pin
-│   ├── rust-macro/             # 宏
-│   ├── rust-const/             # Const generics
-│   ├── rust-embedded/          # 嵌入式（含 WASM/RISC-V）
-│   ├── rust-lifetime-complex/  # 复杂生命周期
-│   ├── rust-skill-index/       # 技能索引
-│   ├── rust-linear-type/       # 线性类型
-│   ├── rust-coroutine/         # 协程
-│   ├── rust-ebpf/              # eBPF
-│   ├── rust-gpu/               # GPU 计算
-│   ├── rust-cache/             # 缓存管理
-│   ├── rust-auth/              # 认证授权
-│   ├── rust-middleware/        # 中间件
-│   └── rust-xacml/             # 策略引擎
-└── references/                 # 参考资料
-    ├── core-concepts/          # 核心概念
-    │   ├── ownership.md         # 所有权
-    │   ├── lifetimes.md         # 生命周期
-    │   └── concurrency.md       # 并发
-    ├── best-practices/         # 最佳实践
-    │   ├── api-design.md        # API 设计
-    │   ├── best-practices.md    # 最佳实践
-    │   ├── error-handling.md    # 错误处理
-    │   ├── unsafe-rules.md      # Unsafe 规则（47条）
-    │   └── coding-standards.md  # 编码规范（80条）
-    ├── ecosystem/              # 生态
-    │   ├── crates.md            # 推荐 crate
-    │   ├── modern-crates.md     # 现代 crate
-    │   └── testing.md           # 测试
-    ├── versions/               # 版本
-    │   └── rust-editions.md     # Rust 版本
-    └── commands/               # 命令
-        ├── rust-review.md       # 代码审查
-        ├── unsafe-check.md      # Unsafe 检查
-        └── skill-index.md       # 技能索引
+│   ├── compile.sh              # Compile check
+│   ├── test.sh                 # Run tests
+│   ├── clippy.sh               # Code checking
+│   └── fmt.sh                  # Format check
+├── .cursor/                    # Cursor configuration
+│   ├── mcp.json                # MCP configuration
+│   └── rules.md                # Cursor rules
+└── skills/                     # Sub-skills directory
+    ├── rust-skill/             # Main skill
+    ├── rust-ownership/         # Ownership
+    ├── rust-mutability/        # Mutability
+    ├── rust-concurrency/       # Concurrency
+    ├── rust-async/             # Async
+    ├── rust-async-pattern/     # Advanced async
+    ├── rust-error/             # Error handling
+    ├── rust-error-advanced/    # Advanced error
+    ├── rust-coding/            # Coding standards
+    ├── rust-unsafe/            # Unsafe code
+    ├── rust-anti-pattern/      # Anti-patterns
+    ├── rust-performance/       # Performance
+    ├── rust-web/               # Web development
+    ├── rust-learner/           # Learning
+    ├── rust-ecosystem/         # Ecosystem
+    ├── rust-ffi/               # FFI
+    ├── rust-pin/               # Pin
+    ├── rust-macro/             # Macros
+    ├── rust-const/             # Const generics
+    ├── rust-embedded/          # Embedded
+    ├── rust-lifetime-complex/  # Complex lifetimes
+    ├── rust-skill-index/       # Skill index
+    ├── rust-linear-type/       # Linear types
+    ├── rust-coroutine/         # Coroutines
+    ├── rust-ebpf/              # eBPF
+    ├── rust-gpu/               # GPU computing
+    ├── rust-cache/             # Caching
+    ├── rust-auth/              # Authentication
+    ├── rust-middleware/        # Middleware
+    └── rust-xacml/             # Policy engine
 ```
 
 ---
 
-## 贡献
+## Contributing
 
-欢迎贡献新的技能或改进现有技能。
+Contributions for new skills or improvements are welcome.
 
 ---
 
-## 许可证
+## License
 
 MIT License - Copyright (c) 2026 李偏偏 <huiali@hotmail.com>
 
 ---
+
