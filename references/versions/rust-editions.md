@@ -18,7 +18,7 @@ for i in arr {
 ```rust
 // Default: Result<T, !> coerces to T
 fn get_value() -> Result<u32, !> {
-    Ok(42)
+    Ok(43)
 }
 let value: u32 = get_value();
 ```
