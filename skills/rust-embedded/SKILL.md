@@ -201,3 +201,235 @@ lto = true
 codegen-units = 1
 ```
 
+---
+
+## WebAssembly 多线程
+
+### SharedArrayBuffer
+
+```rust
+// 需要在服务器端配置 Cross-Origin-Opener-Policy
+// 浏览器才能使用 SharedArrayBuffer
+
+// wasm-bindgen 配置
+[dependencies]
+wasm-bindgen = { version = "0.2", features = ["enable-threads"] }
+
+// 使用 atomic 内存序
+use std::sync::atomic::{AtomicUsize, Ordering};
+
+static COUNTER: AtomicUsize = AtomicUsize::new(0);
+
+#[wasm_bindgen]
+pub fn increment_counter() -> usize {
+    COUNTER.fetch_add(1, Ordering::SeqCst)
+}
+
+#[wasm_bindgen]
+pub fn get_counter() -> usize {
+    COUNTER.load(Ordering::SeqCst)
+}
+```
+
+### Atomics 与内存序
+
+```rust
+use std::sync::atomic::{AtomicI32, Ordering};
+
+// 不同内存序的性能和可见性权衡
+#[wasm_bindgen]
+pub fn atomic_demo() {
+    let atom = AtomicI32::new(0);
+    
+    // 最强保证，最慢
+    atom.store(1, Ordering::SeqCst);
+    
+    // 释放语义（生产者）
+    atom.store(2, Ordering::Release);
+    
+    // 获取语义（消费者）
+    let val = atom.load(Ordering::Acquire);
+    
+    // 松散语义，最快，但可能 reordered
+    atom.store(3, Ordering::Relaxed);
+    let val = atom.load(Ordering::Relaxed);
+}
+```
+
+### 线程局部存储 (TLS)
+
+```rust
+// WASM 线程局部存储
+use std::cell::RefCell;
+
+thread_local! {
+    static THREAD_ID: RefCell<u32> = RefCell::new(0);
+}
+
+#[wasm_bindgen]
+pub fn set_thread_id(id: u32) {
+    THREAD_ID.with(|tid| {
+        *tid.borrow_mut() = id;
+    });
+}
+
+#[wasm_bindgen]
+pub fn get_thread_id() -> u32 {
+    THREAD_ID.with(|tid| *tid.borrow())
+}
+```
+
+---
+
+## RISC-V 嵌入式开发
+
+### 基础设置
+
+```rust
+// Cargo.toml
+[package]
+name = "riscv-firmware"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+riscv = "0.10"
+embedded-hal = "1.0"
+
+[profile.release]
+opt-level = "z"
+lto = true
+```
+
+### 中断与异常
+
+```rust
+// RISC-V 中断处理
+#![no_std]
+
+use riscv::register::{
+    mie::MIE,
+    mstatus::MSTATUS,
+    mip::MIP,
+};
+
+/// 启用机器中断
+pub fn enable_interrupt() {
+    // 启用外部中断、计时器中断、软件中断
+    unsafe {
+        MIE::set_mext();
+        MIE::set_mtimer();
+        MIE::set_msip();
+        
+        // 全局中断使能
+        MSTATUS::set_mie();
+    }
+}
+
+/// 禁用所有中断
+pub fn disable_interrupt() {
+    unsafe {
+        MSTATUS::clear_mie();
+    }
+}
+```
+
+### 内存屏障
+
+```rust
+// RISC-V 内存屏障
+use riscv::asm;
+
+/// 数据内存屏障 - 确保所有内存访问完成
+fn data_memory_barrier() {
+    unsafe {
+        asm!("fence iorw, iorw");
+    }
+}
+
+/// 指令屏障 - 确保指令流更新可见
+fn instruction_barrier() {
+    unsafe {
+        asm!("fence i, i");
+    }
+}
+```
+
+### 原子操作
+
+```rust
+// 使用 riscv::atomic 模块
+use riscv::asm::atomic;
+
+fn atomic_add(dst: &mut usize, val: usize) {
+    unsafe {
+        // 使用 amoadd.w 指令
+        atomic::amoadd(dst as *mut usize, val);
+    }
+}
+
+fn compare_and_swap(ptr: &mut usize, old: usize, new: usize) -> bool {
+    unsafe {
+        // 使用 amoswap.w 指令
+        let current = atomic::amoswap(ptr as *mut usize, new);
+        current == old
+    }
+}
+```
+
+### 多核同步
+
+```rust
+// RISC-V 机器间中断 (IPI)
+const M_SOFT_INT: *mut u32 = 0x3FF0_FFF0 as *mut u32;
+
+fn send_soft_interrupt(core_id: u32) {
+    unsafe {
+        // 设置软件中断位
+        M_SOFT_INT.write_volatile(1 << core_id);
+    }
+}
+
+fn clear_soft_interrupt(core_id: u32) {
+    unsafe {
+        M_SOFT_INT.write_volatile(0);
+    }
+}
+```
+
+### RISC-V 特权级
+
+```rust
+// RISC-V 特权级检查
+use riscv::register::{mstatus, misa};
+
+fn check_privilege_level() -> u8 {
+    // 读取当前特权级
+    // 0 = User, 1 = Supervisor, 2 = Hypervisor, 3 = Machine
+    (mstatus::read().bits() >> 11) & 0b11
+}
+
+fn is_machine_mode() -> bool {
+    check_privilege_level() == 3
+}
+
+/// 获取可用的 ISA 扩展
+fn get_isa_extensions() -> String {
+    let misa = misa::read();
+    format!("{:?}", misa)
+}
+```
+
+---
+
+## RISC-V 性能优化
+
+| 优化点 | 方法 |
+|-------|------|
+| 内存访问 | 使用非对齐访问指令（如果支持） |
+| 原子操作 | 使用 A 扩展指令 |
+| 乘除法 | 使用 M 扩展指令 |
+| 向量操作 | 使用 V 扩展（RV64V） |
+| 压缩指令 | 使用 C 扩展减少代码大小 |
+
+---
