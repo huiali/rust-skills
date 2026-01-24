@@ -1,0 +1,81 @@
+{
+  "description": "Rust Skill MCP 配置 - 提供 Rust 编程专家技能系统",
+  "mcpServers": {
+    "rust-skill": {
+      "command": "builtin",
+      "description": "Rust Skill 系统内置命令解析"
+    }
+  },
+  "resources": {
+    "skills": {
+      "description": "Rust 技能定义文件",
+      "path": "skills/"
+    },
+    "core-concepts": {
+      "description": "核心概念：所有权、生命周期、并发",
+      "path": "references/core-concepts/"
+    },
+    "best-practices": {
+      "description": "最佳实践：API 设计、编码规范、错误处理",
+      "path": "references/best-practices/"
+    },
+    "ecosystem": {
+      "description": "工具生态：Crate 推荐、测试策略",
+      "path": "references/ecosystem/"
+    },
+    "versions": {
+      "description": "版本信息：Rust Edition 特性",
+      "path": "references/versions/"
+    },
+    "commands": {
+      "description": "命令系统：代码审查、安全检查等",
+      "path": "references/commands/"
+    },
+    "scripts": {
+      "description": "脚本工具",
+      "path": "scripts/"
+    }
+  },
+  "tools": {
+    "rust-review": {
+      "description": "代码质量审查",
+      "command": "/rust-review",
+      "parameters": {}
+    },
+    "unsafe-check": {
+      "description": "Unsafe 代码安全检查",
+      "command": "/unsafe-check",
+      "parameters": {}
+    },
+    "skill-index": {
+      "description": "查询所有可用技能",
+      "command": "/skill-index",
+      "parameters": {}
+    },
+    "rust-features": {
+      "description": "查询 Rust 特性",
+      "command": "/rust-features",
+      "parameters": {}
+    },
+    "crate-info": {
+      "description": "获取 Crate 信息",
+      "command": "/crate-info",
+      "parameters": {}
+    },
+    "guideline": {
+      "description": "编码规范查询",
+      "command": "/guideline",
+      "parameters": {}
+    },
+    "audit": {
+      "description": "安全审计",
+      "command": "/audit",
+      "parameters": {}
+    },
+    "docs": {
+      "description": "文档查询",
+      "command": "/docs",
+      "parameters": {}
+    }
+  }
+}
