@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Skill Index"
+  short_description: "Quick directory for all Rust skills"
+  default_prompt: "Use $rust-skill-index to solve this Rust task with concrete code and checks."

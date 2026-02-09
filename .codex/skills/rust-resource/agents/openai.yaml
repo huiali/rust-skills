@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Resource"
+  short_description: "Resource ownership and lifecycle management"
+  default_prompt: "Use $rust-resource to solve this Rust task with concrete code and checks."

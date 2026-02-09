@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Embedded"
+  short_description: "Embedded and no_std development workflows"
+  default_prompt: "Use $rust-embedded to solve this Rust task with concrete code and checks."

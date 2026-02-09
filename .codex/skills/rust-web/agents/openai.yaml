@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Web"
+  short_description: "Rust web services and HTTP API design"
+  default_prompt: "Use $rust-web to solve this Rust task with concrete code and checks."

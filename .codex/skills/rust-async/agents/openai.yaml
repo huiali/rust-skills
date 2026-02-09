@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Async"
+  short_description: "Async patterns, streams, and backpressure handling"
+  default_prompt: "Use $rust-async to solve this Rust task with concrete code and checks."

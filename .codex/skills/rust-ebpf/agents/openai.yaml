@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust eBPF"
+  short_description: "eBPF development and kernel integration patterns"
+  default_prompt: "Use $rust-ebpf to solve this Rust task with concrete code and checks."

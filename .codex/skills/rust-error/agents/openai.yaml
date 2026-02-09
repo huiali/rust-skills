@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Error"
+  short_description: "Practical Result/Option error handling patterns"
+  default_prompt: "Use $rust-error to solve this Rust task with concrete code and checks."

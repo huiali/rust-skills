@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Type Driven"
+  short_description: "Type-driven design and compile-time guarantees"
+  default_prompt: "Use $rust-type-driven to solve this Rust task with concrete code and checks."

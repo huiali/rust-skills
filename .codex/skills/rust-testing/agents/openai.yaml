@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Testing"
+  short_description: "Testing strategy: unit, async, property, and concurrency"
+  default_prompt: "Use $rust-testing to solve this Rust task with concrete code and checks."

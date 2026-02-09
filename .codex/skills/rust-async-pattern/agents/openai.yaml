@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Async Pattern"
+  short_description: "Advanced async runtime and task orchestration"
+  default_prompt: "Use $rust-async-pattern to solve this Rust task with concrete code and checks."

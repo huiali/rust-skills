@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Unsafe"
+  short_description: "Unsafe Rust review and safety boundary design"
+  default_prompt: "Use $rust-unsafe to solve this Rust task with concrete code and checks."

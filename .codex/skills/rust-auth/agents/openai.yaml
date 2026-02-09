@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Auth"
+  short_description: "JWT and API-key authentication in Rust services"
+  default_prompt: "Use $rust-auth to solve this Rust task with concrete code and checks."

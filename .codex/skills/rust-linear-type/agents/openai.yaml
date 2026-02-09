@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Linear Type"
+  short_description: "Resource lifecycle and linear type semantics"
+  default_prompt: "Use $rust-linear-type to solve this Rust task with concrete code and checks."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Zero Cost"
+  short_description: "Zero-cost abstraction and allocation control"
+  default_prompt: "Use $rust-zero-cost to solve this Rust task with concrete code and checks."

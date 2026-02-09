@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Observability"
+  short_description: "Tracing, metrics, and production diagnostics"
+  default_prompt: "Use $rust-observability to solve this Rust task with concrete code and checks."
