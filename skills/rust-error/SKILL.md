@@ -1,38 +1,20 @@
 ---
 name: rust-error
-description: 'Error handling expert covering Result, Option, panic strategies, custom
-  error types with
-
-  thiserror/anyhow, error propagation patterns, and context-rich error chains.
-
-  '
+description: Error handling expert covering Result, Option, panic strategies, custom error types with thiserror/anyhow, error propagation patterns, and context-rich error chains.
 metadata:
   triggers:
-  - Result
-  - Error
-  - panic
-  - '?'
-  - unwrap
-  - expect
-  - anyhow
-  - thiserror
-  - error handling
-  - Option
+    - Result
+    - Error
+    - panic
+    - '?'
+    - unwrap
+    - expect
+    - anyhow
+    - thiserror
+    - error handling
+    - Option
 ---
 
-# Rust Error Handling Expert
-
-## Core Question
-
-**Is this failure expected or unexpected?**
-
-- Expected failure → use `Result<T, E>`
-- Absence is normal → use `Option<T>`
-- Bug / unrecoverable → `panic!`
-
-This simple heuristic guides 90% of error handling decisions.
-
----
 
 ## Solution Patterns
 
@@ -131,7 +113,6 @@ fn process_request() -> Result<Response> {
 
 **Trade-offs**: Loses type information, but gains flexibility and context.
 
----
 
 ## Workflow
 
@@ -174,7 +155,6 @@ Must handle here?
   → match / if let / unwrap_or
 ```
 
----
 
 ## Error Propagation Best Practices
 
@@ -226,7 +206,6 @@ Err(anyhow!("error"))  // Too vague
 let num: i32 = input.parse().expect("parse failed");  // User input!
 ```
 
----
 
 ## When to Panic
 
@@ -268,7 +247,6 @@ let response = reqwest::blocking::get(url).unwrap();  // Use Result
 let config = std::fs::read_to_string("config.json").unwrap();  // Use Result
 ```
 
----
 
 ## Error Type Design
 
@@ -310,7 +288,6 @@ pub enum AppError {
 }
 ```
 
----
 
 ## Common Pitfalls
 
@@ -323,7 +300,6 @@ pub enum AppError {
 | Panic for control flow | Abusing panic | Use normal control flow |
 | String errors | No pattern matching | Use typed errors |
 
----
 
 ## Quick Reference
 
@@ -337,7 +313,6 @@ pub enum AppError {
 | Fallback values | `.unwrap_or()` / `.unwrap_or_else()` | Safe defaults |
 | Early return | `?` operator | Propagate errors |
 
----
 
 ## Review Checklist
 
@@ -354,7 +329,6 @@ When reviewing error handling code:
 - [ ] No silent error swallowing (`let _ = ...`)
 - [ ] Tests cover error paths, not just happy paths
 
----
 
 ## Verification Commands
 
@@ -375,7 +349,6 @@ cargo clippy -- -D unused_must_use
 cargo check
 ```
 
----
 
 ## Conversion Patterns
 
@@ -410,7 +383,6 @@ result?;  // Auto-converts if From impl exists
 .context("operation failed")?;
 ```
 
----
 
 ## Advanced: Error Source Chains
 
@@ -433,7 +405,6 @@ if let Err(e) = dangerous_operation() {
 }
 ```
 
----
 
 ## Related Skills
 
@@ -443,7 +414,6 @@ if let Err(e) = dangerous_operation() {
 - **rust-web** - Error handling in web contexts
 - **rust-async** - Error handling in async code
 
----
 
 ## Localized Reference
 

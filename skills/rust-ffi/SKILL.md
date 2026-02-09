@@ -1,36 +1,22 @@
 ---
 name: rust-ffi
-description: 'FFI cross-language interop expert covering C/C++ bindings, bindgen,
-  cbindgen, PyO3,
-
-  JNI, memory layout, data conversion, and safe FFI patterns.
-
-  '
+description: FFI cross-language interop expert covering C/C++ bindings, bindgen, cbindgen, PyO3, JNI, memory layout, data conversion, and safe FFI patterns.
 metadata:
   triggers:
-  - FFI
-  - C interop
-  - C++ interop
-  - bindgen
-  - cbindgen
-  - PyO3
-  - JNI
-  - extern
-  - libc
-  - CString
-  - CStr
-  - cross-language
+    - FFI
+    - C interop
+    - C++ interop
+    - bindgen
+    - cbindgen
+    - PyO3
+    - JNI
+    - extern
+    - libc
+    - CString
+    - CStr
+    - cross-language
 ---
 
-# FFI Cross-Language Interop Expert
-
-## Core Question
-
-**How do you safely pass data between Rust and other languages?**
-
-FFI is dangerous. Any mistake can lead to undefined behavior.
-
----
 
 ## Binding Generation
 
@@ -51,7 +37,6 @@ bindgen input.h \
 cbindgen --crate mylib --output include/mylib.h
 ```
 
----
 
 ## Solution Patterns
 
@@ -157,7 +142,6 @@ impl RustWrapper {
 }
 ```
 
----
 
 ## Data Type Mapping
 
@@ -173,7 +157,6 @@ impl RustWrapper {
 | `NonNull<T>` | `T*` | Non-null pointer |
 | `Option<NonNull<T>>` | `T*` (nullable) | Nullable pointer |
 
----
 
 ## Error Handling
 
@@ -239,7 +222,6 @@ pub extern "C" fn safe_cpp_call(error_code: *mut i32) -> *const c_char {
 }
 ```
 
----
 
 ## Memory Management
 
@@ -268,7 +250,6 @@ pub extern "C" fn free_buffer(ptr: *mut u8, len: usize) {
 }
 ```
 
----
 
 ## Workflow
 
@@ -319,7 +300,6 @@ valgrind ./target/release/program
 cargo build --target x86_64-unknown-linux-gnu
 ```
 
----
 
 ## Language-Specific Tools
 
@@ -332,7 +312,6 @@ cargo build --target x86_64-unknown-linux-gnu
 | Go | **cgo** | Go bridge |
 | C++ | **cxx** | Safe C++ FFI |
 
----
 
 ## Common Pitfalls
 
@@ -345,7 +324,6 @@ cargo build --target x86_64-unknown-linux-gnu
 | Missing #[no_mangle] | Symbol not found | Explicit export |
 | Panic across FFI | UB | catch_unwind |
 
----
 
 ## Review Checklist
 
@@ -362,7 +340,6 @@ When reviewing FFI code:
 - [ ] Tested with Miri for UB detection
 - [ ] Documentation explains ownership protocol
 
----
 
 ## Verification Commands
 
@@ -383,7 +360,6 @@ cbindgen --lang c --output target/mylib.h
 nm target/release/libmylib.so | grep my_function
 ```
 
----
 
 ## Safety Guidelines
 
@@ -393,7 +369,6 @@ nm target/release/libmylib.so | grep my_function
 4. **Test coverage**: FFI bugs are extremely hard to debug
 5. **Use Miri**: Detect undefined behavior early
 
----
 
 ## Related Skills
 
@@ -403,7 +378,6 @@ nm target/release/libmylib.so | grep my_function
 - **rust-performance** - FFI overhead optimization
 - **rust-web** - Using FFI in web services
 
----
 
 ## Localized Reference
 

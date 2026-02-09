@@ -1,18 +1,8 @@
 ---
 name: rust-resource
-description: 智能指针与资源管理专家。处理 Box, Rc, Arc, Weak, RefCell, Cell, interior mutability,
-  RAII, Drop, 堆分配, 引用计数, 智能指针
+description: 智能指针与资源管理专家。处理 Box, Rc, Arc, Weak, RefCell, Cell, interior mutability, RAII, Drop, 堆分配, 引用计数, 智能指针--- # 智能指针与资源管理 ## 核心问题 **这个资源应该用什么方式管理？** 选择正确的智能指针是 Rust 编程的核心决策之一。
 ---
 
-# 智能指针与资源管理
-
-## 核心问题
-
-**这个资源应该用什么方式管理？**
-
-选择正确的智能指针是 Rust 编程的核心决策之一。
-
----
 
 ## 选择决策树
 
@@ -34,7 +24,6 @@ description: 智能指针与资源管理专家。处理 Box, Rc, Arc, Weak, RefC
                 └─ 只读？ → Arc<T>
 ```
 
----
 
 ## 智能指针对比
 
@@ -47,7 +36,6 @@ description: 智能指针与资源管理专家。处理 Box, Rc, Arc, Weak, RefC
 | `RefCell<T>` | 单 owner | No | 运行时借用检查 |
 | `Cell<T>` | 单 owner | No | Copy 类型的内部可变性 |
 
----
 
 ## 常见错误与解决方案
 
@@ -94,7 +82,6 @@ let shared = Rc::new(data);
 // 如果确定不需要跨线程共享，就不要用 Arc
 ```
 
----
 
 ## 内部可变性选择
 
@@ -115,7 +102,6 @@ struct SharedContainer {
 }
 ```
 
----
 
 ## RAII 与 Drop
 
@@ -143,7 +129,6 @@ impl Drop for Guard<'_> {
 }
 ```
 
----
 
 ## 性能提示
 
@@ -154,7 +139,6 @@ impl Drop for Guard<'_> {
 | 计数器 | 用 `AtomicU64` 而非 `Mutex<u64>` |
 | 缓存 | 考虑 `moka` 或 `cached` crate |
 
----
 
 ## 何时不用智能指针
 

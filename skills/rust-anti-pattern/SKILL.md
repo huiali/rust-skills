@@ -1,32 +1,18 @@
 ---
 name: rust-anti-pattern
-description: 'Rust anti-patterns and common mistakes expert. Handles code review issues
-  with clone abuse,
-
-  unwrap in production, String misuse, index loops, and refactoring guidance.
-
-  '
+description: Rust anti-patterns and common mistakes expert. Handles code review issues with clone abuse, unwrap in production, String misuse, index loops, and refactoring guidance.
 metadata:
   triggers:
-  - anti-pattern
-  - common mistake
-  - clone abuse
-  - unwrap
-  - code review
-  - code smell
-  - refactor
-  - bad pattern
+    - anti-pattern
+    - common mistake
+    - clone abuse
+    - unwrap
+    - code review
+    - code smell
+    - refactor
+    - bad pattern
 ---
 
-# Rust Anti-Patterns and Common Mistakes Expert
-
-## Core Question
-
-**Does this pattern hide a design problem?**
-
-Code that works doesn't mean code that's good. Anti-patterns are "works but shouldn't be used" patterns.
-
----
 
 ## Top 5 Beginner Mistakes
 
@@ -38,7 +24,6 @@ Code that works doesn't mean code that's good. Anti-patterns are "works but shou
 | 4 | Index-based loops | Use iterators `.iter()`, `.enumerate()` |
 | 5 | Fighting lifetimes | Redesign data structure |
 
----
 
 ## Common Anti-Patterns
 
@@ -125,7 +110,6 @@ let mut data: Vec<u8> = vec![0; size];
 // Vec handles memory management
 ```
 
----
 
 ## Solution Patterns
 
@@ -218,7 +202,6 @@ fn sum_even(nums: &[i32]) -> i32 {
 }
 ```
 
----
 
 ## Code Smell Quick Reference
 
@@ -231,7 +214,6 @@ fn sum_even(nums: &[i32]) -> i32 {
 | Long functions (>50 lines) | Too many responsibilities | Split responsibilities |
 | Huge enums | Missing abstraction | Trait + types |
 
----
 
 ## Outdated → Modern Patterns
 
@@ -244,7 +226,6 @@ fn sum_even(nums: &[i32]) -> i32 {
 | Custom linked list | `Vec` or `VecDeque` |
 | Manual unsafe cell | `Cell`, `RefCell` |
 
----
 
 ## Workflow
 
@@ -293,7 +274,6 @@ Refactor incrementally
 Test thoroughly
 ```
 
----
 
 ## Review Checklist
 
@@ -310,7 +290,6 @@ When reviewing code:
 - [ ] Error handling uses Result not panic
 - [ ] No premature optimization
 
----
 
 ## Verification Commands
 
@@ -330,7 +309,6 @@ cargo clippy -- -W clippy::cognitive_complexity
 rg "TODO|FIXME|XXX|HACK" --type rust
 ```
 
----
 
 ## Common Pitfalls
 
@@ -389,7 +367,6 @@ fn log_message(level: &str, msg: &str) {
 }
 ```
 
----
 
 ## Self-Check Questions
 
@@ -413,7 +390,6 @@ fn log_message(level: &str, msg: &str) {
 - Reference other Rust codebases
 - Check std library APIs
 
----
 
 ## Related Skills
 
@@ -423,7 +399,6 @@ fn log_message(level: &str, msg: &str) {
 - **rust-performance** - When optimization matters
 - **rust-refactoring** - Systematic code improvement
 
----
 
 ## Localized Reference
 

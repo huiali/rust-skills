@@ -1,7 +1,6 @@
 ---
 name: rust-observability
-description: "Rust observability skill for tracing, metrics, structured logging, OpenTelemetry pipelines, and production incident diagnostics."
----
+description: "Rust observability skill for tracing, metrics, structured logging, OpenTelemetry pipelines, and production incident diagnostics."---
 
 # Rust Observability Skill
 

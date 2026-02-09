@@ -1,32 +1,18 @@
 ---
 name: rust-pin
-description: 'Pin and self-referential types expert covering Pin, Unpin, Future, async
-  state machines,
-
-  pinning projection, and memory stability guarantees.
-
-  '
+description: Pin and self-referential types expert covering Pin, Unpin, Future, async state machines, pinning projection, and memory stability guarantees.
 metadata:
   triggers:
-  - Pin
-  - Unpin
-  - self-referential
-  - Future
-  - async
-  - Generator
-  - pinning
-  - memory stability
+    - Pin
+    - Unpin
+    - self-referential
+    - Future
+    - async
+    - Generator
+    - pinning
+    - memory stability
 ---
 
-# Pin and Self-Referential Types Expert
-
-## Core Question
-
-**How do you guarantee pointer stability in async or self-referential structures?**
-
-Pin ensures certain types won't move in memory.
-
----
 
 ## When Pin is Needed
 
@@ -64,7 +50,6 @@ struct Node {
 }
 ```
 
----
 
 ## Solution Patterns
 
@@ -163,7 +148,6 @@ async fn process_data() {
 // Compiler ensures state doesn't move by pinning the Future
 ```
 
----
 
 ## Pin Types
 
@@ -174,7 +158,6 @@ async fn process_data() {
 | `Pin<Box<T>>` | Owned on heap | `Pin<Box<Foo>>` |
 | `Pin<Arc<T>>` | Shared ownership | `Pin<Arc<Foo>>` |
 
----
 
 ## Unpin Marker Trait
 
@@ -198,7 +181,6 @@ struct NotUnpin {
 }
 ```
 
----
 
 ## Workflow
 
@@ -243,7 +225,6 @@ Projecting to field:
   → Use pin-project crate for safety
 ```
 
----
 
 ## Common Use Cases
 
@@ -256,7 +237,6 @@ Projecting to field:
 | Stack variables | ❌ No |
 | No self-references | ❌ No |
 
----
 
 ## Review Checklist
 
@@ -271,7 +251,6 @@ When working with Pin:
 - [ ] Drop implementation respects pinning
 - [ ] Documentation explains why pinned
 
----
 
 ## Verification Commands
 
@@ -286,7 +265,6 @@ cargo expand --lib my_async_fn
 cargo +nightly miri test
 ```
 
----
 
 ## Common Pitfalls
 
@@ -340,7 +318,6 @@ impl<T: Unpin> Wrapper<T> {
 }
 ```
 
----
 
 ## Related Skills
 
@@ -350,7 +327,6 @@ impl<T: Unpin> Wrapper<T> {
 - **rust-type-driven** - PhantomPinned and marker types
 - **rust-performance** - Zero-cost abstractions with Pin
 
----
 
 ## Localized Reference
 

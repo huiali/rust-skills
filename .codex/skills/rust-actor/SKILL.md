@@ -1,33 +1,19 @@
 ---
 name: rust-actor
-description: 'Actor model expert covering message passing, state isolation, supervision
-  trees, deadlock prevention,
-
-  fault tolerance, Actix framework, and Erlang-style concurrency patterns.
-
-  '
+description: Actor model expert covering message passing, state isolation, supervision trees, deadlock prevention, fault tolerance, Actix framework, and Erlang-style concurrency patterns.
 metadata:
   triggers:
-  - actor
-  - actor model
-  - message passing
-  - supervision
-  - Actix
-  - mailbox
-  - actor system
-  - fault tolerance
-  - supervision tree
+    - actor
+    - actor model
+    - message passing
+    - supervision
+    - Actix
+    - mailbox
+    - actor system
+    - fault tolerance
+    - supervision tree
 ---
 
-# Actor Model Expert
-
-## Core Question
-
-**How do you avoid deadlocks and implement reliable process communication in concurrent systems?**
-
-The Actor model simplifies concurrency through message passing and state isolation, avoiding shared memory and locks.
-
----
 
 ## Solution Patterns
 
@@ -388,7 +374,6 @@ impl LifecycleHandler for DatabaseActor {
 }
 ```
 
----
 
 ## Actor vs Thread Model
 
@@ -401,7 +386,6 @@ impl LifecycleHandler for DatabaseActor {
 | Debugging | Hard (race conditions) | Easier (message sequence) |
 | Memory | Shared | Isolated per actor |
 
----
 
 ## Workflow
 
@@ -439,7 +423,6 @@ Restart policy:
   → Transient: Restart on errors only
 ```
 
----
 
 ## Review Checklist
 
@@ -456,7 +439,6 @@ When implementing actor systems:
 - [ ] Monitoring tracks mailbox size and message latency
 - [ ] Backpressure handled when mailbox is full
 
----
 
 ## Verification Commands
 
@@ -477,7 +459,6 @@ cargo run --release --bin load_test
 RUST_LOG=debug cargo run
 ```
 
----
 
 ## Common Pitfalls
 
@@ -556,7 +537,6 @@ impl Actor for MyActor {
 }
 ```
 
----
 
 ## Actix Framework Example
 
@@ -601,7 +581,6 @@ async fn main() {
 }
 ```
 
----
 
 ## Related Skills
 
@@ -611,7 +590,6 @@ async fn main() {
 - **rust-channel** - Channel-based communication
 - **rust-performance** - Actor system optimization
 
----
 
 ## Localized Reference
 

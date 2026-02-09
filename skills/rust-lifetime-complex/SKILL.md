@@ -1,28 +1,8 @@
 ---
 name: rust-lifetime-complex
-description: |
-  Advanced lifetime expert covering HRTB, GAT, 'static bounds, trait object constraints,
-  type system conflicts, and lifetime elision edge cases.
-triggers:
-  - lifetime
-  - HRTB
-  - GAT
-  - higher-ranked
-  - 'static
-  - trait object
-  - one type is more general
-  - lifetime conflict
+description: Advanced lifetime expert covering HRTB, GAT, 'static bounds, trait object constraints, type system conflicts, and lifetime elision edge cases.triggers: - lifetime - HRTB - GAT - higher-ranked - 'static - trait object - one type is more general - lifetime conflict--- # Advanced Lifetime and Type System Expert ## Core Question **Why won't this type conversion compile?** The type system's boundaries are often surprising.
 ---
 
-# Advanced Lifetime and Type System Expert
-
-## Core Question
-
-**Why won't this type conversion compile?**
-
-The type system's boundaries are often surprising.
-
----
 
 ## Solution Patterns
 
@@ -168,7 +148,6 @@ async fn good_async_scope() {
 }
 ```
 
----
 
 ## Common Conflict Patterns
 
@@ -180,7 +159,6 @@ async fn good_async_scope() {
 | Async + borrow | Future holds state across await | Clone or drop before await |
 | Closure capture + Send | Lifetime issues | Use 'static or Arc |
 
----
 
 ## When to Give Up Borrowing
 
@@ -212,7 +190,6 @@ fn should_use_owned() -> bool {
 3. **Performance hotspot**: Profile first, then optimize
 4. **High complexity**: Fall back to owned
 
----
 
 ## Workflow
 
@@ -247,7 +224,6 @@ Check:
   → Maintainable long-term
 ```
 
----
 
 ## Debugging Techniques
 
@@ -277,7 +253,6 @@ fn explicit<'a, 'b>(x: &'a str, y: &'b str) -> &'a str {
 // Complexity has limits
 ```
 
----
 
 ## Review Checklist
 
@@ -292,7 +267,6 @@ When dealing with complex lifetimes:
 - [ ] Considered owned data alternative
 - [ ] Design simplification explored first
 
----
 
 ## Verification Commands
 
@@ -307,7 +281,6 @@ cargo expand
 cargo clippy
 ```
 
----
 
 ## Related Skills
 
@@ -317,7 +290,6 @@ cargo clippy
 - **rust-trait** - Trait object constraints
 - **rust-performance** - When to optimize with borrowing
 
----
 
 ## Localized Reference
 

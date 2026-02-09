@@ -1,39 +1,25 @@
 ---
 name: rust-concurrency
-description: 'Concurrency and async programming expert. Handles Send, Sync, threads,
-  async/await, tokio,
-
-  channels, Mutex, RwLock, deadlock prevention, and race condition debugging.
-
-  '
+description: Concurrency and async programming expert. Handles Send, Sync, threads, async/await, tokio, channels, Mutex, RwLock, deadlock prevention, and race condition debugging.
 metadata:
   triggers:
-  - thread
-  - spawn
-  - channel
-  - mpsc
-  - Mutex
-  - RwLock
-  - Atomic
-  - async
-  - await
-  - Future
-  - tokio
-  - deadlock
-  - race condition
-  - Send
-  - Sync
+    - thread
+    - spawn
+    - channel
+    - mpsc
+    - Mutex
+    - RwLock
+    - Atomic
+    - async
+    - await
+    - Future
+    - tokio
+    - deadlock
+    - race condition
+    - Send
+    - Sync
 ---
 
-# Concurrency & Async Programming Expert
-
-## Core Question
-
-**How can data be safely shared and passed between threads?**
-
-This is the essence of concurrency. Rust's type system shines brightest here, preventing data races at compile time.
-
----
 
 ## Concurrency vs Async
 
@@ -46,7 +32,6 @@ This is the essence of concurrency. Rust's type system shines brightest here, pr
 
 **Key Insight**: Threads for parallelism, async for concurrency.
 
----
 
 ## Send/Sync Quick Reference
 
@@ -71,7 +56,6 @@ MutexGuard → NOT Sync (intentionally)
 
 **Rule**: `&T` is Send if `T` is Sync.
 
----
 
 ## Solution Patterns
 
@@ -139,7 +123,6 @@ async fn main() {
 
 **Trade-offs**: Requires async runtime, function coloring.
 
----
 
 ## Workflow
 
@@ -185,7 +168,6 @@ Test for data races
   → Use miri, loom, or thread sanitizers
 ```
 
----
 
 ## Common Errors & Solutions
 
@@ -197,7 +179,6 @@ Test for data races
 | MutexGuard across await | Lock held while suspended | Scope lock before await point |
 | Data race (runtime) | Improper synchronization | Use proper sync primitives |
 
----
 
 ## Deadlock Prevention
 
@@ -241,7 +222,6 @@ let value = {
 async_call().await;
 ```
 
----
 
 ## Performance Considerations
 
@@ -253,7 +233,6 @@ async_call().await;
 | Message passing | Avoid shared state | Copy/move overhead |
 | Lock-free structures | High contention | Complex, use crates (crossbeam) |
 
----
 
 ## Async-Specific Patterns
 
@@ -304,7 +283,6 @@ match timeout(Duration::from_secs(5), long_operation()).await {
 }
 ```
 
----
 
 ## Review Checklist
 
@@ -321,7 +299,6 @@ When reviewing concurrent code:
 - [ ] Error handling for lock poisoning
 - [ ] Graceful shutdown and resource cleanup
 
----
 
 ## Verification Commands
 
@@ -342,7 +319,6 @@ cargo test --features loom
 cargo clippy -- -W clippy::mutex_atomic
 ```
 
----
 
 ## Common Pitfalls
 
@@ -398,7 +374,6 @@ thread::spawn(move || { /* data_clone moved */ });
 // data still available
 ```
 
----
 
 ## Related Skills
 
@@ -409,7 +384,6 @@ thread::spawn(move || { /* data_clone moved */ });
 - **rust-performance** - Concurrency performance optimization
 - **rust-unsafe** - Writing safe concurrent abstractions
 
----
 
 ## Localized Reference
 

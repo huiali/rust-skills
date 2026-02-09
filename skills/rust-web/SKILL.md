@@ -1,35 +1,20 @@
 ---
 name: rust-web
-description: 'Rust web development expert covering HTTP frameworks (axum, actix),
-  REST API design, handler
-
-  patterns, state management, middleware, database integration, and domain-driven
-  architecture.
-
-  '
+description: Rust web development expert covering HTTP frameworks (axum, actix), REST API design, handler patterns, state management, middleware, database integration, and domain-driven architecture.
 metadata:
   triggers:
-  - web
-  - HTTP
-  - REST
-  - API
-  - axum
-  - actix
-  - handler
-  - router
-  - middleware
-  - endpoint
+    - web
+    - HTTP
+    - REST
+    - API
+    - axum
+    - actix
+    - handler
+    - router
+    - middleware
+    - endpoint
 ---
 
-# Rust Web Development Expert
-
-## Core Question
-
-**How do we build reliable, performant web services in Rust?**
-
-Choose the right framework, design clean handlers, manage state safely, and structure code for maintainability.
-
----
 
 ## Framework Selection
 
@@ -42,7 +27,6 @@ Choose the right framework, design clean handlers, manage state safely, and stru
 
 **Recommendation**: Start with **axum** for most projects. It has excellent ergonomics, strong ecosystem integration, and active development.
 
----
 
 ## Solution Patterns
 
@@ -195,7 +179,6 @@ impl IntoResponse for ApiError {
 
 **When to use**: Custom error types for domain-specific failures.
 
----
 
 ## Workflow
 
@@ -242,7 +225,6 @@ Rate limiting → tower::limit
 Authentication → custom middleware
 ```
 
----
 
 ## Middleware Patterns
 
@@ -309,7 +291,6 @@ async fn auth_middleware(
 }
 ```
 
----
 
 ## Database Integration
 
@@ -369,7 +350,6 @@ async fn create_user_with_profile(
 }
 ```
 
----
 
 ## Best Practices
 
@@ -385,7 +365,6 @@ async fn create_user_with_profile(
 | Request validation | `validator` crate with #[validate] |
 | Graceful shutdown | `tokio::signal` for SIGTERM handling |
 
----
 
 ## Common Pitfalls
 
@@ -398,7 +377,6 @@ async fn create_user_with_profile(
 | Missing CORS headers | Browser blocks requests | Add `CorsLayer` |
 | Synchronous blocking | Blocks executor | Use `spawn_blocking` for CPU work |
 
----
 
 ## Domain-Driven Project Structure
 
@@ -469,7 +447,6 @@ src/
 - `repo.rs` - Repository implementations (database, cache)
 - `errors.rs` - Domain-specific error types
 
----
 
 ## Review Checklist
 
@@ -488,7 +465,6 @@ When reviewing web service code:
 - [ ] Logging/tracing properly instrumented
 - [ ] Graceful shutdown implemented
 
----
 
 ## Verification Commands
 
@@ -515,7 +491,6 @@ cargo build --release
 DATABASE_URL=postgres://localhost cargo run
 ```
 
----
 
 ## Performance Optimization
 
@@ -559,7 +534,6 @@ async fn cached_handler() -> (HeaderMap, Json<Data>) {
 }
 ```
 
----
 
 ## Related Skills
 
@@ -571,7 +545,6 @@ async fn cached_handler() -> (HeaderMap, Json<Data>) {
 - **rust-middleware** - Middleware patterns
 - **rust-observability** - Logging and metrics
 
----
 
 ## Localized Reference
 

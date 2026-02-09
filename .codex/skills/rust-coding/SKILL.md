@@ -1,34 +1,20 @@
 ---
 name: rust-coding
-description: 'Rust coding conventions expert covering naming, formatting, comments,
-  clippy, rustfmt,
-
-  lints, code style, best practices, and idiomatic patterns.
-
-  '
+description: Rust coding conventions expert covering naming, formatting, comments, clippy, rustfmt, lints, code style, best practices, and idiomatic patterns.
 metadata:
   triggers:
-  - coding convention
-  - naming
-  - formatting
-  - clippy
-  - rustfmt
-  - lint
-  - code style
-  - best practice
-  - idiomatic
-  - code review
+    - coding convention
+    - naming
+    - formatting
+    - clippy
+    - rustfmt
+    - lint
+    - code style
+    - best practice
+    - idiomatic
+    - code review
 ---
 
-# Rust Coding Conventions Expert
-
-## Core Question
-
-**What makes Rust code "idiomatic"?**
-
-Follow community conventions to make code readable and maintainable.
-
----
 
 ## Naming Conventions (Rust-Specific)
 
@@ -56,7 +42,6 @@ const MAX_CONNECTIONS: usize = 100;
 static CONFIG: once_cell::sync::Lazy<Config> = ...
 ```
 
----
 
 ## Solution Patterns
 
@@ -147,7 +132,6 @@ fn process(input: &str) -> Cow<str> {
 let mut s = String::with_capacity(100);
 ```
 
----
 
 ## Data Type Guidelines
 
@@ -167,7 +151,6 @@ let mut s = String::with_capacity(100);
 | Use `format!` for concat | Better than `+` operator |
 | Avoid nested `contains()` | O(n*m) complexity |
 
----
 
 ## Error Handling Guidelines
 
@@ -177,7 +160,6 @@ let mut s = String::with_capacity(100);
 | `expect()` over `unwrap()` | When value guaranteed |
 | Use `assert!` for invariants | At function entry |
 
----
 
 ## Memory and Lifetimes
 
@@ -187,7 +169,6 @@ let mut s = String::with_capacity(100);
 | `RefCell` use `try_borrow` | Avoid panics |
 | Use shadowing for conversions | `let x = x.parse()?` |
 
----
 
 ## Concurrency Guidelines
 
@@ -197,7 +178,6 @@ let mut s = String::with_capacity(100);
 | Atomics for primitives | Not `Mutex<bool>` |
 | Choose memory ordering carefully | Relaxed/Acquire/Release/SeqCst |
 
----
 
 ## Async Guidelines
 
@@ -206,7 +186,6 @@ let mut s = String::with_capacity(100);
 | CPU-bound → sync | Async for I/O |
 | Don't hold locks across await | Use scoped guards |
 
----
 
 ## Macro Guidelines
 
@@ -215,7 +194,6 @@ let mut s = String::with_capacity(100);
 | Avoid macros (unless necessary) | Prefer functions/generics |
 | Macro input like Rust | Readability first |
 
----
 
 ## Deprecated Patterns → Modern
 
@@ -228,7 +206,6 @@ let mut s = String::with_capacity(100);
 | `failure`/`error-chain` | `thiserror`/`anyhow` | - |
 | `try!()` | `?` operator | 2018 |
 
----
 
 ## Clippy Configuration
 
@@ -255,7 +232,6 @@ pedantic = "warn"
 | `clippy::expect_used` | Prefer expect |
 | `clippy::clone_on_ref_ptr` | Avoid cloning Arc |
 
----
 
 ## Formatting (rustfmt)
 
@@ -272,7 +248,6 @@ tab_spaces = 4
 edition = "2024"
 ```
 
----
 
 ## Documentation Guidelines
 
@@ -304,7 +279,6 @@ pub struct User { ... }
 pub fn new(name: &str) -> Self { ... }
 ```
 
----
 
 ## Workflow
 
@@ -345,7 +319,6 @@ Check:
   → Meaningful error types
 ```
 
----
 
 ## Quick Reference
 
@@ -356,7 +329,6 @@ Docs: /// for public items, //! for module docs
 Lint: #![warn(clippy::all)]
 ```
 
----
 
 ## Review Checklist
 
@@ -373,7 +345,6 @@ When reviewing code:
 - [ ] Conversion methods named correctly (as/to/into)
 - [ ] String parameters use `&str` when possible
 
----
 
 ## Verification Commands
 
@@ -394,7 +365,6 @@ cargo test
 cargo clippy -- -W clippy::wrong_self_convention
 ```
 
----
 
 ## Common Pitfalls
 
@@ -455,7 +425,6 @@ for (i, item) in items.iter().enumerate() {
 }
 ```
 
----
 
 ## Related Skills
 
@@ -465,7 +434,6 @@ for (i, item) in items.iter().enumerate() {
 - **rust-async** - Async conventions
 - **rust-unsafe** - SAFETY comment style
 
----
 
 ## Localized Reference
 

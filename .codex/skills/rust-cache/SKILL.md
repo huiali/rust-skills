@@ -1,33 +1,19 @@
 ---
 name: rust-cache
-description: 'Caching and distributed storage expert covering Redis, connection pools,
-  TTL strategies,
-
-  cache patterns (Cache-Aside, Write-Through), invalidation, and performance optimization.
-
-  '
+description: Caching and distributed storage expert covering Redis, connection pools, TTL strategies, cache patterns (Cache-Aside, Write-Through), invalidation, and performance optimization.
 metadata:
   triggers:
-  - cache
-  - caching
-  - Redis
-  - TTL
-  - cache invalidation
-  - connection pool
-  - distributed cache
-  - cache-aside
-  - write-through
+    - cache
+    - caching
+    - Redis
+    - TTL
+    - cache invalidation
+    - connection pool
+    - distributed cache
+    - cache-aside
+    - write-through
 ---
 
-# Caching and Distributed Storage Expert
-
-## Core Question
-
-**How do you design effective caching strategies that improve performance without compromising data consistency?**
-
-Caching can improve read performance by 95%+, but requires careful TTL management and invalidation strategies.
-
----
 
 ## Solution Patterns
 
@@ -373,7 +359,6 @@ async fn cache_with_protection(cache: &CacheManager) -> Result<()> {
 }
 ```
 
----
 
 ## Cache Strategy Selection
 
@@ -384,7 +369,6 @@ async fn cache_with_protection(cache: &CacheManager) -> Result<()> {
 | **Write-Behind** | High write throughput | Fast writes | Data loss risk |
 | **Refresh-Ahead** | Predictable access patterns | No cache misses | Complex, may waste resources |
 
----
 
 ## Workflow
 
@@ -419,7 +403,6 @@ Options:
   → Version-based: Include version in key (no deletion needed)
 ```
 
----
 
 ## Review Checklist
 
@@ -436,7 +419,6 @@ When implementing caching:
 - [ ] Pattern-based deletion uses SCAN (not blocking DEL)
 - [ ] Cache size limits configured (memory protection)
 
----
 
 ## Verification Commands
 
@@ -460,7 +442,6 @@ redis-cli --scan --pattern "myapp:*" | xargs -L1 redis-cli TTL
 wrk -t4 -c100 -d30s http://localhost:3000/api/cached-endpoint
 ```
 
----
 
 ## Common Pitfalls
 
@@ -543,7 +524,6 @@ async fn update_user(db: &Database, cache: &Cache, user: &User) -> Result<()> {
 }
 ```
 
----
 
 ## Related Skills
 
@@ -553,7 +533,6 @@ async fn update_user(db: &Database, cache: &Cache, user: &User) -> Result<()> {
 - **rust-error** - Error handling for cache failures
 - **rust-observability** - Cache metrics and monitoring
 
----
 
 ## Localized Reference
 

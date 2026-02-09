@@ -1,34 +1,20 @@
 ---
 name: rust-ecosystem
-description: 'Rust ecosystem expert covering crate selection, library recommendations,
-  framework
-
-  comparisons, async runtime choices (tokio, async-std), and common tools.
-
-  '
+description: Rust ecosystem expert covering crate selection, library recommendations, framework comparisons, async runtime choices (tokio, async-std), and common tools.
 metadata:
   triggers:
-  - crate
-  - library
-  - framework
-  - ecosystem
-  - async runtime
-  - tokio
-  - async-std
-  - serde
-  - reqwest
-  - axum
+    - crate
+    - library
+    - framework
+    - ecosystem
+    - async runtime
+    - tokio
+    - async-std
+    - serde
+    - reqwest
+    - axum
 ---
 
-# Rust Ecosystem Expert
-
-## Core Question
-
-**Which crate should I use to solve this problem?**
-
-Choosing the right library is key to efficient Rust development.
-
----
 
 ## Async Runtimes
 
@@ -51,7 +37,6 @@ async-std = "1"
 smol = "2"
 ```
 
----
 
 ## Solution Patterns
 
@@ -120,7 +105,6 @@ serde_json = "1"
 reqwest = { version = "0.11", features = ["json", "blocking"] }
 ```
 
----
 
 ## Web Frameworks
 
@@ -153,7 +137,6 @@ let app = Router::new()
     .route("/user", get(get_user));
 ```
 
----
 
 ## Serialization
 
@@ -182,7 +165,6 @@ let bytes = bincode::serialize(&user)?;
 let user: User = bincode::deserialize(&bytes)?;
 ```
 
----
 
 ## HTTP Clients
 
@@ -209,7 +191,6 @@ let response: Response = ureq::post("https://api.example.com")
     .into_json()?;
 ```
 
----
 
 ## Databases
 
@@ -235,7 +216,6 @@ let user = sqlx::query_as!(
 .await?;
 ```
 
----
 
 ## Concurrency & Parallelism
 
@@ -256,7 +236,6 @@ let sum: i32 = data
     .sum();
 ```
 
----
 
 ## Error Handling
 
@@ -291,7 +270,6 @@ fn load_config() -> Result<Config> {
 }
 ```
 
----
 
 ## Common Tools
 
@@ -305,7 +283,6 @@ fn load_config() -> Result<Config> {
 | Random | **rand** |
 | Regex | **regex** |
 
----
 
 ## Crate Selection Principles
 
@@ -330,7 +307,6 @@ cargo audit
 cargo deny check licenses
 ```
 
----
 
 ## Workflow
 
@@ -368,7 +344,6 @@ cargo deny check
 cargo tree -i <crate>
 ```
 
----
 
 ## Deprecated Patterns → Modern
 
@@ -379,7 +354,6 @@ cargo tree -i <crate>
 | `failure` | `thiserror` + `anyhow` | More popular |
 | `serde_derive` | `serde` (unified) | Simpler imports |
 
----
 
 ## Quick Reference
 
@@ -394,7 +368,6 @@ cargo tree -i <crate>
 | Testing | tempfile + rstest + proptest |
 | Date/time | chrono or time |
 
----
 
 ## Review Checklist
 
@@ -409,7 +382,6 @@ When selecting crates:
 - [ ] High download count and community usage
 - [ ] Stable API (1.0+ or widely used)
 
----
 
 ## Verification Commands
 
@@ -433,7 +405,6 @@ cargo deny check
 cargo outdated
 ```
 
----
 
 ## Common Pitfalls
 
@@ -476,7 +447,6 @@ cargo tree -d
 serde = "1"
 ```
 
----
 
 ## Related Skills
 
@@ -486,7 +456,6 @@ serde = "1"
 - **rust-testing** - Testing libraries
 - **rust-performance** - Performance-critical crates
 
----
 
 ## Localized Reference
 

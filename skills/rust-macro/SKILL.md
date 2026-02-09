@@ -1,31 +1,17 @@
 ---
 name: rust-macro
-description: 'Macro and procedural metaprogramming expert covering macro_rules!, derive
-  macros,
-
-  proc-macros, compile-time computation, and code generation patterns.
-
-  '
+description: Macro and procedural metaprogramming expert covering macro_rules!, derive macros, proc-macros, compile-time computation, and code generation patterns.
 metadata:
   triggers:
-  - macro
-  - derive
-  - proc-macro
-  - macro_rules
-  - metaprogramming
-  - code generation
-  - compile-time
+    - macro
+    - derive
+    - proc-macro
+    - macro_rules
+    - metaprogramming
+    - code generation
+    - compile-time
 ---
 
-# Macro and Procedural Metaprogramming Expert
-
-## Core Question
-
-**How do you reduce code duplication? When to use macros vs generics?**
-
-Macros are compile-time code generation, generics are runtime polymorphism.
-
----
 
 ## Macros vs Generics
 
@@ -37,7 +23,6 @@ Macros are compile-time code generation, generics are runtime polymorphism.
 | Debugging | Debug expanded code | Direct debugging |
 | Use case | Reduce boilerplate | Generic algorithms |
 
----
 
 ## Solution Patterns
 
@@ -188,7 +173,6 @@ fn expensive_computation() -> String {
 }
 ```
 
----
 
 ## Repetition Patterns
 
@@ -221,7 +205,6 @@ create_struct!(User {
 });
 ```
 
----
 
 ## Workflow
 
@@ -279,7 +262,6 @@ mod tests {
 }
 ```
 
----
 
 ## Common Crates
 
@@ -291,7 +273,6 @@ mod tests {
 | **derive-more** | Common derive macros |
 | **darling** | Parse macro attributes |
 
----
 
 ## Best Practices
 
@@ -303,7 +284,6 @@ mod tests {
 | Test expansion | Ensure correctness |
 | Use cargo expand | Visualize macro output |
 
----
 
 ## Review Checklist
 
@@ -318,7 +298,6 @@ When reviewing macro code:
 - [ ] Compile-time overhead acceptable
 - [ ] No unnecessary proc-macro dependency
 
----
 
 ## Verification Commands
 
@@ -336,7 +315,6 @@ cargo check -p my-proc-macro
 cargo test --all-features
 ```
 
----
 
 ## Common Pitfalls
 
@@ -395,7 +373,6 @@ impl Simple {
 }
 ```
 
----
 
 ## Related Skills
 
@@ -405,7 +382,6 @@ impl Simple {
 - **rust-error** - Error handling in macros
 - **rust-testing** - Testing macro expansion
 
----
 
 ## Localized Reference
 

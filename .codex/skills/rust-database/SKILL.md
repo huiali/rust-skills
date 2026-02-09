@@ -1,7 +1,6 @@
 ---
 name: rust-database
-description: "Rust database skill for SQLx/Diesel/SeaORM design, transaction boundaries, migration safety, query performance, and operational reliability."
----
+description: "Rust database skill for SQLx/Diesel/SeaORM design, transaction boundaries, migration safety, query performance, and operational reliability."---
 
 # Rust Database Skill
 

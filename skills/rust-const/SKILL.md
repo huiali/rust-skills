@@ -1,31 +1,17 @@
 ---
 name: rust-const
-description: 'Const generics and compile-time computation expert covering const fn,
-  type-level computation,
-
-  const evaluation, MaybeUninit arrays, and compile-time validation.
-
-  '
+description: Const generics and compile-time computation expert covering const fn, type-level computation, const evaluation, MaybeUninit arrays, and compile-time validation.
 metadata:
   triggers:
-  - const
-  - const generics
-  - compile-time
-  - const fn
-  - MaybeUninit
-  - type-level computation
-  - const evaluation
+    - const
+    - const generics
+    - compile-time
+    - const fn
+    - MaybeUninit
+    - type-level computation
+    - const evaluation
 ---
 
-# Const Generics and Compile-Time Computation Expert
-
-## Core Question
-
-**Which computations can be done at compile time?**
-
-Rust's const fn lets you run code during compilation.
-
----
 
 ## Solution Patterns
 
@@ -163,7 +149,6 @@ impl<const N: usize> StateMachine<Initialized, N> {
 }
 ```
 
----
 
 ## Const Fn Capabilities
 
@@ -212,7 +197,6 @@ const fn limitations() {
 }
 ```
 
----
 
 ## Workflow
 
@@ -252,7 +236,6 @@ Drawbacks:
   ❌ Complex error messages
 ```
 
----
 
 ## Review Checklist
 
@@ -266,7 +249,6 @@ When using const:
 - [ ] Generic const parameters reasonably bounded
 - [ ] Not overusing const (readability tradeoff)
 
----
 
 ## Verification Commands
 
@@ -282,7 +264,6 @@ cargo check
 cargo test --lib
 ```
 
----
 
 ## Common Pitfalls
 
@@ -327,7 +308,6 @@ fn process<const N: usize>(data: [u8; N]) -> [u8; N] {
 }
 ```
 
----
 
 ## Related Skills
 
@@ -336,7 +316,6 @@ fn process<const N: usize>(data: [u8; N]) -> [u8; N] {
 - **rust-unsafe** - MaybeUninit safety
 - **rust-macro** - Compile-time code generation
 
----
 
 ## Localized Reference
 

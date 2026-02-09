@@ -1,34 +1,20 @@
 ---
 name: rust-async
-description: 'Advanced async patterns expert. Handles Stream processing, backpressure
-  control, select/join
-
-  operations, cancellation, Future trait implementation, and async runtime optimization.
-
-  '
+description: Advanced async patterns expert. Handles Stream processing, backpressure control, select/join operations, cancellation, Future trait implementation, and async runtime optimization.
 metadata:
   triggers:
-  - async
-  - Stream
-  - backpressure
-  - select
-  - Future
-  - tokio
-  - async-std
-  - cancellation
-  - poll
-  - async trait
+    - async
+    - Stream
+    - backpressure
+    - select
+    - Future
+    - tokio
+    - async-std
+    - cancellation
+    - poll
+    - async trait
 ---
 
-# Advanced Async Patterns Expert
-
-## Core Question
-
-**How do we correctly handle streams, control flow, and resources in async code?**
-
-Async is not parallelism, but async code has its own unique complexity. Mastering these patterns is essential for building robust async applications.
-
----
 
 ## Solution Patterns
 
@@ -137,7 +123,6 @@ let _ = task.await;  // Will return JoinError::Cancelled
 
 **Key insight**: Cancellation is cooperative - requires yield points.
 
----
 
 ## Workflow
 
@@ -180,7 +165,6 @@ Resource cleanup?
   → Use Drop or explicit cleanup
 ```
 
----
 
 ## Join vs Try_Join
 
@@ -229,7 +213,6 @@ async fn fetch_dashboard() -> Result<Dashboard, Error> {
 }
 ```
 
----
 
 ## Common Errors & Solutions
 
@@ -241,7 +224,6 @@ async fn fetch_dashboard() -> Result<Dashboard, Error> {
 | Deadlock | Lock held across `.await` | Minimize lock scope, drop before await |
 | Async drop unsupported | Drop in async context | Use spawn for cleanup or blocking drop |
 
----
 
 ## Backpressure Strategies
 
@@ -295,7 +277,6 @@ while let Some(item) = rx.recv().await {
 **Pros**: Natural backpressure from bounded channel
 **Cons**: Extra copy/move overhead
 
----
 
 ## Performance Tips
 
@@ -307,7 +288,6 @@ while let Some(item) = rx.recv().await {
 | Lock-free at await | Never hold locks across `.await` points |
 | `spawn_blocking` | Use for CPU-bound work in async context |
 
----
 
 ## Advanced: Future Trait
 
@@ -341,7 +321,6 @@ impl Future for Delay {
 
 **Gotcha**: Must properly handle wakeup notifications.
 
----
 
 ## Review Checklist
 
@@ -358,7 +337,6 @@ When reviewing async code:
 - [ ] Resource cleanup happens even on cancellation
 - [ ] CPU-bound work uses `spawn_blocking`
 
----
 
 ## Verification Commands
 
@@ -379,7 +357,6 @@ RUSTFLAGS="--cfg tokio_unstable" cargo run
 cargo flamegraph --bin your-app
 ```
 
----
 
 ## Common Pitfalls
 
@@ -471,7 +448,6 @@ impl Drop for Resource {
 }
 ```
 
----
 
 ## Related Skills
 
@@ -482,7 +458,6 @@ impl Drop for Resource {
 - **rust-performance** - Async performance optimization
 - **rust-web** - Async web frameworks (axum, actix)
 
----
 
 ## Localized Reference
 

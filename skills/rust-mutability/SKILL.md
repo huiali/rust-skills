@@ -1,35 +1,21 @@
 ---
 name: rust-mutability
-description: 'Interior mutability expert covering Cell, RefCell, Mutex, RwLock patterns,
-  borrow conflicts
-
-  (E0596, E0499, E0502), and thread-safe mutation strategies.
-
-  '
+description: Interior mutability expert covering Cell, RefCell, Mutex, RwLock patterns, borrow conflicts (E0596, E0499, E0502), and thread-safe mutation strategies.
 metadata:
   triggers:
-  - mutability
-  - mut
-  - Cell
-  - RefCell
-  - Mutex
-  - RwLock
-  - interior mutability
-  - borrow conflict
-  - E0596
-  - E0499
-  - E0502
+    - mutability
+    - mut
+    - Cell
+    - RefCell
+    - Mutex
+    - RwLock
+    - interior mutability
+    - borrow conflict
+    - E0596
+    - E0499
+    - E0502
 ---
 
-# Interior Mutability Expert
-
-## Core Question
-
-**Does the data need to change, and who controls that change?**
-
-Mutability is how program state evolves. Design it carefully.
-
----
 
 ## Mutability Types
 
@@ -41,7 +27,6 @@ Mutability is how program state evolves. Design it carefully.
 | `Mutex<T>` | Interior | Yes | Multi-threaded interior mutability |
 | `RwLock<T>` | Interior | Yes | Multi-threaded read-write lock |
 
----
 
 ## Solution Patterns
 
@@ -152,7 +137,6 @@ impl Config {
 
 **Trade-offs**: Write locks more expensive than Mutex.
 
----
 
 ## Borrow Rules
 
@@ -164,7 +148,6 @@ At any time, you can have either:
 Never both simultaneously
 ```
 
----
 
 ## Error Code Quick Reference
 
@@ -175,7 +158,6 @@ Never both simultaneously
 | E0502 | Borrow conflict | "separate scopes" | Why both borrows needed simultaneously? |
 | RefCell panic | Runtime borrow error | "use try_borrow" | Is runtime checking appropriate? |
 
----
 
 ## Workflow
 
@@ -231,7 +213,6 @@ RwLock?
   → Use when reads >> writes
 ```
 
----
 
 ## Thread-Safe Selection
 
@@ -269,7 +250,6 @@ data.write().unwrap().insert(key, value);  // Few writers
 
 **Use when**: Read-heavy workloads (10+ reads per write).
 
----
 
 ## Common Pitfalls
 
@@ -332,7 +312,6 @@ let value = {
 async_op().await;
 ```
 
----
 
 ## Review Checklist
 
@@ -349,7 +328,6 @@ When reviewing mutability code:
 - [ ] Atomic types used for simple counters/flags
 - [ ] Read-write patterns match RwLock choice
 
----
 
 ## Verification Commands
 
@@ -370,7 +348,6 @@ cargo test --features loom
 cargo clippy -- -W clippy::mutex_atomic
 ```
 
----
 
 ## Advanced Patterns
 
@@ -407,7 +384,6 @@ impl Shared {
 }
 ```
 
----
 
 ## Related Skills
 
@@ -417,7 +393,6 @@ impl Shared {
 - **rust-anti-pattern** - Mutability anti-patterns
 - **rust-performance** - Lock contention optimization
 
----
 
 ## Localized Reference
 

@@ -1,18 +1,8 @@
 ---
 name: rust-embedded
-description: 嵌入式与 no_std 专家。处理 no_std, embedded-hal, 裸机开发, 中断, DMA, 资源受限环境等问题。触发词：no_std,
-  embedded, embedded-hal, microcontroller, firmware, ISR, DMA, 嵌入式, 裸机
+description: 嵌入式与 no_std 专家。处理 no_std, embedded-hal, 裸机开发, 中断, DMA, 资源受限环境等问题。触发词：no_std, embedded, embedded-hal, microcontroller, firmware, ISR, DMA, 嵌入式, 裸机--- # 嵌入式与 no_std 开发 ## 核心问题 **如何在资源受限环境或没有标准库的情况下编程？** no_std 不是 Rust 的子集，而是一种不同的编程模式。
 ---
 
-# 嵌入式与 no_std 开发
-
-## 核心问题
-
-**如何在资源受限环境或没有标准库的情况下编程？**
-
-no_std 不是 Rust 的子集，而是一种不同的编程模式。
-
----
 
 ## no_std 基础
 
@@ -41,7 +31,6 @@ static ALLOC: some_allocator::Allocator = some_allocator::Allocator;
 | `alloc` | 堆分配（需 allocator） |
 | `compiler_builtins` | 编译器内置函数 |
 
----
 
 ## 嵌入式-hal
 
@@ -70,7 +59,6 @@ fn blink_led<L: OutputPin>(mut led: L) -> ! {
 | `I2c` | I2C 通信 |
 | `Serial` | 串口 |
 
----
 
 ## 中断处理
 
@@ -102,7 +90,6 @@ fn enable_interrupt(nvic: &mut NVIC, irq: interrupt::TIM2) {
 }
 ```
 
----
 
 ## 内存管理
 
@@ -131,7 +118,6 @@ struct RingBuffer {
 }
 ```
 
----
 
 ## 外设访问模式
 
@@ -152,7 +138,6 @@ mod gpioa {
 }
 ```
 
----
 
 ## 常见问题
 
@@ -164,7 +149,6 @@ mod gpioa {
 | 程序不运行 | 链接脚本问题 | 检查 startup code |
 | 外设不响应 | 时钟未使能 | 先配置 RCC |
 
----
 
 ## 资源受限技巧
 
@@ -176,7 +160,6 @@ mod gpioa {
 | `codegen-units = 1` | 更好的优化 |
 | 避免 alloc | 用栈或静态数组 |
 
----
 
 ## 项目配置示例
 
@@ -201,7 +184,6 @@ lto = true
 codegen-units = 1
 ```
 
----
 
 ## WebAssembly 多线程
 
@@ -279,7 +261,6 @@ pub fn get_thread_id() -> u32 {
 }
 ```
 
----
 
 ## RISC-V 嵌入式开发
 
@@ -420,7 +401,6 @@ fn get_isa_extensions() -> String {
 }
 ```
 
----
 
 ## RISC-V 性能优化
 
@@ -432,4 +412,3 @@ fn get_isa_extensions() -> String {
 | 向量操作 | 使用 V 扩展（RV64V） |
 | 压缩指令 | 使用 C 扩展减少代码大小 |
 
----

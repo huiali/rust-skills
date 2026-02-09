@@ -1,18 +1,8 @@
 ---
 name: rust-error-advanced
-description: 深入错误处理专家。处理 Result vs Option, thiserror, anyhow, error context, library
-  vs application errors, 错误处理, Result 用法, 什么时候用 panic
+description: 深入错误处理专家。处理 Result vs Option, thiserror, anyhow, error context, library vs application errors, 错误处理, Result 用法, 什么时候用 panic--- # 深入错误处理 ## 核心问题 **这个失败是预期的还是 bug？** 错误处理策略决定代码的健壮性。
 ---
 
-# 深入错误处理
-
-## 核心问题
-
-**这个失败是预期的还是 bug？**
-
-错误处理策略决定代码的健壮性。
-
----
 
 ## Result vs Option vs panic
 
@@ -23,7 +13,6 @@ description: 深入错误处理专家。处理 Result vs Option, thiserror, anyh
 | `panic!` | bug 或不变式违规 | 程序逻辑错误、不可恢复错误 |
 | `unreachable!()` | 理论上不会执行到的代码 | 匹配穷举 |
 
----
 
 ## 错误处理决策
 
@@ -41,7 +30,6 @@ description: 深入错误处理专家。处理 Result vs Option, thiserror, anyh
         └─ panic!, assert!
 ```
 
----
 
 ## thiserror（库代码）
 
@@ -73,7 +61,6 @@ fn read_config() -> Result<Config, MyError> {
 }
 ```
 
----
 
 ## anyhow（应用代码）
 
@@ -99,7 +86,6 @@ fn complex_operation() -> Result<()> {
 }
 ```
 
----
 
 ## 错误设计原则
 
@@ -111,7 +97,6 @@ fn complex_operation() -> Result<()> {
 | 需要错误码 | 枚举变体 |
 | 需要错误链 | `context()` + `with_context()` |
 
----
 
 ## 常见反模式
 
@@ -122,7 +107,6 @@ fn complex_operation() -> Result<()> {
 | 丢失上下文 | 调试困难 | `.context()` |
 | 错误变体过多 | 过度设计 | 简化或合并 |
 
----
 
 ## panic 使用场景
 
@@ -157,7 +141,6 @@ fn process_status(status: Status) {
 assert!(!queue.is_empty(), "queue should never be empty here");
 ```
 
----
 
 ## 错误链
 
@@ -176,7 +159,6 @@ fn middle_layer() -> Result<()> {
 }
 ```
 
----
 
 ## 最佳实践
 

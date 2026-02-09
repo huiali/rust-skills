@@ -1,7 +1,6 @@
 ---
 name: rust-testing
-description: "Rust testing expert for unit, integration, async, property-based, concurrency, and benchmark testing workflows."
----
+description: "Rust testing expert for unit, integration, async, property-based, concurrency, and benchmark testing workflows."---
 
 # Rust Testing Skill
 

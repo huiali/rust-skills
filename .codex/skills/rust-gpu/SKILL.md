@@ -1,18 +1,8 @@
 ---
 name: rust-gpu
-description: GPU 内存与计算专家。处理 CUDA, OpenCL, GPU memory, compute shader, memory coalescing,
-  zero-copy, 显存管理, 异构计算
+description: GPU 内存与计算专家。处理 CUDA, OpenCL, GPU memory, compute shader, memory coalescing, zero-copy, 显存管理, 异构计算--- # GPU 内存与计算 ## 核心问题 **如何在 Rust 中高效管理 GPU 内存和异构计算？** GPU 计算需要特殊的内存管理策略和同步机制。
 ---
 
-# GPU 内存与计算
-
-## 核心问题
-
-**如何在 Rust 中高效管理 GPU 内存和异构计算？**
-
-GPU 计算需要特殊的内存管理策略和同步机制。
-
----
 
 ## GPU 内存架构
 
@@ -35,7 +25,6 @@ GPU 计算需要特殊的内存管理策略和同步机制。
    CPU (通过 PCIe)      GPU 计算单元
 ```
 
----
 
 ## 内存类型对比
 
@@ -47,7 +36,6 @@ GPU 计算需要特殊的内存管理策略和同步机制。
 | Local | 寄存器/VRAM | 高 | 小 | 线程私有 |
 | Register | SM | 最低 | 极小 | 线程私有 |
 
----
 
 ## CUDA 内存管理 (rust-cuda)
 
@@ -88,7 +76,6 @@ unsafe {
 };
 ```
 
----
 
 ## 零拷贝内存
 
@@ -122,7 +109,6 @@ unsafe {
 };
 ```
 
----
 
 ## 统一内存 (Unified Memory)
 
@@ -157,7 +143,6 @@ unsafe {
 };
 ```
 
----
 
 ## 内存合并访问
 
@@ -176,7 +161,6 @@ __global__ void coalesced_access(float* data) {
 }
 ```
 
----
 
 ## 共享内存使用
 
@@ -207,7 +191,6 @@ __global__ void shared_memory_reduce(float* input, float* output) {
 }
 ```
 
----
 
 ## 内存对齐
 
@@ -227,7 +210,6 @@ struct alignas(256) AlignedData {
 assert(((uintptr_t)ptr % ALIGNMENT) == 0);
 ```
 
----
 
 ## 性能优化检查表
 
@@ -240,7 +222,6 @@ assert(((uintptr_t)ptr % ALIGNMENT) == 0);
 | 固定内存 | 使用页锁定内存 |
 | 批处理 | 减少内核启动开销 |
 
----
 
 ## 与其他技能关联
 

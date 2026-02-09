@@ -1,33 +1,19 @@
 ---
 name: rust-learner
-description: 'Rust learning and ecosystem tracking expert covering version updates,
-  new features, RFC tracking,
-
-  crate updates, best practice evolution, and learning resources.
-
-  '
+description: Rust learning and ecosystem tracking expert covering version updates, new features, RFC tracking, crate updates, best practice evolution, and learning resources.
 metadata:
   triggers:
-  - learning
-  - latest version
-  - what's new
-  - version update
-  - new features
-  - RFC
-  - weekly news
-  - tutorial
-  - learning path
+    - learning
+    - latest version
+    - what's new
+    - version update
+    - new features
+    - RFC
+    - weekly news
+    - tutorial
+    - learning path
 ---
 
-# Rust Learning and Ecosystem Tracking Expert
-
-## Core Question
-
-**How do you keep up with Rust's evolution?**
-
-Rust releases a new version every 6 weeks. Stay updated but don't blindly chase every new feature.
-
----
 
 ## Version Update Strategy
 
@@ -63,7 +49,6 @@ rust-version = "1.70"  # Declare minimum version
 serde = { version = "1.0", default-features = false }
 ```
 
----
 
 ## Solution Patterns
 
@@ -119,7 +104,6 @@ trait Repository {
 }
 ```
 
----
 
 ## Learning Path
 
@@ -137,7 +121,6 @@ Advanced → unsafe, FFI, performance optimization
 Expert → Macros, type system, design patterns
 ```
 
----
 
 ## Information Sources
 
@@ -159,7 +142,6 @@ Expert → Macros, type system, design patterns
 | [lib.rs](https://lib.rs/) | Find alternative crates |
 | [Rust Analyzer](https://rust-analyzer.github.io/) | IDE plugin |
 
----
 
 ## Dependency Management
 
@@ -189,7 +171,6 @@ cargo deny check licenses
 cargo tree -d  # Show duplicates
 ```
 
----
 
 ## Workflow
 
@@ -216,7 +197,6 @@ Every year:
 - [ ] Review architecture patterns
 ```
 
----
 
 ## Learning Resources
 
@@ -244,7 +224,6 @@ Every year:
 - [Rust by Practice](https://practice.rs/) - Hands-on exercises
 - [Advent of Code](https://adventofcode.com/) - Annual coding challenge
 
----
 
 ## Edition Update Strategy
 
@@ -268,7 +247,6 @@ cargo fix --edition
 cargo test --all-features
 ```
 
----
 
 ## Review Checklist
 
@@ -283,7 +261,6 @@ When learning new Rust features:
 - [ ] Checked ecosystem adoption
 - [ ] Updated team documentation
 
----
 
 ## Verification Commands
 
@@ -308,7 +285,6 @@ cargo deny check
 cargo clippy -- -W deprecated
 ```
 
----
 
 ## Common Pitfalls
 
@@ -349,7 +325,6 @@ rustup doc --changelog
 cargo info <crate> --version <version>
 ```
 
----
 
 ## Related Skills
 
@@ -359,7 +334,6 @@ cargo info <crate> --version <version>
 - **rust-async** - Async/await patterns
 - **rust-error** - Error handling evolution
 
----
 
 ## Localized Reference
 

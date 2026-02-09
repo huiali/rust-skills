@@ -1,18 +1,8 @@
 ---
 name: rust-coroutine
-description: 协程与绿色线程专家。处理 generator, suspend/resume, stackful coroutine, stackless
-  coroutine, context switch, 协程, 绿色线程, 上下文切换, 生成器
+description: 协程与绿色线程专家。处理 generator, suspend/resume, stackful coroutine, stackless coroutine, context switch, 协程, 绿色线程, 上下文切换, 生成器--- # 协程与绿色线程 ## 核心问题 **如何实现高效的轻量级并发？** 协程提供用户态的上下文切换，避免内核线程的开销。
 ---
 
-# 协程与绿色线程
-
-## 核心问题
-
-**如何实现高效的轻量级并发？**
-
-协程提供用户态的上下文切换，避免内核线程的开销。
-
----
 
 ## 协程 vs 线程
 
@@ -24,7 +14,6 @@ description: 协程与绿色线程专家。处理 generator, suspend/resume, sta
 | 栈大小 | 1-8MB | 几 KB |
 | 抢占 | 抢占式 | 协作式 |
 
----
 
 ## Rust 原生 Generator
 
@@ -58,7 +47,6 @@ fn main() {
 }
 ```
 
----
 
 ## 栈式协程 (Stackful Coroutine)
 
@@ -98,7 +86,6 @@ fn main() {
 }
 ```
 
----
 
 ## 栈式协程设计模式
 
@@ -198,7 +185,6 @@ fn process_job(job: &Job) -> Result<Vec<u8>, ()> {
 }
 ```
 
----
 
 ## 栈无关协程 (Stackless Coroutine)
 
@@ -224,7 +210,6 @@ async fn main() {
 }
 ```
 
----
 
 ## 上下文切换机制
 
@@ -281,7 +266,6 @@ impl Context {
 }
 ```
 
----
 
 ## 协程调度器
 
@@ -321,7 +305,6 @@ impl Scheduler {
 }
 ```
 
----
 
 ## 常见问题
 
@@ -332,7 +315,6 @@ impl Scheduler {
 | 内存泄漏 | 任务未完成 | 正确清理协程 |
 | 死锁 | 循环等待 | 避免循环依赖 |
 
----
 
 ## 与其他技能关联
 

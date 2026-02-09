@@ -1,34 +1,20 @@
 ---
 name: rust-type-driven
-description: 'Type-driven design expert covering newtype pattern, type state, PhantomData,
-  marker traits,
-
-  builder pattern, compile-time validation, sealed traits, and zero-sized types (ZST).
-
-  '
+description: Type-driven design expert covering newtype pattern, type state, PhantomData, marker traits, builder pattern, compile-time validation, sealed traits, and zero-sized types (ZST).
 metadata:
   triggers:
-  - type-driven
-  - newtype
-  - type state
-  - PhantomData
-  - marker trait
-  - builder pattern
-  - compile-time validation
-  - sealed trait
-  - ZST
-  - zero-sized type
+    - type-driven
+    - newtype
+    - type state
+    - PhantomData
+    - marker trait
+    - builder pattern
+    - compile-time validation
+    - sealed trait
+    - ZST
+    - zero-sized type
 ---
 
-# Type-Driven Design Expert
-
-## Core Question
-
-**How can you make the compiler catch more errors at compile time?**
-
-Good type design means fewer runtime errors.
-
----
 
 ## Solution Patterns
 
@@ -197,7 +183,6 @@ let config = ConfigBuilder::new()
 // ConfigBuilder::new().build();  // Error!
 ```
 
----
 
 ## Making Invalid States Unrepresentable
 
@@ -234,7 +219,6 @@ impl Email {
 }
 ```
 
----
 
 ## Marker Traits
 
@@ -259,7 +243,6 @@ impl MyTrait for MyType {
 }
 ```
 
----
 
 ## Zero-Sized Types (ZST)
 
@@ -289,7 +272,6 @@ impl Logger<Always> {
 assert_eq!(std::mem::size_of::<Logger<DebugOnly>>(), 0);
 ```
 
----
 
 ## Workflow
 
@@ -331,7 +313,6 @@ fn send_email(to: Email) {
 }
 ```
 
----
 
 ## Anti-Patterns
 
@@ -343,7 +324,6 @@ fn send_email(to: Email) {
 | Runtime validation | Late error discovery | Constructor validation |
 | Boolean parameters | Unclear meaning | Use enum or builder |
 
----
 
 ## Validation Timing
 
@@ -354,7 +334,6 @@ fn send_email(to: Email) {
 | Reference validity | Lifetimes | `&'a T` |
 | Thread safety | `Send + Sync` | Compiler checks |
 
----
 
 ## Review Checklist
 
@@ -370,7 +349,6 @@ When reviewing type design:
 - [ ] Marker traits document capabilities
 - [ ] ZSTs used for zero-cost abstractions
 
----
 
 ## Verification Commands
 
@@ -386,7 +364,6 @@ objdump -d target/release/myapp | grep -A 10 my_function
 cargo test --lib
 ```
 
----
 
 ## Common Pitfalls
 
@@ -439,7 +416,6 @@ fn transfer_money(from: u64, to: u64, amount: u64) { ... }
 fn transfer_money(from: AccountId, to: AccountId, amount: Money) { ... }
 ```
 
----
 
 ## Related Skills
 
@@ -449,7 +425,6 @@ fn transfer_money(from: AccountId, to: AccountId, amount: Money) { ... }
 - **rust-zero-cost** - Zero-cost abstractions
 - **rust-linear-type** - Linear types and session types
 
----
 
 ## Localized Reference
 

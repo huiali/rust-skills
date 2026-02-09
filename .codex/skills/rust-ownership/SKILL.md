@@ -1,33 +1,19 @@
 ---
 name: rust-ownership
-description: 'Ownership, borrowing, and lifetime expert. Handles compiler errors E0382,
-  E0597, E0506, E0507,
-
-  E0515, E0716, E0106 and provides systematic solutions for memory safety patterns.
-
-  '
+description: Ownership, borrowing, and lifetime expert. Handles compiler errors E0382, E0597, E0506, E0507, E0515, E0716, E0106 and provides systematic solutions for memory safety patterns.
 metadata:
   triggers:
-  - ownership
-  - borrow
-  - lifetime
-  - move
-  - clone
-  - Copy
-  - E0382
-  - E0597
-  - E0506
+    - ownership
+    - borrow
+    - lifetime
+    - move
+    - clone
+    - Copy
+    - E0382
+    - E0597
+    - E0506
 ---
 
-# Ownership & Lifetime Expert
-
-## Core Question
-
-**Who owns this data, and for how long can it be accessed?**
-
-Understanding ownership is understanding half of Rust. Every value has exactly one owner at any given time.
-
----
 
 ## Solution Patterns
 
@@ -76,7 +62,6 @@ fn longest<'a>(s1: &'a str, s2: &'a str) -> &'a str {
 2. Use named lifetimes to express relationships
 3. Prefer returning owned types
 
----
 
 ## Workflow
 
@@ -109,7 +94,6 @@ Use Arc/Rc for shared ownership
 Lifetimes aren't always necessary
 ```
 
----
 
 ## Smart Pointer Selection
 
@@ -121,7 +105,6 @@ Lifetimes aren't always necessary
 | Need runtime borrow checking | `RefCell<T>` | Single-threaded interior mutability |
 | Multi-threaded interior mutability | `Mutex<T>` or `RwLock<T>` | Thread-safe |
 
----
 
 ## Common Pitfalls
 
@@ -132,7 +115,6 @@ Lifetimes aren't always necessary
 | `Box::leak()` memory leaks | Memory waste | Use proper lifetime management |
 | Fighting the borrow checker | Digging your own hole | Understand and work with compiler design |
 
----
 
 ## Practical Guidance
 
@@ -153,7 +135,6 @@ Lifetimes aren't always necessary
    - Check borrow scope ranges
    - Consider code reorganization
 
----
 
 ## Error Code Quick Reference
 
@@ -167,7 +148,6 @@ Lifetimes aren't always necessary
 | E0716 | Temporary value lifetime insufficient | "bind to variable" | Why is this temporary? |
 | E0106 | Missing lifetime parameter | "add 'a" | What's the lifetime relationship? |
 
----
 
 ## Thinking Process
 
@@ -185,7 +165,6 @@ When encountering ownership issues, follow these steps:
 **3. Fix symptom or redesign?**
    - If failed 3 times → escalate to design level
 
----
 
 ## Trace Up (Design Analysis)
 
@@ -202,7 +181,6 @@ Persistent E0597 → rust-type-driven: Are scope boundaries correct?
 E0506/E0507 → rust-mutability: Should use interior mutability?
 ```
 
----
 
 ## Trace Down (Implementation)
 
@@ -223,7 +201,6 @@ From design decisions to implementation:
     ↓ Consider lifetimes or return owned
 ```
 
----
 
 ## Review Checklist
 
@@ -238,7 +215,6 @@ When reviewing ownership-related code:
 - [ ] Lifetime elision is leveraged where possible
 - [ ] Complex lifetime scenarios are documented
 
----
 
 ## Verification Commands
 
@@ -256,7 +232,6 @@ cargo clippy -- -W clippy::clone_on_copy -W clippy::unnecessary_clone
 cargo test --features leak-check
 ```
 
----
 
 ## Common Pitfalls
 
@@ -278,7 +253,6 @@ cargo test --features leak-check
 
 **Fix**: Step back and redesign data flow
 
----
 
 ## Related Skills
 
@@ -289,7 +263,6 @@ cargo test --features leak-check
 - **rust-resource** - Resource management and RAII patterns
 - **rust-type-driven** - Type-driven design
 
----
 
 ## Localized Reference
 

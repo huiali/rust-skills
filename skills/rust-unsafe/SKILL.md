@@ -1,37 +1,23 @@
 ---
 name: rust-unsafe
-description: 'Unsafe code and FFI expert covering raw pointers (*mut, *const), FFI
-  patterns, transmute,
-
-  union, #[repr(C)], SAFETY comments, soundness rules, and undefined behavior prevention.
-
-  '
+description: Unsafe code and FFI expert covering raw pointers (*mut, *const), FFI patterns, transmute, union, #[repr(C)], SAFETY comments, soundness rules, and undefined behavior prevention.
 metadata:
   triggers:
-  - unsafe
-  - raw pointer
-  - FFI
-  - extern
-  - transmute
-  - union
-  - repr(C)
-  - MaybeUninit
-  - NonNull
-  - SAFETY comment
-  - soundness
-  - undefined behavior
-  - UB
+    - unsafe
+    - raw pointer
+    - FFI
+    - extern
+    - transmute
+    - union
+    - repr(C)
+    - MaybeUninit
+    - NonNull
+    - SAFETY comment
+    - soundness
+    - undefined behavior
+    - UB
 ---
 
-# Unsafe Code and FFI Expert
-
-## Core Question
-
-**When can you use unsafe, and how do you use it safely?**
-
-Unsafe is necessary but must be used with extreme caution.
-
----
 
 ## When Unsafe is Justified
 
@@ -42,7 +28,6 @@ Unsafe is necessary but must be used with extreme caution.
 | Performance optimization (measured) | Hot path with proven bottleneck | ⚠️ Verify first |
 | Escaping borrow checker | Don't know why you need it | ❌ No |
 
----
 
 ## SAFETY Comment Requirements
 
@@ -61,7 +46,6 @@ unsafe { *ptr = value; }
 pub unsafe fn write(ptr: *mut T, value: &T) { ... }
 ```
 
----
 
 ## Solution Patterns
 
@@ -157,7 +141,6 @@ extern "C" {
 }
 ```
 
----
 
 ## 47 Unsafe Rules Reference
 
@@ -243,7 +226,6 @@ extern "C" {
 |------|-------------|
 | I-01 | Ensure I/O safety when using raw handles |
 
----
 
 ## Workflow
 
@@ -294,7 +276,6 @@ Safe private functions (validate inputs)
 Safe public API (no unsafe visible)
 ```
 
----
 
 ## Common Errors and Fixes
 
@@ -307,7 +288,6 @@ Safe public API (no unsafe visible)
 | Invalid bit pattern | Use `MaybeUninit` |
 | Missing SAFETY comment | Add comment |
 
----
 
 ## Deprecated Patterns
 
@@ -320,7 +300,6 @@ Safe public API (no unsafe visible)
 | `static mut` | `AtomicT` or `Mutex` |
 | Manual extern declarations | `bindgen` |
 
----
 
 ## FFI Tools
 
@@ -332,7 +311,6 @@ Safe public API (no unsafe visible)
 | Node.js | `napi-rs` |
 | C++ | `cxx` |
 
----
 
 ## Review Checklist
 
@@ -349,7 +327,6 @@ When reviewing unsafe code:
 - [ ] Safe public API wraps unsafe internals
 - [ ] Tested with Miri for undefined behavior
 
----
 
 ## Verification Commands
 
@@ -370,7 +347,6 @@ valgrind --leak-check=full ./target/release/program
 cargo doc --no-deps --open
 ```
 
----
 
 ## Common Pitfalls
 
@@ -421,7 +397,6 @@ struct Point { x: f64, y: f64 }
 extern "C" { fn use_point(p: Point); }
 ```
 
----
 
 ## Related Skills
 
@@ -431,7 +406,6 @@ extern "C" { fn use_point(p: Point); }
 - **rust-coding** - SAFETY comment conventions
 - **rust-concurrency** - Thread-safe unsafe patterns
 
----
 
 ## Localized Reference
 

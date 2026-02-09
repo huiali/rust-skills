@@ -1,8 +1,6 @@
 ---
 name: rust-middleware
-description: |
-  Web middleware expert covering request tracking, CORS configuration, rate limiting,
-  authentication guards, compression, and middleware composition patterns.
+description: Web middleware expert covering request tracking, CORS configuration, rate limiting, authentication guards, compression, and middleware composition patterns.
 metadata:
   triggers:
     - middleware
@@ -14,15 +12,6 @@ metadata:
     - middleware pattern
 ---
 
-# Web Middleware Expert
-
-## Core Question
-
-**How do you compose cross-cutting concerns in web applications without coupling them to business logic?**
-
-Middleware provides a clean way to handle logging, authentication, rate limiting, and other cross-cutting concerns in a composable pipeline.
-
----
 
 ## Solution Patterns
 
@@ -434,7 +423,6 @@ let app = Router::new()
     .layer(CompressionLayer::new());  // Enables gzip, br, deflate, zstd
 ```
 
----
 
 ## Middleware Composition Patterns
 
@@ -460,7 +448,6 @@ Request Flow:
 Response
 ```
 
----
 
 ## Workflow
 
@@ -503,7 +490,6 @@ Production:
   → Compression enabled
 ```
 
----
 
 ## Review Checklist
 
@@ -520,7 +506,6 @@ When implementing middleware:
 - [ ] Middleware is composable and reusable
 - [ ] No blocking operations in middleware
 
----
 
 ## Verification Commands
 
@@ -550,7 +535,6 @@ curl http://localhost:8080/protected \
 wrk -t4 -c100 -d30s http://localhost:8080/api
 ```
 
----
 
 ## Common Pitfalls
 
@@ -603,7 +587,6 @@ async fn good_middleware(req: Request, next: Next) -> Response {
 }
 ```
 
----
 
 ## Related Skills
 
@@ -613,7 +596,6 @@ async fn good_middleware(req: Request, next: Next) -> Response {
 - **rust-error** - Error handling in middleware
 - **rust-performance** - Middleware optimization
 
----
 
 ## Localized Reference
 

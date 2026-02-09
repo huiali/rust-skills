@@ -1,34 +1,20 @@
 ---
 name: rust-auth
-description: 'Authentication and authorization expert covering JWT, API keys, OAuth,
-  RBAC, password hashing,
-
-  distributed token storage, and session management patterns.
-
-  '
+description: Authentication and authorization expert covering JWT, API keys, OAuth, RBAC, password hashing, distributed token storage, and session management patterns.
 metadata:
   triggers:
-  - authentication
-  - authorization
-  - JWT
-  - API key
-  - OAuth
-  - RBAC
-  - password
-  - session
-  - token
-  - auth
+    - authentication
+    - authorization
+    - JWT
+    - API key
+    - OAuth
+    - RBAC
+    - password
+    - session
+    - token
+    - auth
 ---
 
-# Authentication and Authorization Expert
-
-## Core Question
-
-**How do you securely authenticate and authorize users in Rust applications?**
-
-Security is paramount. Choose the right auth strategy for your use case.
-
----
 
 ## Authentication Strategies
 
@@ -40,7 +26,6 @@ Security is paramount. Choose the right auth strategy for your use case.
 | **Session Cookie** | Traditional web apps | Medium | Medium |
 | **mTLS** | Service mesh, microservices | Very High | High |
 
----
 
 ## Solution Patterns
 
@@ -321,7 +306,6 @@ pub async fn jwt_auth_middleware(
 }
 ```
 
----
 
 ## RBAC (Role-Based Access Control)
 
@@ -356,7 +340,6 @@ impl RbacService {
 }
 ```
 
----
 
 ## Workflow
 
@@ -393,7 +376,6 @@ Token management:
   → Rotate: Periodic key rotation
 ```
 
----
 
 ## Review Checklist
 
@@ -410,7 +392,6 @@ When implementing auth:
 - [ ] IP whitelisting for API keys
 - [ ] Concurrent session limits
 
----
 
 ## Verification Commands
 
@@ -428,7 +409,6 @@ cargo test token_expiry
 wrk -t4 -c100 -d30s http://localhost:3000/auth/login
 ```
 
----
 
 ## Common Pitfalls
 
@@ -471,7 +451,6 @@ localStorage.setItem('token', jwt);
 // Set-Cookie: token=...; HttpOnly; Secure; SameSite=Strict
 ```
 
----
 
 ## Related Skills
 
@@ -481,7 +460,6 @@ localStorage.setItem('token', jwt);
 - **rust-error** - Error handling
 - **rust-database** - User storage
 
----
 
 ## Localized Reference
 

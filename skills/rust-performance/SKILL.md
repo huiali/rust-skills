@@ -1,34 +1,20 @@
 ---
 name: rust-performance
-description: 'Performance optimization expert covering profiling, benchmarking, memory
-  allocation, SIMD, cache
-
-  optimization, false sharing, lock contention, and NUMA-aware programming.
-
-  '
+description: Performance optimization expert covering profiling, benchmarking, memory allocation, SIMD, cache optimization, false sharing, lock contention, and NUMA-aware programming.
 metadata:
   triggers:
-  - performance
-  - optimization
-  - benchmark
-  - profiling
-  - allocation
-  - SIMD
-  - cache
-  - slow
-  - latency
-  - throughput
+    - performance
+    - optimization
+    - benchmark
+    - profiling
+    - allocation
+    - SIMD
+    - cache
+    - slow
+    - latency
+    - throughput
 ---
 
-# Performance Optimization Expert
-
-## Core Question
-
-**Where is the bottleneck, and is optimization worthwhile?**
-
-Measure first, optimize second. Never guess.
-
----
 
 ## Optimization Priority
 
@@ -42,7 +28,6 @@ Measure first, optimize second. Never guess.
 
 **Warning**: Premature optimization is the root of all evil. Make it work first, then optimize hot paths.
 
----
 
 ## Solution Patterns
 
@@ -110,7 +95,6 @@ let sum: i32 = data
     .sum();
 ```
 
----
 
 ## Profiling Tools
 
@@ -122,7 +106,6 @@ let sum: i32 = data
 | `valgrind --tool=cachegrind` | Cache analysis |
 | `dhat` | Heap allocation profiling |
 
----
 
 ## Common Optimizations
 
@@ -136,7 +119,6 @@ let sum: i32 = data
 | String concatenation in loop | O(n²) | `with_capacity` or `format!` |
 | LinkedList | Cache-unfriendly | `Vec` or `VecDeque` |
 
----
 
 ## Advanced: False Sharing
 
@@ -180,7 +162,6 @@ struct ShardCounters {
 }
 ```
 
----
 
 ## Lock Contention Optimization
 
@@ -226,7 +207,6 @@ pub fn parallel_count(data: &[String], num_threads: usize)
 }
 ```
 
----
 
 ## NUMA Awareness
 
@@ -264,7 +244,6 @@ numactl --hardware
 numactl --cpunodebind=0 --membind=0 ./my_program
 ```
 
----
 
 ## Data Structure Selection
 
@@ -294,7 +273,6 @@ impl Config {
 }
 ```
 
----
 
 ## Common Performance Traps
 
@@ -306,7 +284,6 @@ impl Config {
 | Frequent small allocations | Allocator pressure | Object pooling |
 | Dynamic string keys | Extra allocations | Use integer IDs |
 
----
 
 ## Review Checklist
 
@@ -323,7 +300,6 @@ When optimizing performance:
 - [ ] Benchmarks show improvement
 - [ ] Code still readable and maintainable
 
----
 
 ## Verification Commands
 
@@ -347,7 +323,6 @@ valgrind --tool=cachegrind ./target/release/your_program
 numactl --hardware
 ```
 
----
 
 ## Common Pitfalls
 
@@ -369,7 +344,6 @@ numactl --hardware
 
 **Fix**: Only optimize if gain is significant (>20%)
 
----
 
 ## Performance Diagnostic Workflow
 
@@ -393,7 +367,6 @@ numactl --hardware
 7. Repeat if not fast enough
 ```
 
----
 
 ## Related Skills
 
@@ -403,7 +376,6 @@ numactl --hardware
 - **rust-coding** - Writing performant idiomatic code
 - **rust-anti-pattern** - Performance anti-patterns to avoid
 
----
 
 ## Localized Reference
 

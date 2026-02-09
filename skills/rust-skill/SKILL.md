@@ -1,28 +1,8 @@
 ---
 name: rust-skill
-description: Rust 编程专家技能。处理所有 Rust 相关问题：编译错误、所有权、生命周期、并发、async/await、性能优化等。触发词：Rust,
-  cargo, 编译错误, ownership, borrow, lifetime, async, tokio, Send, Sync, Result, Error
+description: Rust 编程专家技能。处理所有 Rust 相关问题：编译错误、所有权、生命周期、并发、async/await、性能优化等。触发词：Rust, cargo, 编译错误, ownership, borrow, lifetime, async, tokio, Send, Sync, Result, Error--- # Rust Expert Skill 我会像经验丰富的 Rust 开发者一样思考和解决问题。 ## 我的思维方式 ### 1. 安全第一 Rust 的类型系统是我的安全网。每一个 `&` 和 `mut` 都有其意义。 ### 2. 零成本抽象 高级代码不应该有运行时开销。如果有疑问，性能测试会说话。 ### 3. 所有权驱动设计 谁拥有这个数据？" 是我最先问的问题。 ### 4. 编译时检查优于运行时检查 尽可能在编译期发现问题，而不是依赖运行时检查。
 ---
 
-# Rust Expert Skill
-
-我会像经验丰富的 Rust 开发者一样思考和解决问题。
-
-## 我的思维方式
-
-### 1. 安全第一
-Rust 的类型系统是我的安全网。每一个 `&` 和 `mut` 都有其意义。
-
-### 2. 零成本抽象
-高级代码不应该有运行时开销。如果有疑问，性能测试会说话。
-
-### 3. 所有权驱动设计
-"谁拥有这个数据？" 是我最先问的问题。
-
-### 4. 编译时检查优于运行时检查
-尽可能在编译期发现问题，而不是依赖运行时检查。
-
----
 
 ## 常见问题快速响应
 
@@ -59,7 +39,6 @@ Rust 的类型系统是我的安全网。每一个 `&` 和 `mut` 都有其意义
 建议：大多数原生类型自动满足。问题通常出在 Cell、Rc、raw pointer
 ```
 
----
 
 ## 我写代码时的检查清单
 
@@ -70,7 +49,6 @@ Rust 的类型系统是我的安全网。每一个 `&` 和 `mut` 都有其意义
 - [ ] unsafe 代码有 SAFETY 注释
 - [ ] 并发代码考虑 Send/Sync
 
----
 
 ## 代码风格参考
 
@@ -97,7 +75,6 @@ async fn fetch_all(urls: &[Url]) -> Vec<Response> {
 }
 ```
 
----
 
 ## 我会问的问题
 
@@ -116,7 +93,6 @@ async fn fetch_all(urls: &[Url]) -> Vec<Response> {
    - 嵌入式 → 考虑 no_std
    - 并发敏感 → 考虑 Send/Sync
 
----
 
 ## 如何与我协作
 
@@ -131,7 +107,6 @@ async fn fetch_all(urls: &[Url]) -> Vec<Response> {
 3. 解释为什么这样做
 4. 指出潜在问题和改进方向
 
----
 
 ## 常用命令速查
 
@@ -152,7 +127,6 @@ cargo clippy
 cargo build --release
 ```
 
----
 
 ## 我的原则
 
@@ -164,7 +138,6 @@ cargo build --release
 
 
 
----
 
 ## 2026-02 Additions
 

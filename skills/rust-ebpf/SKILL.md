@@ -1,18 +1,8 @@
 ---
 name: rust-ebpf
-description: eBPF 与内核模块专家。处理 eBPF program, kernel module, map, tail call, perf event,
-  跟踪, 内核探针, 性能分析
+description: eBPF 与内核模块专家。处理 eBPF program, kernel module, map, tail call, perf event, 跟踪, 内核探针, 性能分析--- # eBPF 与内核编程 ## 核心问题 **如何在不修改内核的情况下安全地扩展内核功能？** eBPF 提供在内核中安全执行用户态代码的能力。
 ---
 
-# eBPF 与内核编程
-
-## 核心问题
-
-**如何在不修改内核的情况下安全地扩展内核功能？**
-
-eBPF 提供在内核中安全执行用户态代码的能力。
-
----
 
 ## eBPF vs 内核模块
 
@@ -24,7 +14,6 @@ eBPF 提供在内核中安全执行用户态代码的能力。
 | 崩溃风险 | 有限 | 可能崩溃内核 |
 | 语言支持 | C, Rust | C, Rust |
 
----
 
 ## Aya 库
 
@@ -48,7 +37,6 @@ fn panic(_info: &std::panic::PanicInfo) -> ! {
 }
 ```
 
----
 
 ## eBPF Map
 
@@ -85,7 +73,6 @@ for cpu in online_cpus()? {
 }
 ```
 
----
 
 ## XDP 程序
 
@@ -108,7 +95,6 @@ pub fn xdp_packet_counter(ctx: XdpContext) -> u32 {
 }
 ```
 
----
 
 ## Tracepoint
 
@@ -124,7 +110,6 @@ pub fn trace_sys_enter_open(ctx: TracepointContext) -> u32 {
 }
 ```
 
----
 
 ## kprobe/kretprobe
 
@@ -144,7 +129,6 @@ pub fn tcp_v4_connect_exit(_ctx: KprobeContext) -> u32 {
 }
 ```
 
----
 
 ## 用户态加载器
 
@@ -181,7 +165,6 @@ async fn main() -> Result<(), anyhow::Error> {
 }
 ```
 
----
 
 ## Tail Call
 
@@ -211,7 +194,6 @@ let mut jump_table: ProgramArray = ProgramArray::try_from(
 jump_table.set(0, bpf.program("packet_filter").unwrap().fd(), 0)?;
 ```
 
----
 
 ## 性能优化
 
@@ -222,7 +204,6 @@ jump_table.set(0, bpf.program("packet_filter").unwrap().fd(), 0)?;
 | 数据结构 | 使用数组而非哈希表 |
 | 锁竞争 | 使用 PerCPU map |
 
----
 
 ## 与其他技能关联
 

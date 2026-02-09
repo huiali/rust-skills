@@ -1,34 +1,20 @@
 ---
 name: rust-async-pattern
-description: 'Advanced async patterns expert covering Stream implementation, zero-copy
-  buffers, tokio::spawn lifetimes,
-
-  plugin system scheduling, tonic streaming, and async lifetime management.
-
-  '
+description: Advanced async patterns expert covering Stream implementation, zero-copy buffers, tokio::spawn lifetimes, plugin system scheduling, tonic streaming, and async lifetime management.
 metadata:
   triggers:
-  - async pattern
-  - Stream
-  - tokio::spawn
-  - zero-copy
-  - plugin system
-  - tonic
-  - streaming
-  - BorrowedMessage
-  - async scheduling
-  - lifetime async
+    - async pattern
+    - Stream
+    - tokio::spawn
+    - zero-copy
+    - plugin system
+    - tonic
+    - streaming
+    - BorrowedMessage
+    - async scheduling
+    - lifetime async
 ---
 
-# Advanced Async Patterns Expert
-
-## Core Question
-
-**How do you manage complex async lifetime issues, especially with self-referential types and streaming?**
-
-Async makes lifetime problems harder. Self-referential buffers, tokio::spawn requirements, and Stream trait constraints all interact in non-obvious ways.
-
----
 
 ## Solution Patterns
 
@@ -321,7 +307,6 @@ impl MyServiceTrait for MyService {
 }
 ```
 
----
 
 ## Architecture Patterns
 
@@ -335,7 +320,6 @@ impl MyServiceTrait for MyService {
 | **Bytes (Arc)** | Network buffers | True zero-copy via reference counting | Reference counting overhead |
 | **Owned Snapshots** | API boundaries | Simple, always works | Copies data |
 
----
 
 ## Workflow
 
@@ -369,7 +353,6 @@ Verify:
   → API types are Send + Sync + 'static
 ```
 
----
 
 ## Review Checklist
 
@@ -386,7 +369,6 @@ When implementing advanced async patterns:
 - [ ] Arena cleanup prevents memory leaks
 - [ ] Error handling doesn't panic in streams
 
----
 
 ## Verification Commands
 
@@ -407,7 +389,6 @@ cargo bench --bench buffer_bench
 cargo clippy -- -W clippy::future_not_send
 ```
 
----
 
 ## Common Pitfalls
 
@@ -495,7 +476,6 @@ async fn blocking_async() {
 }
 ```
 
----
 
 ## Decision Matrix
 
@@ -511,7 +491,6 @@ async fn blocking_async() {
 | Need backpressure | Channel + actor |
 | Complex lifecycle | Actor with supervision |
 
----
 
 ## Related Skills
 
@@ -522,7 +501,6 @@ async fn blocking_async() {
 - **rust-concurrency** - Concurrency primitives
 - **rust-performance** - Zero-copy optimization
 
----
 
 ## Localized Reference
 
