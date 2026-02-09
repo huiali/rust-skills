@@ -1,278 +1,117 @@
-# Rust Skill 使用指南
+﻿# Rust Skill 使用指南（Codex）
 
-> 如何在 AI 编程工具中使用 Rust Skill 系统
-
----
-[中文](./USER_GUIDE_zh.md) | [English](./USER_GUIDE.md)
+> 本文档说明如何在 Codex 中使用 `rust-skills`，以及当前仓库的技能文件约定。
 
 ---
 
-## 简介
+## 1. 当前约定（重要）
 
-Rust Skill 是一个专为 Rust 编程设计的 AI 专家技能系统。它将 Rust 知识拆分为 **35 个子技能**，覆盖从入门到专家的全部领域。
+本仓库技能文件采用以下规则：
 
-**核心价值**：让 AI 在回答 Rust 相关问题时，能够调用对应领域的专业知识，提供更精准的解答。
+- 默认技能文件：`skills/<skill-name>/SKILL.md`（中文）
+- 英文技能文件：`skills/<skill-name>/SKILL_EN.md`（英文）
+- 历史中文备份（如存在）：`skills/<skill-name>/SKILL_ZH.md`
 
----
-
-## 支持的 AI 工具
-
-| 工具 | 支持情况 | 配置方式 |
-|-----|---------|---------|
-| **Cursor** | ✅ 原生支持 | MCP 配置 |
-| **Claude Code** | ✅ 支持 | MCP 配置 |
-| **GitHub Copilot** | ⚠️ 有限支持 | 手动参考 |
-| **其他 Agent** | ✅ 支持 | 直接引用 |
+Codex 默认读取并触发 `SKILL.md`。
 
 ---
 
-## 快速开始
+## 2. 在 Codex 中安装技能
 
-### 方式一：Cursor + MCP（推荐）
+### 方式 A：本地开发（推荐）
 
-#### 1. 配置 Cursor Rules
+如果你正在这个仓库里直接使用 Codex，不需要额外安装。只要目录结构完整，Codex 就可以按技能描述自动触发。
 
-在项目根目录创建 `.cursor/rules.md` 文件：
+### 方式 B：从 GitHub 安装到 Codex
 
-```markdown
-# Rust Skill Rules
+将技能安装到 `~/.codex/skills`（Windows 下通常是 `C:\Users\<你>\.codex\skills`）：
 
-当遇到 Rust 编程问题时，AI 应自动匹配对应技能：
-- 所有权/生命周期错误 → `rust-ownership`
-- 并发/异步 → `rust-concurrency`
-- 错误处理 → `rust-error`
-- unsafe/FFI → `rust-unsafe`
-- 性能优化 → `rust-performance`
-- Redis 缓存 → `rust-cache`
-- JWT 认证 → `rust-auth`
-- 中间件 → `rust-middleware`
-- 策略引擎 → `rust-xacml`
-
-技能定义：`skills/*/SKILL.md`
+```powershell
+python C:\Users\Administrator\.codex\skills\.system\skill-installer\scripts\install-skill-from-github.py --repo <your-user-or-org>/rust-skills --path skills/rust-skill
 ```
 
-#### 2. 配置 MCP
-
-在项目根目录创建 `.cursor/mcp.json` 文件：
-
-```json
-{
-  "mcpServers": {
-    "rust-skill": {
-      "command": "builtin",
-      "description": "Rust Skill 系统"
-    }
-  }
-}
-```
-
-> **配置说明**：
-> - `.cursor/rules.md` - Cursor 规则文件
-> - `.cursor/mcp.json` - MCP 配置文件
-> - `skills/` 和 `references/` - 项目核心内容，无需移动
-
-#### 3. 重启 Cursor
-
-配置完成后，Cursor 会自动加载技能系统。
-
-#### 4. 使用技能
-
-直接在对话中描述问题，系统会自动路由到对应技能：
-
-```
-"如何修复 E0382 借用检查器错误？"
-→ 自动触发 rust-ownership
-
-"tokio::spawn 需要 'static 但我有借用数据"
-→ 自动触发 rust-concurrency
-
-"如何实现 Redis 缓存管理？"
-→ 自动触发 rust-cache
-```
+安装后重启 Codex。
 
 ---
 
-### 方式二：直接引用
+## 3. Codex 中如何触发技能
 
-如果 AI 工具不支持 MCP，可以直接告诉它技能文件的位置：
+Codex 根据 `SKILL.md` frontmatter 的 `name` 与 `description` 自动判断是否触发。
 
-```
-请参考 D:/space/rust-skill/skills/ 目录下的技能文件，
-特别是 rust-ownership/SKILL.md 和 rust-concurrency/SKILL.md。
-```
+你可以用两种方式：
+
+### 自动触发（推荐）
+
+直接描述问题：
+
+- “帮我修复 Rust 的 E0382” -> 常触发 `rust-ownership`
+- “tokio::spawn 里生命周期不满足” -> 常触发 `rust-concurrency` / `rust-async`
+- “JWT 默认 EdDSA 怎么做” -> 常触发 `rust-auth`
+
+### 显式指定技能
+
+在提问里明确写：
+
+- “使用 `rust-web` 帮我设计按领域聚合的项目结构”
+- “请按 `rust-performance` 给这个函数做优化方案”
 
 ---
 
-## 技能触发方式
+## 4. 技能组织建议（给维护者）
 
-### 自动触发
+为了让 Codex 更稳定触发：
 
-描述问题时包含触发词，AI 会自动匹配对应技能：
+- `description` 要写清“做什么 + 什么时候用”
+- 一个技能只解决一个主问题域
+- 大量细节放在同目录补充文件，`SKILL.md` 保持可扫描
+- 示例尽量可复制运行（含 `cargo check/test/clippy`）
 
-| 问题示例 | 触发技能 |
-|---------|---------|
-| "所有权转移后原变量还能用吗？" | rust-ownership |
-| "Cell 和 RefCell 有什么区别？" | rust-mutability |
-| "Mutex 和 RwLock 怎么选？" | rust-concurrency |
-| "Result 和 Option 怎么处理？" | rust-error |
-| "async Stream 怎么实现？" | rust-async |
-| "unsafe 代码要注意什么？" | rust-unsafe |
-| "如何调用 C++ 库？" | rust-ffi |
-| "no_std 环境怎么开发？" | rust-embedded |
-| "Redis 缓存怎么设计？" | rust-cache |
-| "JWT 认证怎么做？" | rust-auth |
+---
 
-### 手动指定
+## 5. 常见问题
 
-如果自动匹配不准确，可以明确指定技能：
+### Q1：为什么技能没有触发？
 
-```
-请使用 rust-ownership 技能回答：
-" Rc 和 Arc 有什么区别？ "
+优先检查：
+
+1. `SKILL.md` frontmatter 是否有合法 `name/description`
+2. 你的提问是否包含该技能的语义关键词
+3. 是否被更匹配的技能抢占触发
+
+可在提问中显式写技能名来强制路由。
+
+### Q2：中文/英文版本怎么切换？
+
+当前默认是中文 `SKILL.md`。
+
+- 给人看英文：打开 `SKILL_EN.md`
+- 给 Codex 默认触发：保持 `SKILL.md` 为你希望的主语言
+
+### Q3：改完技能后不生效？
+
+- 本地仓库模式：通常立即生效
+- 安装到 `~/.codex/skills` 模式：更新后建议重启 Codex
+
+---
+
+## 6. 推荐提问模板
+
+```text
+请使用 rust-auth。
+场景：Axum API，JWT 作为访问令牌，默认 EdDSA。
+目标：给出签发、验签、中间件校验与密钥轮换策略。
+约束：生产可用，包含错误处理和测试建议。
 ```
 
 ---
 
-## 技能分类速查
+## 7. 仓库参考
 
-### Core Skills（核心技能 - 日常必用）
-
-| 技能 | 描述 | 适用场景 |
-|-----|------|---------|
-| rust-ownership | 所有权与生命周期 | 借用检查错误、内存安全 |
-| rust-mutability | 可变性深入 | Cell、RefCell 选择 |
-| rust-concurrency | 并发与异步 | 线程、通道、tokio |
-| rust-error | 错误处理 | Result、Option 处理 |
-
-### Advanced Skills（进阶技能 - 深入理解）
-
-| 技能 | 描述 | 适用场景 |
-|-----|------|---------|
-| rust-unsafe | 不安全代码 | FFI、原始指针 |
-| rust-performance | 性能优化 | 基准测试、SIMD |
-| rust-web | Web 开发 | axum、API 设计 |
-| rust-cache | 缓存管理 | Redis、TTL 策略 |
-| rust-auth | 认证授权 | JWT、API Key |
-| rust-middleware | 中间件 | CORS、限流、日志 |
-| rust-xacml | 策略引擎 | RBAC、权限决策 |
-
-### Expert Skills（专家技能 - 疑难杂症）
-
-| 技能 | 描述 | 适用场景 |
-|-----|------|---------|
-| rust-ffi | 跨语言互操作 | C/C++ 调用 |
-| rust-embedded | 嵌入式开发 | no_std、WASM |
-| rust-ebpf | 内核编程 | eBPF、Linux 内核 |
-| rust-gpu | GPU 计算 | CUDA、并行计算 |
+- 主入口技能：`skills/rust-skill/SKILL.md`
+- 技能索引：`skills/rust-skill-index/SKILL.md`
+- Web 结构示例：`skills/rust-web/SKILL.md`
+- 认证实践：`skills/rust-auth/SKILL.md`
 
 ---
 
-## 使用示例
-
-### 示例 1：修复编译错误
-
-**提问**：
-```
-error[E0382]: use of moved value: `value`
-```
-
-**AI 自动响应**：
-→ 触发 rust-ownership 技能
-→ 解释所有权转移规则
-→ 提供解决方案（借用、克隆、Arc）
-
-### 示例 2：性能优化
-
-**提问**：
-```
-这个 HashMap 操作太慢了，怎么优化？
-```
-
-**AI 自动响应**：
-→ 触发 rust-performance 技能
-→ 分析数据结构选择
-→ 建议并行化、SIMD 优化
-
-### 示例 3：Web 开发
-
-**提问**：
-```
-用 axum 写一个 REST API，需要认证和限流
-```
-
-**AI 自动响应**：
-→ 触发 rust-web + rust-auth + rust-middleware
-→ 提供完整代码模板
-→ 包含 JWT 认证、中间件配置
-
----
-
-## 项目结构
-
-```
-rust-skill/
-├── .cursor/                  # Cursor 配置目录
-│   ├── mcp.json             # MCP 配置文件
-│   └── rules.md             # Cursor 规则文件
-├── skills/                  # 技能目录（35 个子技能）
-│   ├── rust-ownership/      # 所有权
-│   ├── rust-concurrency/    # 并发
-│   ├── rust-cache/          # 缓存
-│   ├── rust-auth/           # 认证
-│   ├── rust-middleware/     # 中间件
-│   ├── rust-xacml/          # 策略引擎
-│   └── ...                  # 更多技能
-├── references/              # 参考资料
-│   ├── best-practices/      # 最佳实践
-│   ├── core-concepts/       # 核心概念
-│   └── ecosystem/           # 生态 crate
-├── scripts/                 # 工具脚本
-├── USER_GUIDE.md            # 本使用指南（英文）
-├── USER_GUIDE_zh.md         # 本使用指南（中文）
-├── SKILL.md                 # 主入口（英文）
-├── SKILL_zh.md              # 主入口（中文）
-├── README.md                # 项目说明（英文）
-└── README_zh.md             # 项目说明（中文）
-```
-
----
-
-## 常见问题
-
-### Q1: AI 没有自动触发对应技能？
-
-**A**: 尝试在问题中包含更多关键词，或直接指定技能：
-
-```
-请使用 rust-ownership 回答：Rc<T> 和 Arc<T> 的区别？
-```
-
-### Q2: 技能内容太详细，看不完？
-
-**A**: 每个技能都有清晰的层级结构，可以直接跳转到需要的部分：
-
-```markdown
-## 核心模式    ← 先看这个
-## 最佳实践    ← 然后看这个
-## 常见问题    ← 遇到问题时查这个
-```
-
-### Q3: 需要添加新的技能？
-
-**A**: 在 `skills/` 目录下创建新文件夹，添加 `SKILL.md` 文件即可。参考现有技能的格式。
-
----
-
-## 相关链接
-
-- **GitHub**: https://github.com/huiali/rust-skills
-- **问题反馈**: https://github.com/huiali/rust-skills/issues
-- **贡献指南**: 欢迎提交 PR 添加新技能
-
----
-
-## 许可证
-
-MIT License - Copyright (c) 2026 李偏偏
-
----
+MIT License
