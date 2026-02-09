@@ -1,6 +1,6 @@
 # Rust Skill - Rust Expert Skill System
 
-> A Rust programming expert skill system for Cursor Agent, containing **35 sub-skills** covering Rust from beginner to expert level.
+> A Rust programming expert skill system for Cursor Agent, containing **38 sub-skills** covering Rust from beginner to expert level.
 
 ---
 
@@ -67,6 +67,9 @@ Rust Skill is an AI assistant skill system designed specifically for Rust progra
 | **rust-auth** | JWT & API Key auth | auth, jwt, token, api-key |
 | **rust-middleware** | Middleware patterns | middleware, cors, rate-limit |
 | **rust-xacml** | Policy engine | xacml, policy, rbac, permission |
+| **rust-testing** | Testing strategy | test, proptest, mock, loom, criterion |
+| **rust-database** | Database & ORM | sqlx, diesel, sea-orm, transaction, migration |
+| **rust-observability** | Tracing & metrics | tracing, opentelemetry, metrics, prometheus |
 
 ### Expert Skills (Specialized)
 
@@ -157,6 +160,27 @@ Rust Skill is an AI assistant skill system designed specifically for Rust progra
 | Problem Type | Recommended Skill |
 |:---------|:---------|
 | Crate recommendations | `rust-ecosystem` |
+
+### Testing
+
+| Problem Type | Recommended Skill |
+|:---------|:---------|
+| Unit/integration test design | `rust-testing` |
+| Property/concurrency/flaky tests | `rust-testing` |
+
+### Database & Persistence
+
+| Problem Type | Recommended Skill |
+|:---------|:---------|
+| SQLx/Diesel/SeaORM usage | `rust-database` |
+| Transaction/deadlock/migration issues | `rust-database` |
+
+### Observability
+
+| Problem Type | Recommended Skill |
+|:---------|:---------|
+| Tracing/logging/metrics instrumentation | `rust-observability` |
+| OpenTelemetry and production diagnostics | `rust-observability` |
 
 ---
 

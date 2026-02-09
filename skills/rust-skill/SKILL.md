@@ -162,3 +162,20 @@ cargo build --release
 - 为并发问题选择合适的同步原语
 - 让编译器帮我发现尽可能多的问题
 
+
+
+---
+
+## 2026-02 Additions
+
+### New Skills
+
+- `rust-testing`: unit, integration, property, and concurrency testing with `proptest`/`loom`/`criterion`.
+- `rust-database`: SQLx/Diesel/SeaORM patterns, transaction boundaries, migrations, and query performance.
+- `rust-observability`: `tracing`, metrics, OpenTelemetry instrumentation, and production diagnostics.
+
+### Routing Hints
+
+- Testing failures or flaky async tests: use `rust-testing`.
+- SQL/ORM/transaction/deadlock/migration issues: use `rust-database`.
+- Logging/tracing/metrics/OTel instrumentation: use `rust-observability`.

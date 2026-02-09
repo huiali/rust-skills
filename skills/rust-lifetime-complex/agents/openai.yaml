@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Lifetime Complex"
-  short_description: "Help with Rust Lifetime Complex tasks"
+  short_description: "Complex lifetime, HRTB, and GAT scenarios"
+  default_prompt: "Use $rust-lifetime-complex to solve this Rust task with concrete code and checks."

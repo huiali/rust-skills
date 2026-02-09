@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Performance"
-  short_description: "Help with Rust Performance tasks"
+  short_description: "Profiling and performance optimization workflows"
+  default_prompt: "Use $rust-performance to solve this Rust task with concrete code and checks."

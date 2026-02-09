@@ -310,3 +310,12 @@ rust-skill (主入口)
                                   │
                                   └─► rust-coroutine
 ```
+
+
+---
+
+## 2026-02 Additions
+
+- `rust-testing`: testing strategy (unit, integration, property, concurrency, benchmark)
+- `rust-database`: database and ORM workflows (sqlx, diesel, sea-orm, transactions, migrations)
+- `rust-observability`: tracing, metrics, and OpenTelemetry instrumentation

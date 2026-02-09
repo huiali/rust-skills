@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Gpu"
-  short_description: "Help with Rust Gpu tasks and workflows"
+  short_description: "GPU memory and compute patterns in Rust"
+  default_prompt: "Use $rust-gpu to solve this Rust task with concrete code and checks."

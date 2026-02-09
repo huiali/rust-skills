@@ -5,7 +5,7 @@ description: Rust 技能索引。提供所有技能的快速导航和查询入�
 
 # Rust 技能索引
 
-> **当前共 35 个技能**，完整内容请参见根目录 `SKILL.md`
+> **当前共 38 个技能**，完整内容请参见根目录 `SKILL.md`
 
 ---
 
@@ -16,7 +16,7 @@ description: Rust 技能索引。提供所有技能的快速导航和查询入�
 | 核心技能 | 7 | 日常开发必备 |
 | 进阶技能 | 10 | 深入理解 Rust |
 | 专家技能 | 18 | 疑难杂症专项 |
-| **总计** | **35** | |
+| **总计** | **38** | |
 
 ---
 
@@ -121,3 +121,12 @@ Web 开发：rust-web, rust-async, rust-middleware, rust-auth, rust-xacml
 | 认证授权 | rust-auth |
 | Web 中间件 | rust-middleware |
 | 策略引擎 | rust-xacml |
+
+
+---
+
+## Newly Added Skills
+
+- `rust-testing` - unit/integration/property/concurrency testing
+- `rust-database` - sqlx/diesel/sea-orm, transaction, migration
+- `rust-observability` - tracing, metrics, OpenTelemetry

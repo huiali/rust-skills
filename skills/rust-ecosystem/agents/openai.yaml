@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Ecosystem"
-  short_description: "Help with Rust Ecosystem tasks"
+  short_description: "Crate selection and ecosystem tradeoff analysis"
+  default_prompt: "Use $rust-ecosystem to solve this Rust task with concrete code and checks."

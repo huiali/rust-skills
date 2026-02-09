@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Actor"
-  short_description: "Help with Rust Actor tasks"
+  short_description: "Actor model design and mailbox coordination"
+  default_prompt: "Use $rust-actor to solve this Rust task with concrete code and checks."

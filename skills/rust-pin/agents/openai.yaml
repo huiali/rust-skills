@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Pin"
-  short_description: "Help with Rust Pin tasks and workflows"
+  short_description: "Pin/Unpin and self-referential type reasoning"
+  default_prompt: "Use $rust-pin to solve this Rust task with concrete code and checks."

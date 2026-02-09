@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Database"
+  short_description: "Database access, transactions, and migration safety"
+  default_prompt: "Use $rust-database to solve this Rust task with concrete code and checks."

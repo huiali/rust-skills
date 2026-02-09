@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Middleware"
-  short_description: "Help with Rust Middleware tasks"
+  short_description: "Middleware composition and request pipeline control"
+  default_prompt: "Use $rust-middleware to solve this Rust task with concrete code and checks."

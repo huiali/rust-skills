@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Cache"
-  short_description: "Help with Rust Cache tasks"
+  short_description: "Redis caching strategy and invalidation design"
+  default_prompt: "Use $rust-cache to solve this Rust task with concrete code and checks."

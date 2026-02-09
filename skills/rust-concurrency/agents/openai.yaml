@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Concurrency"
-  short_description: "Help with Rust Concurrency tasks"
+  short_description: "Threading, Send/Sync, and async concurrency"
+  default_prompt: "Use $rust-concurrency to solve this Rust task with concrete code and checks."

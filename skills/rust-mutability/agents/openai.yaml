@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Mutability"
-  short_description: "Help with Rust Mutability tasks"
+  short_description: "Interior mutability and borrow conflict patterns"
+  default_prompt: "Use $rust-mutability to solve this Rust task with concrete code and checks."

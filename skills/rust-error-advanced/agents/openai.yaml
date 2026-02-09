@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Error Advanced"
-  short_description: "Help with Rust Error Advanced tasks"
+  short_description: "Advanced error layering with anyhow/thiserror"
+  default_prompt: "Use $rust-error-advanced to solve this Rust task with concrete code and checks."

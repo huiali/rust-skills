@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Macro"
-  short_description: "Help with Rust Macro tasks"
+  short_description: "Declarative and procedural macro implementation"
+  default_prompt: "Use $rust-macro to solve this Rust task with concrete code and checks."

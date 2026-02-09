@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Const"
-  short_description: "Help with Rust Const tasks"
+  short_description: "Const generics and compile-time programming"
+  default_prompt: "Use $rust-const to solve this Rust task with concrete code and checks."

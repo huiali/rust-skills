@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Coding"
-  short_description: "Help with Rust Coding tasks"
+  short_description: "Code style, API design, and maintainability"
+  default_prompt: "Use $rust-coding to solve this Rust task with concrete code and checks."

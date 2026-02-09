@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Coroutine"
-  short_description: "Help with Rust Coroutine tasks"
+  short_description: "Coroutine and generator-based control flow"
+  default_prompt: "Use $rust-coroutine to solve this Rust task with concrete code and checks."

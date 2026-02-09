@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Skill"
-  short_description: "Help with Rust Skill tasks"
+  short_description: "Main routing skill for Rust coding problems"
+  default_prompt: "Use $rust-skill to solve this Rust task with concrete code and checks."

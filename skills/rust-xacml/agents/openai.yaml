@@ -1,3 +1,4 @@
 interface:
-  display_name: "Rust Xacml"
-  short_description: "Help with Rust Xacml tasks"
+  display_name: "Rust XACML"
+  short_description: "Authorization policy modeling with XACML/RBAC"
+  default_prompt: "Use $rust-xacml to solve this Rust task with concrete code and checks."

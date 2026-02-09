@@ -1,3 +1,4 @@
 interface:
-  display_name: "Rust Dpdk"
-  short_description: "Help with Rust Dpdk tasks"
+  display_name: "Rust DPDK"
+  short_description: "Low-latency packet processing with Rust + DPDK"
+  default_prompt: "Use $rust-dpdk to solve this Rust task with concrete code and checks."

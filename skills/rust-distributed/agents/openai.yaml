@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Distributed"
-  short_description: "Help with Rust Distributed tasks"
+  short_description: "Distributed systems patterns in Rust services"
+  default_prompt: "Use $rust-distributed to solve this Rust task with concrete code and checks."

@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Anti Pattern"
-  short_description: "Help with Rust Anti Pattern tasks"
+  short_description: "Detect and refactor common Rust anti-patterns"
+  default_prompt: "Use $rust-anti-pattern to solve this Rust task with concrete code and checks."

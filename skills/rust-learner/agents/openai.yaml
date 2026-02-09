@@ -1,3 +1,4 @@
 interface:
   display_name: "Rust Learner"
-  short_description: "Help with Rust Learner tasks"
+  short_description: "Learning roadmap and Rust feature adoption"
+  default_prompt: "Use $rust-learner to solve this Rust task with concrete code and checks."
