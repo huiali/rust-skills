@@ -1,160 +1,420 @@
 ---
 name: rust-mutability
-description: 可变性专家。处理 E0596, E0499, E0502, interior mutability, Cell, RefCell, Mutex,
-  RwLock, borrow conflict, 可变性, 内部可变性, 借用冲突
+description: |
+  Interior mutability expert covering Cell, RefCell, Mutex, RwLock patterns, borrow conflicts
+  (E0596, E0499, E0502), and thread-safe mutation strategies.
+triggers:
+  - mutability
+  - mut
+  - Cell
+  - RefCell
+  - Mutex
+  - RwLock
+  - interior mutability
+  - borrow conflict
+  - E0596
+  - E0499
+  - E0502
 ---
 
-# 可变性
+# Interior Mutability Expert
 
-## 核心问题
+## Core Question
 
-**数据需要变化吗？谁来控制变化？**
+**Does the data need to change, and who controls that change?**
 
-可变性是程序状态改变的方式，需要谨慎设计。
-
----
-
-## 可变性类型
-
-| 类型 | 控制者 | 线程安全 | 使用场景 |
-|-----|-------|---------|---------|
-| `&mut T` | 外部调用者 | Yes | 标准可变借用 |
-| `Cell<T>` | 内部 | No | Copy 类型的内部可变性 |
-| `RefCell<T>` | 内部 | No | 非 Copy 类型的内部可变性 |
-| `Mutex<T>` | 内部 | Yes | 多线程内部可变性 |
-| `RwLock<T>` | 内部 | Yes | 多线程读写锁 |
-
----
-
-## 借用规则
-
-```
-任何时刻只能有：
-├─ 多个 &T（不可变借用）
-└─ 或者一个 &mut T（可变借用）
-
-两者不能同时存在
-```
+Mutability is how program state evolves. Design it carefully.
 
 ---
 
-## 错误码速查
+## Mutability Types
 
-| 错误码 | 含义 | 不要说 | 要问 |
-|-------|------|--------|------|
-| E0596 | 无法获取可变引用 | "add mut" | 这个真的需要可变吗？ |
-| E0499 | 多个可变借用冲突 | "split borrows" | 数据结构设计对吗？ |
-| E0502 | 借用冲突 | "separate scopes" | 为什么需要同时借用？ |
-| RefCell panic | 运行时借用错误 | "use try_borrow" | 运行时检查合适吗？ |
+| Type | Controller | Thread-Safe | Use Case |
+|------|------------|-------------|----------|
+| `&mut T` | External caller | Yes | Standard mutable borrow |
+| `Cell<T>` | Interior | No | Copy types with interior mutability |
+| `RefCell<T>` | Interior | No | Non-Copy types with interior mutability |
+| `Mutex<T>` | Interior | Yes | Multi-threaded interior mutability |
+| `RwLock<T>` | Interior | Yes | Multi-threaded read-write lock |
 
 ---
 
-## 何时用内部可变性
+## Solution Patterns
+
+### Pattern 1: External Mutability
 
 ```rust
-// 情况1：从 &self 获取 &mut T
-struct Config {
-    counters: RefCell<HashMap<String, u32>>,
+// Standard mutable borrow
+fn increment(counter: &mut u32) {
+    *counter += 1;
 }
 
-impl Config {
-    fn increment(&self, key: &str) {
-        // 从不可变引用获取可变引用
-        let mut counters = self.counters.borrow_mut();
-        *counters.entry(key.to_string()).or_insert(0) += 1;
+// Mutable method
+impl Counter {
+    fn increment(&mut self) {
+        self.value += 1;
     }
 }
+```
 
-// 情况2：Copy 类型
+**When to use**: Default choice, mutability controlled by caller.
+
+### Pattern 2: Cell for Copy Types
+
+```rust
+use std::cell::Cell;
+
 struct State {
     count: Cell<u32>,
 }
 
 impl State {
+    // Get immutable &self, mutate interior
     fn increment(&self) {
         self.count.set(self.count.get() + 1);
     }
 }
 ```
 
----
+**When to use**: Simple values (Copy types) need interior mutability.
 
-## 线程安全选择
+**Trade-offs**: Only works with Copy types, no references.
+
+### Pattern 3: RefCell for Non-Copy Types
 
 ```rust
-// 简单计数器 → 原子类型
+use std::cell::RefCell;
+
+struct Cache {
+    data: RefCell<HashMap<String, Value>>,
+}
+
+impl Cache {
+    fn insert(&self, key: String, value: Value) {
+        self.data.borrow_mut().insert(key, value);
+    }
+
+    fn get(&self, key: &str) -> Option<Value> {
+        self.data.borrow().get(key).cloned()
+    }
+}
+```
+
+**When to use**: Need `&mut T` from `&self`, single-threaded.
+
+**Trade-offs**: Runtime borrow checking, can panic.
+
+### Pattern 4: Mutex for Thread Safety
+
+```rust
+use std::sync::Mutex;
+
+struct SharedState {
+    data: Mutex<HashMap<String, Value>>,
+}
+
+impl SharedState {
+    fn insert(&self, key: String, value: Value) {
+        self.data.lock().unwrap().insert(key, value);
+    }
+}
+```
+
+**When to use**: Multi-threaded interior mutability.
+
+**Trade-offs**: Lock contention, can deadlock.
+
+### Pattern 5: RwLock for Read-Heavy Workloads
+
+```rust
+use std::sync::RwLock;
+
+struct Config {
+    settings: RwLock<HashMap<String, String>>,
+}
+
+impl Config {
+    fn get(&self, key: &str) -> Option<String> {
+        self.settings.read().unwrap().get(key).cloned()
+    }
+
+    fn update(&self, key: String, value: String) {
+        self.settings.write().unwrap().insert(key, value);
+    }
+}
+```
+
+**When to use**: Many readers, few writers.
+
+**Trade-offs**: Write locks more expensive than Mutex.
+
+---
+
+## Borrow Rules
+
+```
+At any time, you can have either:
+├─ Multiple &T (immutable borrows)
+└─ OR one &mut T (mutable borrow)
+
+Never both simultaneously
+```
+
+---
+
+## Error Code Quick Reference
+
+| Code | Meaning | Don't Say | Ask Instead |
+|------|---------|-----------|-------------|
+| E0596 | Cannot get mutable reference | "add mut" | Does this really need mutability? |
+| E0499 | Multiple mutable borrows conflict | "split borrows" | Is data structure design correct? |
+| E0502 | Borrow conflict | "separate scopes" | Why both borrows needed simultaneously? |
+| RefCell panic | Runtime borrow error | "use try_borrow" | Is runtime checking appropriate? |
+
+---
+
+## Workflow
+
+### Step 1: Choose Mutability Strategy
+
+```
+Single-threaded?
+  Need &mut from &self?
+    → RefCell<T>
+  Copy type?
+    → Cell<T>
+  Otherwise?
+    → &mut T
+
+Multi-threaded?
+  Simple atomic?
+    → AtomicU64/AtomicBool
+  Complex data?
+    Read-heavy → RwLock<T>
+    Write-heavy → Mutex<T>
+```
+
+### Step 2: Handle Borrow Conflicts
+
+```
+E0499 (multiple mut borrows)?
+  → Split struct into smaller pieces
+  → Use Cell/RefCell for interior mutability
+  → Redesign to avoid simultaneous access
+
+E0502 (borrow conflict)?
+  → Minimize borrow scopes
+  → Clone data if needed
+  → Restructure code flow
+```
+
+### Step 3: Consider Trade-offs
+
+```
+RefCell?
+  ✅ Flexible
+  ❌ Runtime panics possible
+  → Use in prototypes, single-threaded
+
+Mutex?
+  ✅ Thread-safe
+  ❌ Lock contention
+  → Profile before optimizing
+
+RwLock?
+  ✅ Many readers efficient
+  ❌ Writer starvation possible
+  → Use when reads >> writes
+```
+
+---
+
+## Thread-Safe Selection
+
+### Atomic Types
+
+```rust
+use std::sync::atomic::{AtomicU64, Ordering};
+
 let counter = AtomicU64::new(0);
+counter.fetch_add(1, Ordering::Relaxed);
+```
 
-// 复杂数据 → Mutex 或 RwLock
+**Use when**: Simple counters, flags.
+
+### Mutex
+
+```rust
+use std::sync::Mutex;
+
 let data = Mutex::new(HashMap::new());
+data.lock().unwrap().insert(key, value);
+```
 
-// 读多写少 → RwLock
+**Use when**: Thread-safe mutation, balanced read/write.
+
+### RwLock
+
+```rust
+use std::sync::RwLock;
+
 let data = RwLock::new(HashMap::new());
+data.read().unwrap().get(&key);  // Many readers
+data.write().unwrap().insert(key, value);  // Few writers
 ```
+
+**Use when**: Read-heavy workloads (10+ reads per write).
 
 ---
 
-## 常见问题
+## Common Pitfalls
 
-### 借用冲突
+### 1. Borrow Conflict
+
+**Symptom**: E0499, E0502 errors
 
 ```rust
-// ❌ 借用冲突
-let mut s = String::new();
-let r1 = &s;
-let r2 = &s;
-let r3 = &mut s; // 冲突！
+// ❌ Bad: multiple mutable borrows
+let r1 = &mut data.field1;
+let r2 = &mut data.field2;  // Error!
 
-// ✅ 分开作用域
-let mut s = String::new();
+// ✅ Good: split borrows
+let (field1, field2) = (&mut data.field1, &mut data.field2);
+
+// ✅ Better: restructure
+struct Data {
+    part1: Part1,
+    part2: Part2,
+}
+```
+
+### 2. RefCell Panic
+
+**Symptom**: "already borrowed" panic at runtime
+
+```rust
+// ❌ Bad: nested borrows
+let cell = RefCell::new(vec![1, 2, 3]);
+let borrow1 = cell.borrow();
+let borrow2 = cell.borrow_mut();  // Panics!
+
+// ✅ Good: drop first borrow
 {
-    let r1 = &s;
-    // 使用 r1
+    let borrow1 = cell.borrow();
+    // use borrow1...
+}  // dropped
+let borrow2 = cell.borrow_mut();  // OK
+
+// ✅ Better: use try_borrow
+if let Ok(mut b) = cell.try_borrow_mut() {
+    // safe mutation
 }
-let r3 = &mut s;
-// 使用 r3
 ```
 
-### RefCell panic
+### 3. Lock Held Across Await
+
+**Symptom**: Deadlock in async code
 
 ```rust
-// ❌ 双重可变借用
-let cell = RefCell::new(vec![]);
-let mut_borrow = cell.borrow_mut();
-let another = cell.borrow(); // panic!
+// ❌ Bad: MutexGuard across await
+let guard = mutex.lock().unwrap();
+async_op().await;  // DANGER
 
-// ✅ 用 try_borrow 避免 panic
-if let Ok(mut_borrow) = cell.try_borrow_mut() {
-    // 安全使用
+// ✅ Good: drop lock before await
+let value = {
+    let guard = mutex.lock().unwrap();
+    guard.clone()
+};  // lock dropped
+async_op().await;
+```
+
+---
+
+## Review Checklist
+
+When reviewing mutability code:
+
+- [ ] Mutability truly necessary (not premature)
+- [ ] Appropriate mutability type chosen (Cell/RefCell/Mutex)
+- [ ] RefCell used only in single-threaded contexts
+- [ ] Mutex/RwLock used for multi-threaded access
+- [ ] Lock scopes minimized to avoid contention
+- [ ] No locks held across `.await` points
+- [ ] Borrow conflicts resolved at design level
+- [ ] Runtime panics handled (try_borrow)
+- [ ] Atomic types used for simple counters/flags
+- [ ] Read-write patterns match RwLock choice
+
+---
+
+## Verification Commands
+
+```bash
+# Check compilation
+cargo check
+
+# Look for borrow conflict errors
+cargo check 2>&1 | grep -E "E0499|E0502|E0596"
+
+# Run tests
+cargo test
+
+# Check for deadlocks (with loom)
+cargo test --features loom
+
+# Clippy warnings
+cargo clippy -- -W clippy::mutex_atomic
+```
+
+---
+
+## Advanced Patterns
+
+### Splitting Borrows
+
+```rust
+// ✅ Split struct to enable simultaneous borrows
+struct Data {
+    readers: Vec<Reader>,
+    writers: Vec<Writer>,
+}
+
+fn process(data: &mut Data) {
+    let readers = &data.readers;
+    let writers = &mut data.writers;  // OK, different fields
+    // use both...
+}
+```
+
+### Interior Mutability with Shared Ownership
+
+```rust
+use std::sync::{Arc, Mutex};
+
+#[derive(Clone)]
+struct Shared {
+    inner: Arc<Mutex<Inner>>,
+}
+
+impl Shared {
+    fn update(&self) {
+        self.inner.lock().unwrap().modify();
+    }
 }
 ```
 
 ---
 
-## 设计建议
+## Related Skills
 
-1. **变异是必要的吗？**
-   - 也许可以返回新值
-   - 也许可以 immutable 构造
-
-2. **谁控制变异？**
-   - 外部调用者 → `&mut T`
-   - 内部逻辑 → 内部可变性
-   - 并发访问 → 同步原语
-
-3. **线程上下文？**
-   - 单线程 → Cell/RefCell
-   - 多线程 → Mutex/RwLock/Atomic
+- **rust-ownership** - Ownership and borrowing fundamentals
+- **rust-concurrency** - Thread-safe patterns
+- **rust-unsafe** - UnsafeCell and low-level mutability
+- **rust-anti-pattern** - Mutability anti-patterns
+- **rust-performance** - Lock contention optimization
 
 ---
 
-## 向上追踪
+## Localized Reference
 
-借用冲突持续时：
-
-```
-E0499/E0502 (借用冲突)
-    ↑ 问：数据结构设计正确吗？
-    ↑ 查 rust-type-driven：应该拆分数据吗？
-    ↑ 查 rust-concurrency：涉及 async 吗？
-```
+- **Chinese version**: [SKILL_ZH.md](./SKILL_ZH.md) - 完整中文版本，包含所有内容

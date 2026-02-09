@@ -1,52 +1,63 @@
 ---
 name: rust-ownership
-description: 所有权、借用、生命周期专家。处理 E0382, E0597, E0506, E0507, E0515, E0716, E0106 等错误。触发词：ownership,
-  borrow, lifetime, move, clone, Copy, 所有权, 借用, 生命周期
+description: |
+  Ownership, borrowing, and lifetime expert. Handles compiler errors E0382, E0597, E0506, E0507,
+  E0515, E0716, E0106 and provides systematic solutions for memory safety patterns.
+triggers:
+  - ownership
+  - borrow
+  - lifetime
+  - move
+  - clone
+  - Copy
+  - E0382
+  - E0597
+  - E0506
 ---
 
-# 所有权与生命周期专家
+# Ownership & Lifetime Expert
 
-## 核心信条
+## Core Question
 
-**每个值都有一个明确的主人**
+**Who owns this data, and for how long can it be accessed?**
 
-这是 Rust 最独特的设计。理解所有权，你就理解了 Rust 的一半。
+Understanding ownership is understanding half of Rust. Every value has exactly one owner at any given time.
 
 ---
 
-## 常见问题模式
+## Solution Patterns
 
-### 模式 1：移动后的使用
+### Pattern 1: Value Moved After Use
 
 ```rust
 let s1 = String::from("hello");
 let s2 = s1;
-// println!("{}", s1); // 编译错误！
+// println!("{}", s1); // Compile error!
 ```
 
-**问题本质**：s1 的所有权转移给了 s2，s1 不再有效
+**Root Cause**: Ownership transferred from `s1` to `s2`, `s1` is no longer valid.
 
-**解决方案**：
-- 如果需要两个副本 → `clone()`
-- 如果只需要读 → 传递引用 `&s1`
-- 如果 s2 只是临时 → 考虑重新设计
+**Solutions**:
+- Need two copies → use `clone()`
+- Only need to read → pass by reference `&s1`
+- `s2` is temporary → consider redesign
 
-### 模式 2：借用冲突
+### Pattern 2: Borrow Conflict
 
 ```rust
 let mut s = String::from("hello");
 let r1 = &s;
-let r2 = &mut s; // 冲突！
+let r2 = &mut s; // Conflict!
 // println!("{}", r1);
 ```
 
-**问题本质**：不可变借用和可变借用同时存在
+**Root Cause**: Immutable and mutable borrows coexist.
 
-**解决方案**：
-- 确保可变借用使用完毕后再创建新的借用
-- 重新组织代码结构
+**Solutions**:
+- Ensure mutable borrow completes before creating new borrows
+- Restructure code organization
 
-### 模式 3：生命周期不匹配
+### Pattern 3: Lifetime Mismatch
 
 ```rust
 fn longest<'a>(s1: &'a str, s2: &'a str) -> &'a str {
@@ -54,157 +65,228 @@ fn longest<'a>(s1: &'a str, s2: &'a str) -> &'a str {
 }
 ```
 
-**问题本质**：返回值生命周期必须和输入之一关联
+**Root Cause**: Return value lifetime must be tied to one of the inputs.
 
-**解决关键**：
-1. 明确每个引用的生命周期
-2. 用命名生命周期表达关系
-3. 优先返回 owned 类型
+**Key Solutions**:
+1. Clarify each reference's lifetime
+2. Use named lifetimes to express relationships
+3. Prefer returning owned types
 
 ---
 
-## 我的思考流程
+## Workflow
 
-### 1. 谁拥有数据？
+### Step 1: Who Owns the Data?
 
-| 情况 | 所有者 |
-|-----|-------|
-| 函数参数 | 调用者拥有 |
-| 函数内部变量 | 函数拥有（返回时销毁） |
-| 结构体字段 | 结构体实例拥有 |
-| `Arc<T>` | 多个共享所有者 |
+| Situation | Owner |
+|-----------|-------|
+| Function parameter | Caller owns |
+| Function-local variable | Function owns (destroyed on return) |
+| Struct field | Struct instance owns |
+| `Arc<T>` | Multiple shared owners |
 
-### 2. 借用合理吗？
+### Step 2: Is Borrowing Appropriate?
 
-| 操作 | 借用类型 | 注意事项 |
-|-----|---------|---------|
-| 只读操作 | `&T` | 可多个同时存在 |
-| 需要修改 | `&mut T` | 同时只能有一个 |
-| 借用期间原值会被修改吗？ | 如果会，问题就在这里 |
+| Operation | Borrow Type | Notes |
+|-----------|-------------|-------|
+| Read-only | `&T` | Multiple can coexist |
+| Needs mutation | `&mut T` | Only one at a time |
+| Will original be modified during borrow? | If yes, that's the issue |
 
-### 3. 能避免生命周期吗？
+### Step 3: Can Lifetimes Be Avoided?
 
 ```
-返回 String 而不是 &str
+Return String instead of &str
     ↓
-使用 owned 集合而不是切片
+Use owned collections instead of slices
     ↓
-用 Arc/Rc 共享所有权
+Use Arc/Rc for shared ownership
     ↓
-生命周期不是必须品
+Lifetimes aren't always necessary
 ```
 
 ---
 
-## 智能指针选择
+## Smart Pointer Selection
 
-| 场景 | 选择 | 原因 |
-|-----|------|-----|
-| 堆分配单个值 | `Box<T>` | 简单直接 |
-| 单线程共享引用计数 | `Rc<T>` | 轻量级 |
-| 多线程共享引用计数 | `Arc<T>` | 原子操作 |
-| 需要运行时借用检查 | `RefCell<T>` | 单线程内部可变性 |
-| 多线程内部可变性 | `Mutex<T>` 或 `RwLock<T>` | 线程安全 |
-
----
-
-## 反模式警示
-
-| 反模式 | 问题 | 正确做法 |
-|-------|------|---------|
-| `.clone()` 到处都是 | 隐藏所有权问题 | 思考真正的所有权需求 |
-| `'static` 用于所有地方 | 过于宽松且不精确 | 使用实际需要的生命周期 |
-| `Box::leak()` 泄漏内存 | 内存浪费 | 使用正确的生命周期管理 |
-| 与借用检查器对抗 | 给自己挖坑 | 理解并配合编译器的设计 |
+| Scenario | Choice | Reason |
+|----------|--------|--------|
+| Heap-allocate single value | `Box<T>` | Simple and direct |
+| Single-threaded shared reference counting | `Rc<T>` | Lightweight |
+| Multi-threaded shared reference counting | `Arc<T>` | Atomic operations |
+| Need runtime borrow checking | `RefCell<T>` | Single-threaded interior mutability |
+| Multi-threaded interior mutability | `Mutex<T>` or `RwLock<T>` | Thread-safe |
 
 ---
 
-## 实践建议
+## Common Pitfalls
 
-### 新手常见困惑
-
-1. **"什么时候该用引用，什么时候该用所有权？"**
-   - 函数参数用引用（除非需要消耗）
-   - 函数返回值用引用（如果 caller 不需要所有权）
-   - 存储时考虑生命周期复杂度
-
-2. **"生命周期注解到底怎么加？"**
-   - 大多数情况编译器能推断
-   - 结构体、trait impl、方法返回引用时需要显式标注
-   - 生命周期名称要有意义，比如 `'connection`、`'file`
-
-3. **"为什么这个借用不工作？"**
-   - 可变借用期间原值不可访问
-   - 检查借用的作用域范围
-   - 考虑是否需要重新组织代码结构
+| Anti-Pattern | Problem | Correct Approach |
+|--------------|---------|------------------|
+| `.clone()` everywhere | Hides ownership issues | Think about actual ownership needs |
+| `'static` for everything | Too loose and imprecise | Use actual required lifetimes |
+| `Box::leak()` memory leaks | Memory waste | Use proper lifetime management |
+| Fighting the borrow checker | Digging your own hole | Understand and work with compiler design |
 
 ---
 
-## 错误码速查表
+## Practical Guidance
 
-| 错误码 | 含义 | 不要说 | 要问 |
-|-------|------|--------|------|
-| E0382 | 值被移动后使用 | "clone it" | 谁应该拥有这个数据？ |
-| E0597 | 生命周期太短 | "extend lifetime" | 作用域边界正确吗？ |
-| E0506 | 借用未结束就被修改 | "end borrow first" | 变异应该在哪里发生？ |
-| E0507 | 从引用 move 出数据 | "clone before move" | 为什么要从引用移动？ |
-| E0515 | 返回非 owned 数据 | "return owned" | 调用者应该拥有数据吗？ |
-| E0716 | 临时值生命周期不足 | "bind to variable" | 为什么这个是临时的？ |
-| E0106 | 生命周期参数缺失 | "add 'a" | 生命周期关系是什么？ |
+### Common Beginner Questions
 
----
+**1. "When should I use references vs ownership?"**
+   - Function parameters: use references (unless consuming)
+   - Function returns: use references (if caller doesn't need ownership)
+   - Storage: consider lifetime complexity
 
-## 思考过程
+**2. "How do I add lifetime annotations?"**
+   - Most cases: compiler can infer
+   - Need explicit: structs, trait impls, methods returning references
+   - Use meaningful names: `'connection`, `'file`
 
-遇到所有权问题时，按以下步骤思考：
-
-1. **这个数据在领域中的角色是什么？**
-   - 实体（有唯一标识）→ owned
-   - 值对象（可互换）→ clone/copy 可以
-   - 临时计算结果 → 考虑重构
-
-2. **所有权设计是有意为之还是意外？**
-   - 有意 → 在约束内工作
-   - 意外 → 考虑重新设计
-
-3. **修复症状还是重新设计？**
-   - 如果尝试 3 次仍失败 → 升级到设计层面
+**3. "Why doesn't this borrow work?"**
+   - Mutable borrows make original inaccessible
+   - Check borrow scope ranges
+   - Consider code reorganization
 
 ---
 
-## 向上追踪（Trace Up）
+## Error Code Quick Reference
 
-当所有权错误持续时，追踪到设计层面：
+| Code | Meaning | Don't Say | Ask Instead |
+|------|---------|-----------|-------------|
+| E0382 | Use of moved value | "clone it" | Who should own this data? |
+| E0597 | Lifetime too short | "extend lifetime" | Are scope boundaries correct? |
+| E0506 | Borrow not ended before mutation | "end borrow first" | Where should mutation occur? |
+| E0507 | Move out of reference | "clone before move" | Why move from reference? |
+| E0515 | Return non-owned data | "return owned" | Should caller own the data? |
+| E0716 | Temporary value lifetime insufficient | "bind to variable" | Why is this temporary? |
+| E0106 | Missing lifetime parameter | "add 'a" | What's the lifetime relationship? |
+
+---
+
+## Thinking Process
+
+When encountering ownership issues, follow these steps:
+
+**1. What's this data's role in the domain?**
+   - Entity (unique identity) → owned
+   - Value object (interchangeable) → clone/copy acceptable
+   - Temporary computation result → consider refactor
+
+**2. Is ownership design intentional or accidental?**
+   - Intentional → work within constraints
+   - Accidental → consider redesign
+
+**3. Fix symptom or redesign?**
+   - If failed 3 times → escalate to design level
+
+---
+
+## Trace Up (Design Analysis)
+
+When ownership errors persist, trace to design level:
 
 ```
 E0382 (moved value)
-    ↑ 问：什么设计选择导致了这种所有权模式？
-    ↑ 查：这是实体还是值对象？
-    ↑ 查：是否有其他约束？
+    ↑ Ask: What design choice led to this ownership pattern?
+    ↑ Check: Is this an entity or value object?
+    ↑ Check: Are there other constraints?
 
-持续 E0382 → rust-resource：应该用 Arc/Rc 共享吗？
-持续 E0597 → rust-type-driven：作用域边界正确吗？
-E0506/E0507 → rust-mutability：应该用内部可变性吗？
+Persistent E0382 → rust-resource: Should use Arc/Rc for sharing?
+Persistent E0597 → rust-type-driven: Are scope boundaries correct?
+E0506/E0507 → rust-mutability: Should use interior mutability?
 ```
 
 ---
 
-## 向下实现（Trace Down）
+## Trace Down (Implementation)
 
-从设计决策到实现：
+From design decisions to implementation:
 
 ```
-"数据需要不可变共享"
-    ↓ 多线程：Arc<T>
-    ↓ 单线程：Rc<T>
+"Data needs immutable sharing"
+    ↓ Multi-threaded: Arc<T>
+    ↓ Single-threaded: Rc<T>
 
-"数据需要独占所有权"
-    ↓ 返回 owned 值
+"Data needs exclusive ownership"
+    ↓ Return owned value
 
-"数据只是临时使用"
-    ↓ 在作用域内使用引用
+"Data is temporary use only"
+    ↓ Use references within scope
 
-"需要在函数间传递数据"
-    ↓ 考虑生命周期或返回 owned
+"Need to pass data between functions"
+    ↓ Consider lifetimes or return owned
 ```
 
+---
+
+## Review Checklist
+
+When reviewing ownership-related code:
+
+- [ ] Each value has a clear owner
+- [ ] Borrows don't outlive the borrowed data
+- [ ] Mutable and immutable borrows don't overlap
+- [ ] Lifetime annotations accurately reflect data relationships
+- [ ] Smart pointer choice matches threading requirements
+- [ ] `.clone()` is used intentionally, not to avoid compiler errors
+- [ ] Lifetime elision is leveraged where possible
+- [ ] Complex lifetime scenarios are documented
+
+---
+
+## Verification Commands
+
+```bash
+# Check compilation
+cargo check
+
+# Run tests
+cargo test
+
+# Check for common mistakes
+cargo clippy -- -W clippy::clone_on_copy -W clippy::unnecessary_clone
+
+# Verify no memory leaks in tests
+cargo test --features leak-check
+```
+
+---
+
+## Common Pitfalls
+
+### 1. Clone Abuse
+
+**Symptom**: `.clone()` everywhere to satisfy compiler
+
+**Fix**: Understand actual ownership requirements, use references where possible
+
+### 2. Lifetime Overuse
+
+**Symptom**: Complex lifetime annotations everywhere
+
+**Fix**: Return owned types, use smart pointers
+
+### 3. Fighting Borrow Checker
+
+**Symptom**: Constantly rewriting to satisfy compiler
+
+**Fix**: Step back and redesign data flow
+
+---
+
+## Related Skills
+
+- **rust-mutability** - Interior mutability patterns (Cell, RefCell)
+- **rust-concurrency** - Send/Sync and thread safety
+- **rust-unsafe** - Raw pointers and manual memory management
+- **rust-lifetime-complex** - Advanced lifetime patterns (HRTB, GAT)
+- **rust-resource** - Resource management and RAII patterns
+- **rust-type-driven** - Type-driven design
+
+---
+
+## Localized Reference
+
+- **Chinese version**: [SKILL_ZH.md](./SKILL_ZH.md) - 完整中文版本，包含所有内容
