@@ -1,48 +1,27 @@
 ---
 name: rust-observability
-description: Rust observability skill for logging, tracing, metrics, OpenTelemetry, structured events, and production diagnostics. Use when instrumenting Rust services with tracing spans, correlation IDs, Prometheus metrics, alerting signals, or debugging latency/error hotspots.
+description: "Rust observability instrumentation with tracing, metrics, OpenTelemetry, and production diagnostics."
 ---
 
 # Rust Observability Skill
 
-Use this skill to make Rust systems diagnosable in production.
+Use this skill to solve Rust tasks in this domain with actionable, production-ready guidance.
+
+## Focus Areas
+- Instrument critical paths first
+- Keep logs structured and safe
+- Use bounded-cardinality metrics
 
 ## Workflow
+1. Define telemetry goals
+2. Add tracing/logging/metrics
+3. Export and verify telemetry
+4. Tune dashboards and alerts
 
-1. Define signals: logs, traces, metrics, and service-level objectives.
-2. Instrument critical paths first: request entry, DB calls, external RPC, queue boundaries.
-3. Add correlation context (request ID, tenant, user-safe identifiers).
-4. Export telemetry to your backend (Prometheus/OTLP/etc.).
-5. Validate dashboards and alert thresholds against failure modes.
+## Typical Triggers
+- tracing, metrics, otel, prometheus
 
-## Instrumentation Patterns
-
-### Tracing
-
-- Use `tracing` spans around I/O and business-critical operations.
-- Attach semantic fields (`status`, `latency_ms`, `db.statement.name`).
-- Propagate trace context across async/task boundaries.
-
-### Logging
-
-- Prefer structured logs over free-form strings.
-- Separate user-safe context from sensitive data.
-- Keep log levels intentional (`error`, `warn`, `info`, `debug`, `trace`).
-
-### Metrics
-
-- Track RED signals: rate, errors, duration.
-- Add saturation metrics for pools, queues, and executors.
-- Keep metric cardinality bounded.
-
-## Suggested crates
-
-- `tracing`, `tracing-subscriber`
-- `metrics` or `prometheus`
-- `opentelemetry`, `tracing-opentelemetry`
-
-## Guardrails
-
-- Do not log secrets or tokens.
-- Do not use high-cardinality labels (e.g., raw user IDs) in metrics.
-- Do not instrument everything first; instrument bottlenecks first.
+## Output Expectations
+- Provide compilable Rust snippets when code is requested.
+- Explain tradeoffs and list assumptions.
+- Include concrete verification commands (`cargo check`, `cargo test`, `cargo clippy`) when relevant.
