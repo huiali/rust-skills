@@ -1,27 +1,71 @@
 ---
 name: rust-observability
-description: "Rust observability instrumentation with tracing, metrics, OpenTelemetry, and production diagnostics."
+description: "Rust observability skill for tracing, metrics, structured logging, OpenTelemetry pipelines, and production incident diagnostics."
 ---
 
 # Rust Observability Skill
 
-Use this skill to solve Rust tasks in this domain with actionable, production-ready guidance.
+## Core Question
 
-## Focus Areas
-- Instrument critical paths first
-- Keep logs structured and safe
-- Use bounded-cardinality metrics
+**Which telemetry signals reduce mean time to detect and resolve production failures?**
 
-## Workflow
-1. Define telemetry goals
-2. Add tracing/logging/metrics
-3. Export and verify telemetry
-4. Tune dashboards and alerts
+## Signal Model
 
-## Typical Triggers
-- tracing, metrics, otel, prometheus
+- Logs: contextual events and state snapshots.
+- Traces: cross-service causal path and latency breakdown.
+- Metrics: rate/error/duration + saturation and capacity.
 
-## Output Expectations
-- Provide compilable Rust snippets when code is requested.
-- Explain tradeoffs and list assumptions.
-- Include concrete verification commands (`cargo check`, `cargo test`, `cargo clippy`) when relevant.
+Use all three intentionally, not interchangeably.
+
+## Instrumentation Priorities
+
+1. Request entry/exit and key business operations.
+2. Downstream calls (DB, cache, RPC, queue).
+3. Retry/timeouts and circuit-breaker transitions.
+4. Queue depth and worker saturation.
+
+## Logging Rules
+
+- Structured logs only.
+- No secrets/tokens/PII leakage.
+- Stable field names for dashboards and alerts.
+
+## Metrics Rules
+
+- Keep label cardinality bounded.
+- Prefer RED + USE style baseline metrics.
+- Track queue/worker/resource saturation explicitly.
+
+## Common Pitfalls
+
+- High-cardinality labels (raw user/session IDs).
+- Verbose debug logs on hot paths in production.
+- Traces without propagated correlation context.
+- Alert thresholds not aligned with SLOs.
+
+## Review Checklist
+
+- [ ] Critical path spans and error fields exist.
+- [ ] Metrics cover latency/errors/saturation.
+- [ ] Correlation IDs flow across service boundaries.
+- [ ] Logging policy prevents sensitive data exposure.
+- [ ] Alerts map to actionable runbooks.
+
+## Verification Commands
+
+```bash
+cargo check
+cargo test
+cargo clippy
+RUST_LOG=info cargo run
+```
+
+## Related Skills
+
+- `rust-web`
+- `rust-database`
+- `rust-concurrency`
+
+## Localized Reference
+
+- Original Chinese version is preserved in `SKILL_ZH.md`.

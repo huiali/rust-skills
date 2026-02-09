@@ -5,23 +5,50 @@ description: "Rust testing expert for unit, integration, async, property-based, 
 
 # Rust Testing Skill
 
-Use this skill to solve Rust tasks in this domain with actionable, production-ready guidance.
+Use this skill for detailed, production-ready guidance in this Rust domain.
 
-## Focus Areas
-- Design robust and deterministic tests
-- Improve failure diagnostics
-- Keep test suites fast and maintainable
+## Core Question
+
+**How do we keep tests deterministic, fast, and meaningful?**
+
+## Solution Patterns
+
+- Use unit tests for logic, integration for contracts
+- Use property tests for invariants
+- Use loom/criterion for concurrency/perf confidence
 
 ## Workflow
-1. Classify failure type
-2. Select test strategy
-3. Write deterministic assertions
-4. Run CI-friendly validation
 
-## Typical Triggers
-- cargo test, proptest, loom, criterion
+1. Reproduce and isolate the issue with a minimal failing case.
+2. Choose the smallest safe design that satisfies constraints.
+3. Implement with explicit ownership, errors, and boundaries.
+4. Verify with tests, linting, and scenario-specific checks.
 
-## Output Expectations
-- Provide compilable Rust snippets when code is requested.
-- Explain tradeoffs and list assumptions.
-- Include concrete verification commands (`cargo check`, `cargo test`, `cargo clippy`) when relevant.
+## Review Checklist
+
+- [ ] Correct behavior for both success and failure paths.
+- [ ] Ownership and API boundaries are explicit.
+- [ ] Error handling and diagnostics are actionable.
+- [ ] Performance-sensitive paths are measured.
+- [ ] Regression tests cover the changed behavior.
+
+## Common Pitfalls
+
+- Fixing flakes with sleep
+- Over-mocking
+- Slow tests in default CI path
+
+## Verification Commands
+
+```bash
+cargo test
+cargo test -- --nocapture
+cargo bench
+cargo nextest run
+```
+
+## Related Skills
+
+- `rust-concurrency`
+- `rust-performance`
+- `rust-database`
