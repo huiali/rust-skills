@@ -1,7 +1,7 @@
 ---
 name: rust-coroutine
-description: "协程与绿色线程专家。处理 generator, suspend/resume, stackful coroutine, stackless coroutine, context switch, 协程, 绿色线程, 上下文切换, 生成器"
-globs: ["**/*.rs"]
+description: 协程与绿色线程专家。处理 generator, suspend/resume, stackful coroutine, stackless
+  coroutine, context switch, 协程, 绿色线程, 上下文切换, 生成器
 ---
 
 # 协程与绿色线程

@@ -1,7 +1,8 @@
 ---
 name: rust-pin
-description: "Pin 与自引用类型专家。处理 Pin, Unpin, self-referential, Future, async, Generator, Pinning projection 等问题。触发词：Pin, Unpin, self-referential, Future, async, Generator, 自引用, Pinning"
-globs: ["**/*.rs"]
+description: Pin 与自引用类型专家。处理 Pin, Unpin, self-referential, Future, async, Generator,
+  Pinning projection 等问题。触发词：Pin, Unpin, self-referential, Future, async, Generator,
+  自引用, Pinning
 ---
 
 # Pin 与自引用

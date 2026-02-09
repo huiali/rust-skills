@@ -1,0 +1,3 @@
+interface:
+  display_name: "Rust Actor"
+  short_description: "Help with Rust Actor tasks"

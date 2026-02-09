@@ -1,12 +1,6 @@
 ---
 name: rust-middleware
-description: "请求追踪、CORS 配置、限流、中间件模式"
-category: infrastructure
-triggers: ["middleware", "cors", "rate-limit", "tracing", "中间件", "请求追踪"]
-related_skills:
-  - rust-web
-  - rust-error
-  - rust-concurrency
+description: 请求追踪、CORS 配置、限流、中间件模式
 ---
 
 # Rust Middleware - 中间件技能

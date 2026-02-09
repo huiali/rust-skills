@@ -1,7 +1,8 @@
 ---
 name: rust-concurrency
-description: "并发与异步专家。处理 Send, Sync, thread, async, await, tokio, channel, Mutex, deadlock, race condition, 并发, 异步, 死锁等问题。触发词：thread, spawn, channel, mpsc, Mutex, RwLock, Atomic, async, await, Future, tokio, deadlock, race condition"
-globs: ["**/*.rs"]
+description: 并发与异步专家。处理 Send, Sync, thread, async, await, tokio, channel, Mutex, deadlock,
+  race condition, 并发, 异步, 死锁等问题。触发词：thread, spawn, channel, mpsc, Mutex, RwLock, Atomic,
+  async, await, Future, tokio, deadlock, race condition
 ---
 
 # 并发与异步专家

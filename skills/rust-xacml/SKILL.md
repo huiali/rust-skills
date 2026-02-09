@@ -1,13 +1,6 @@
 ---
 name: rust-xacml
-description: "策略引擎、权限决策、RBAC、策略模式、责任链"
-category: architecture
-triggers: ["xacml", "permission", "rbac", "policy", "authorization", "策略引擎", "权限"]
-related_skills:
-  - rust-auth
-  - rust-web
-  - rust-performance
-  - rust-cache
+description: 策略引擎、权限决策、RBAC、策略模式、责任链
 ---
 
 # Rust XACML - 策略引擎技能

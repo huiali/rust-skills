@@ -1,7 +1,7 @@
 ---
 name: rust-web
-description: "Rust Web 开发专家。处理 axum, actix, HTTP, REST, API, 数据库, 状态管理等问题。触发词：web, HTTP, REST, API, axum, actix, handler, database, web开发, 服务器, 路由"
-globs: ["**/*.rs"]
+description: Rust Web 开发专家。处理 axum, actix, HTTP, REST, API, 数据库, 状态管理等问题。触发词：web,
+  HTTP, REST, API, axum, actix, handler, database, web开发, 服务器, 路由
 ---
 
 # Rust Web 开发

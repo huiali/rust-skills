@@ -1,7 +1,6 @@
 ---
 name: rust-dpdk
-description: "用户态网络专家。处理 DPDK, 用户态驱动, 高性能网络, packet processing, 零拷贝, RSS 负载均衡"
-globs: ["**/*.rs"]
+description: 用户态网络专家。处理 DPDK, 用户态驱动, 高性能网络, packet processing, 零拷贝, RSS 负载均衡
 ---
 
 # 用户态网络 (DPDK)

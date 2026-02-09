@@ -1,7 +1,7 @@
 ---
 name: rust-ffi
-description: "FFI 跨语言互操作专家。处理 C/C++ 互操作、bindgen、PyO3、Java JNI、内存布局、数据转换等问题。触发词：FFI, C, C++, bindgen, cbindgen, PyO3, jni, extern, libc, CString, CStr, 跨语言, 互操作, 绑定"
-globs: ["**/*.rs"]
+description: FFI 跨语言互操作专家。处理 C/C++ 互操作、bindgen、PyO3、Java JNI、内存布局、数据转换等问题。触发词：FFI,
+  C, C++, bindgen, cbindgen, PyO3, jni, extern, libc, CString, CStr, 跨语言, 互操作, 绑定
 ---
 
 # FFI 跨语言互操作

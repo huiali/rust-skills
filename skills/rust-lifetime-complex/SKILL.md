@@ -1,7 +1,7 @@
 ---
 name: rust-lifetime-complex
-description: "高级生命周期专家。处理 HRTB, GAT, 'static 约束, dyn trait object, 泛型边界冲突等问题。触发词：lifetime, HRTB, GAT, 'static, dyn, trait object, one type is more general, 生命周期, 类型约束"
-globs: ["**/*.rs"]
+description: 高级生命周期专家。处理 HRTB, GAT, 'static 约束, dyn trait object, 泛型边界冲突等问题。触发词：lifetime,
+  HRTB, GAT, 'static, dyn, trait object, one type is more general, 生命周期, 类型约束
 ---
 
 # 高级生命周期与类型系统

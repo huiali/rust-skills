@@ -1,7 +1,7 @@
 ---
 name: rust-error-advanced
-description: "深入错误处理专家。处理 Result vs Option, thiserror, anyhow, error context, library vs application errors, 错误处理, Result 用法, 什么时候用 panic"
-globs: ["**/*.rs"]
+description: 深入错误处理专家。处理 Result vs Option, thiserror, anyhow, error context, library
+  vs application errors, 错误处理, Result 用法, 什么时候用 panic
 ---
 
 # 深入错误处理

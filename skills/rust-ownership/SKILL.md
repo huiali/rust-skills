@@ -1,7 +1,7 @@
 ---
 name: rust-ownership
-description: "所有权、借用、生命周期专家。处理 E0382, E0597, E0506, E0507, E0515, E0716, E0106 等错误。触发词：ownership, borrow, lifetime, move, clone, Copy, 所有权, 借用, 生命周期"
-globs: ["**/*.rs"]
+description: 所有权、借用、生命周期专家。处理 E0382, E0597, E0506, E0507, E0515, E0716, E0106 等错误。触发词：ownership,
+  borrow, lifetime, move, clone, Copy, 所有权, 借用, 生命周期
 ---
 
 # 所有权与生命周期专家

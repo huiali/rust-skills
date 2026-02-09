@@ -1,7 +1,8 @@
 ---
 name: rust-unsafe
-description: "不安全代码与 FFI 专家。处理 unsafe, raw pointer, FFI, extern, transmute, *mut, *const, union, #[repr(C)], libc, MaybeUninit, NonNull, SAFETY comment, soundness, undefined behavior, UB, 安全抽象, 裸指针, 外部函数接口, 内存布局, 未定义行为"
-globs: ["**/*.rs"]
+description: '不安全代码与 FFI 专家。处理 unsafe, raw pointer, FFI, extern, transmute, *mut,
+  *const, union, #[repr(C)], libc, MaybeUninit, NonNull, SAFETY comment, soundness,
+  undefined behavior, UB, 安全抽象, 裸指针, 外部函数接口, 内存布局, 未定义行为'
 ---
 
 # 不安全代码与 FFI

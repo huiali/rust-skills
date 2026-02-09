@@ -1,7 +1,7 @@
 ---
 name: rust-type-driven
-description: "类型驱动设计专家。处理 newtype, type state, PhantomData, marker trait, builder pattern, 类型状态, 新类型模式, 编译时验证, sealed trait, ZST"
-globs: ["**/*.rs"]
+description: 类型驱动设计专家。处理 newtype, type state, PhantomData, marker trait, builder pattern,
+  类型状态, 新类型模式, 编译时验证, sealed trait, ZST
 ---
 
 # 类型驱动设计

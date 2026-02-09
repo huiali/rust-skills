@@ -1,13 +1,6 @@
 ---
 name: rust-auth
-description: "JWT 认证、API Key 认证、分布式 Token 存储、密码安全存储"
-category: infrastructure
-triggers: ["auth", "jwt", "token", "api-key", "permission", "认证", "授权"]
-related_skills:
-  - rust-web
-  - rust-middleware
-  - rust-error
-  - rust-concurrency
+description: JWT 认证、API Key 认证、分布式 Token 存储、密码安全存储
 ---
 
 # Rust Auth - 认证授权技能

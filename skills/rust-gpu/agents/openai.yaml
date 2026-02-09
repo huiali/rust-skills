@@ -1,0 +1,3 @@
+interface:
+  display_name: "Rust Gpu"
+  short_description: "Help with Rust Gpu tasks and workflows"

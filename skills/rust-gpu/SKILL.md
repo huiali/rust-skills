@@ -1,7 +1,7 @@
 ---
 name: rust-gpu
-description: "GPU 内存与计算专家。处理 CUDA, OpenCL, GPU memory, compute shader, memory coalescing, zero-copy, 显存管理, 异构计算"
-globs: ["**/*.rs"]
+description: GPU 内存与计算专家。处理 CUDA, OpenCL, GPU memory, compute shader, memory coalescing,
+  zero-copy, 显存管理, 异构计算
 ---
 
 # GPU 内存与计算

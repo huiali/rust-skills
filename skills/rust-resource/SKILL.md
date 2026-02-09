@@ -1,7 +1,7 @@
 ---
 name: rust-resource
-description: "智能指针与资源管理专家。处理 Box, Rc, Arc, Weak, RefCell, Cell, interior mutability, RAII, Drop, 堆分配, 引用计数, 智能指针"
-globs: ["**/*.rs"]
+description: 智能指针与资源管理专家。处理 Box, Rc, Arc, Weak, RefCell, Cell, interior mutability,
+  RAII, Drop, 堆分配, 引用计数, 智能指针
 ---
 
 # 智能指针与资源管理

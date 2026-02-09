@@ -1,7 +1,8 @@
 ---
 name: rust-performance
-description: "性能优化专家。处理 benchmark, profiling, allocation, SIMD, cache, 优化, 基准测试等问题。触发词：performance, optimization, benchmark, profiling, allocation, SIMD, cache, make it faster, 性能优化, 基准测试, 内存分配"
-globs: ["**/*.rs"]
+description: 性能优化专家。处理 benchmark, profiling, allocation, SIMD, cache, 优化, 基准测试等问题。触发词：performance,
+  optimization, benchmark, profiling, allocation, SIMD, cache, make it faster, 性能优化,
+  基准测试, 内存分配
 ---
 
 # 性能优化

@@ -1,7 +1,8 @@
 ---
 name: rust-async
-description: "高级异步模式专家。处理 Stream, backpressure, select, join, cancellation, Future trait 等问题。触发词：async, Stream, backpressure, select, Future, tokio, async-std, 异步, 流, 取消"
-globs: ["**/*.rs"]
+description: 高级异步模式专家。处理 Stream, backpressure, select, join, cancellation, Future
+  trait 等问题。触发词：async, Stream, backpressure, select, Future, tokio, async-std, 异步,
+  流, 取消
 ---
 
 # 高级异步模式

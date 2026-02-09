@@ -1,7 +1,7 @@
 ---
 name: rust-zero-cost
-description: "零成本抽象与泛型专家。处理泛型, trait, monomorphization, static dispatch, dynamic dispatch, impl Trait, dyn Trait, 泛型, 特征, 单态化, 零成本抽象"
-globs: ["**/*.rs"]
+description: 零成本抽象与泛型专家。处理泛型, trait, monomorphization, static dispatch, dynamic dispatch,
+  impl Trait, dyn Trait, 泛型, 特征, 单态化, 零成本抽象
 ---
 
 # 零成本抽象与泛型

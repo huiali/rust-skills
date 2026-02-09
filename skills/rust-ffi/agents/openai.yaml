@@ -1,0 +1,3 @@
+interface:
+  display_name: "Rust Ffi"
+  short_description: "Help with Rust Ffi tasks and workflows"

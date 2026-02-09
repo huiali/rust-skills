@@ -1,7 +1,7 @@
 ---
 name: rust-mutability
-description: "可变性专家。处理 E0596, E0499, E0502, interior mutability, Cell, RefCell, Mutex, RwLock, borrow conflict, 可变性, 内部可变性, 借用冲突"
-globs: ["**/*.rs"]
+description: 可变性专家。处理 E0596, E0499, E0502, interior mutability, Cell, RefCell, Mutex,
+  RwLock, borrow conflict, 可变性, 内部可变性, 借用冲突
 ---
 
 # 可变性

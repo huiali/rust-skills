@@ -1,7 +1,7 @@
 ---
 name: rust-skill
-description: "Rust 编程专家技能。处理所有 Rust 相关问题：编译错误、所有权、生命周期、并发、async/await、性能优化等。触发词：Rust, cargo, 编译错误, ownership, borrow, lifetime, async, tokio, Send, Sync, Result, Error"
-globs: ["**/*.rs", "**/Cargo.toml"]
+description: Rust 编程专家技能。处理所有 Rust 相关问题：编译错误、所有权、生命周期、并发、async/await、性能优化等。触发词：Rust,
+  cargo, 编译错误, ownership, borrow, lifetime, async, tokio, Send, Sync, Result, Error
 ---
 
 # Rust Expert Skill

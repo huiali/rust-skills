@@ -1,13 +1,6 @@
 ---
 name: rust-cache
-description: "Redis 缓存管理、连接池、TTL策略、模式匹配删除、性能优化"
-category: infrastructure
-triggers: ["cache", "redis", "ttl", "connection", "性能优化", "缓存"]
-related_skills:
-  - rust-concurrency
-  - rust-async
-  - rust-performance
-  - rust-error
+description: Redis 缓存管理、连接池、TTL策略、模式匹配删除、性能优化
 ---
 
 # Rust Cache - 缓存管理技能
