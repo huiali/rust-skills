@@ -10,7 +10,8 @@
       "Bash(then head -20 \"skills/$dir/SKILL.md\")",
       "Bash(fi)",
       "Bash(done)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(xargs -r -n 1 git update-ref -d)"
     ]
   },
   "enableAllProjectMcpServers": true,
