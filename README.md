@@ -216,9 +216,23 @@ rust-skill (main entry)
 
 ---
 
-## Usage
+## Installation & Usage
 
-Describe your Rust problem directly in Cursor, and the system will automatically route to the appropriate sub-skill:
+### Quick Start
+
+Choose your installation method:
+
+| Scenario | Method | Documentation |
+|----------|--------|---------------|
+| Personal development | **Global Install** | [USAGE_GLOBAL.md](./USAGE_GLOBAL.md) |
+| Team collaboration | **Git Submodule** | [USAGE_SUBMODULE.md](./USAGE_SUBMODULE.md) |
+| Claude Code specific | **Claude Code Setup** | [CLAUDE_CODE_GUIDE.md](./CLAUDE_CODE_GUIDE.md) |
+
+📖 **See [USAGE_GUIDE.md](./USAGE_GUIDE.md) for detailed comparison and guidance**
+
+### Usage Examples
+
+Describe your Rust problem directly, and the system will automatically route to the appropriate sub-skill:
 
 ```rust
 // Example questions

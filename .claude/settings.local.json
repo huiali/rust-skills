@@ -1,0 +1,6 @@
+{
+  "enabledMcpjsonServers": [
+    "rust-skill"
+  ],
+  "enableAllProjectMcpServers": true
+}
