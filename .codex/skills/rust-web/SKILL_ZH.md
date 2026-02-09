@@ -1,7 +1,6 @@
 ---
 name: rust-web
-description: Rust Web 开发专家。处理 axum, actix, HTTP, REST, API, 数据库, 状态管理等问题。触发词：web,
-  HTTP, REST, API, axum, actix, handler, database, web开发, 服务器, 路由
+description: Rust Web 开发专家。处理 axum, actix, HTTP, REST, API, 数据库, 状态管理等问题。触发词：web,HTTP, REST, API, axum, actix, handler, database, web开发, 服务器, 路由
 ---
 
 # Rust Web 开发
@@ -204,20 +203,61 @@ tx.commit().await?;
 
 ---
 
-## 项目结构参考
+## 项目结构参考（按领域聚合）
 
-```
+```text
 src/
-├── main.rs           # 入口
-├── lib.rs            # 共享代码
-├── app.rs            # Router 组装
-├── routes/           # 路由定义
+├── main.rs                              # 入口（加载配置、启动 HTTP 服务）
+├── bootstrap/
 │   ├── mod.rs
-│   ├── users.rs
-│   └── auth.rs
-├── models/           # 数据模型
-├── services/         # 业务逻辑
-├── errors/           # 错误类型
-└── middleware/       # 中间件
+│   └── app_builder.rs                   # 全局装配（DB/Cache/Telemetry）
+├── domains/
+│   ├── user/                            # 单领域目录：内部自带各层职责
+│   │   ├── mod.rs
+│   │   ├── http.rs                      # 路由 + handler + DTO 映射
+│   │   ├── app.rs                       # UseCase / Command / Query 编排
+│   │   ├── entity.rs                    # 领域实体
+│   │   ├── value.rs                     # 值对象
+│   │   ├── policy.rs                    # 领域规则/策略
+│   │   ├── port.rs                      # 端口定义（trait）
+│   │   ├── repo.rs                      # 基础设施实现
+│   │   ├── cache.rs                     # 缓存适配
+│   │   ├── errors.rs                    # 领域错误
+│   │   └── tests.rs                     # 领域内测试
+│   ├── auth/
+│   │   ├── mod.rs
+│   │   ├── http.rs
+│   │   ├── app.rs
+│   │   ├── entity.rs
+│   │   ├── policy.rs
+│   │   ├── port.rs
+│   │   ├── repo.rs
+│   │   ├── jwt.rs
+│   │   ├── errors.rs
+│   │   └── tests.rs
+│   └── order/
+│       ├── mod.rs
+│       ├── http.rs
+│       ├── app.rs
+│       ├── entity.rs
+│       ├── port.rs
+│       ├── repo.rs
+│       ├── events.rs
+│       ├── errors.rs
+│       └── tests.rs
+├── shared/
+│   ├── mod.rs
+│   ├── error.rs                         # 通用错误模型
+│   ├── result.rs                        # 统一 Result 别名
+│   ├── types.rs                         # 通用类型（ID/时间）
+│   └── middleware.rs                    # 跨领域中间件
+└── tests/
+    ├── integration/
+    └── fixtures/
 ```
 
+结构原则：
+- 以“领域目录”为主组织代码，每个领域目录内包含 interface/application/domain/infrastructure 职责。
+- 通过单词文件名区分职责（如 `app.rs`、`port.rs`、`repo.rs`、`http.rs`）。
+- 领域之间通过应用层接口协作，避免跨目录直接访问实现细节。
+- 公共能力下沉到 `shared/`，领域特有逻辑不外溢。

@@ -1,34 +1,48 @@
 ---
 name: rust-unsafe
-description: '不安全代码与 FFI 专家。处理 unsafe, raw pointer, FFI, extern, transmute, *mut,
-  *const, union, #[repr(C)], libc, MaybeUninit, NonNull, SAFETY comment, soundness,
-  undefined behavior, UB, 安全抽象, 裸指针, 外部函数接口, 内存布局, 未定义行为'
+description: |
+  Unsafe code and FFI expert covering raw pointers (*mut, *const), FFI patterns, transmute,
+  union, #[repr(C)], SAFETY comments, soundness rules, and undefined behavior prevention.
+triggers:
+  - unsafe
+  - raw pointer
+  - FFI
+  - extern
+  - transmute
+  - union
+  - repr(C)
+  - MaybeUninit
+  - NonNull
+  - SAFETY comment
+  - soundness
+  - undefined behavior
+  - UB
 ---
 
-# 不安全代码与 FFI
+# Unsafe Code and FFI Expert
 
-## 核心问题
+## Core Question
 
-**什么时候可以用 unsafe，怎么用才安全？**
+**When can you use unsafe, and how do you use it safely?**
 
- unsafe 是必要的，但必须谨慎使用。
-
----
-
-## 何时可以用 Unsafe
-
-| 使用场景 | 示例 | 是否正当 |
-|---------|-----|---------|
-| FFI 调用 C | `extern "C" { fn libc_malloc(size: usize) -> *mut c_void; }` | ✅ |
-| 实现底层抽象 | `Vec`, `Arc` 的内部实现 | ✅ |
-| 性能优化（已测量） | 热点代码测出瓶颈 | ⚠️ 需验证 |
-| 逃避借用检查 | 不知道为什么要用 | ❌ |
+Unsafe is necessary but must be used with extreme caution.
 
 ---
 
-## SAFETY 注释要求
+## When Unsafe is Justified
 
-**每个 unsafe 块必须包含 SAFETY 注释：**
+| Use Case | Example | Justified? |
+|----------|---------|-----------|
+| FFI calls to C | `extern "C" { fn libc_malloc(size: usize) -> *mut c_void; }` | ✅ Yes |
+| Low-level abstractions | Internal implementation of `Vec`, `Arc` | ✅ Yes |
+| Performance optimization (measured) | Hot path with proven bottleneck | ⚠️ Verify first |
+| Escaping borrow checker | Don't know why you need it | ❌ No |
+
+---
+
+## SAFETY Comment Requirements
+
+**Every unsafe block must include a SAFETY comment:**
 
 ```rust
 // SAFETY: ptr must be non-null and properly aligned.
@@ -36,7 +50,7 @@ description: '不安全代码与 FFI 专家。处理 unsafe, raw pointer, FFI, e
 unsafe { *ptr = value; }
 
 /// # Safety
-/// 
+///
 /// * `ptr` must be properly aligned and not null
 /// * `ptr` must point to initialized memory of type T
 /// * The memory must not be accessed after this function returns
@@ -45,141 +59,376 @@ pub unsafe fn write(ptr: *mut T, value: &T) { ... }
 
 ---
 
-## 47 条 Unsafe 规则速查
+## Solution Patterns
 
-### 通用原则 (3条)
+### Pattern 1: FFI with Safe Wrapper
 
-| 规则 | 说明 |
-|-----|------|
-| G-01 | 不要用 unsafe 逃避编译器安全检查 |
-| G-02 | 不要盲目为性能使用 unsafe |
-| G-03 | 不要为类型/方法创建名为 "Unsafe" 的别名 |
+```rust
+use std::ffi::{CStr, CString};
+use std::os::raw::c_char;
 
-### 内存布局 (6条)
+extern "C" {
+    fn c_function(s: *const c_char) -> i32;
+}
 
-| 规则 | 说明 |
-|-----|------|
-| M-01 | 为 struct/tuple/enum 选择合适的内存布局 |
-| M-02 | 不要修改其他进程的内存变量 |
-| M-03 | 不要让 String/Vec 自动释放其他进程的内存 |
-| M-04 | 优先使用 C-API 或 Syscalls 的可重入版本 |
-| M-05 | 用第三方 crate 处理位域 |
-| M-06 | 用 `MaybeUninit<T>` 处理未初始化内存 |
+// ✅ Safe wrapper
+pub fn safe_c_function(s: &str) -> Result<i32, Box<dyn Error>> {
+    let c_str = CString::new(s)?;
+    // SAFETY: c_str is a valid null-terminated string created from Rust data.
+    // The pointer is valid for the duration of this call.
+    let result = unsafe { c_function(c_str.as_ptr()) };
+    Ok(result)
+}
+```
 
-### 原始指针 (6条)
+### Pattern 2: Raw Pointer with Validation
 
-| 规则 | 说明 |
-|-----|------|
-| P-01 | 不要跨线程共享原始指针 |
-| P-02 | 优先使用 `NonNull<T>` 而非 `*mut T` |
-| P-03 | 用 `PhantomData<T>` 标记方差和所有权 |
-| P-04 | 不要解引用强制转换为对齐错误的类型 |
-| P-05 | 不要手动将不可变指针转为可变指针 |
-| P-06 | 用 `ptr::cast` 而非 `as` 做指针转换 |
+```rust
+use std::ptr::NonNull;
 
-### 联合 (2条)
+struct Buffer {
+    ptr: NonNull<u8>,
+    len: usize,
+}
 
-| 规则 | 说明 |
-|-----|------|
-| U-01 | 除 C 互操作外避免使用 union |
-| U-02 | 不要在不同生命周期使用 union 变体 |
+impl Buffer {
+    pub fn write(&mut self, index: usize, value: u8) -> Result<(), String> {
+        if index >= self.len {
+            return Err("index out of bounds".to_string());
+        }
 
-### FFI (18条)
+        // SAFETY: We've checked index is within bounds.
+        // ptr is NonNull and points to valid memory.
+        unsafe {
+            self.ptr.as_ptr().add(index).write(value);
+        }
+        Ok(())
+    }
+}
+```
 
-| 规则 | 说明 |
-|-----|------|
-| F-01 | 避免直接向 C 传递字符串 |
-| F-02 | 仔细阅读 `std::ffi` 类型的文档 |
-| F-03 | 为包装的 C 指针实现 Drop |
-| F-04 | 处理跨越 FFI 边界的 panic |
-| F-05 | 使用 `std` 或 `libc` 的可移植类型别名 |
-| F-06 | 确保 C-ABI 字符串兼容性 |
-| F-07 | 不要为传递给外部代码的类型实现 Drop |
-| F-08 | 在 FFI 中正确处理错误 |
-| F-09 | 安全包装中用引用而非原始指针 |
-| F-10 | 导出函数必须线程安全 |
-| F-11 | 小心 `repr(packed)` 字段的引用 |
-| F-12 | 文档化 C 参数的不变式假设 |
-| F-13 | 确保自定义类型的数据布局一致 |
-| F-14 | FFI 中的类型应有稳定布局 |
-| F-15 | 验证外部值的鲁棒性 |
-| F-16 | 分离 C 闭包的数据和代码 |
-| F-17 | 用不透明类型而非 `c_void` |
-| F-18 | 避免向 C 传递 trait object |
+### Pattern 3: Uninitialized Memory
 
-### 安全抽象 (11条)
+```rust
+use std::mem::MaybeUninit;
 
-| 规则 | 说明 |
-|-----|------|
-| S-01 | 注意 panic 带来的内存安全问题 |
-| S-02 | unsafe 代码作者必须验证安全不变量 |
-| S-03 | 不要在公共 API 中暴露未初始化内存 |
-| S-04 | 避免因 panic 导致的双重释放 |
-| S-05 | 手动实现 Auto Traits 时考虑安全性 |
-| S-06 | 不要在公共 API 中暴露原始指针 |
-| S-07 | 为性能提供安全的替代方法 |
-| S-08 | 从不可变参数返回可变引用是错误的 |
-| S-09 | 在每个 unsafe 块前添加 SAFETY 注释 |
-| S-10 | 为公共 unsafe 函数添加文档中的 Safety 节 |
-| S-11 | 在 unsafe 函数中使用 `assert!` 而非 `debug_assert!` |
+// ✅ Safe uninitialized memory handling
+fn create_buffer(size: usize) -> Vec<u8> {
+    let mut buffer: Vec<MaybeUninit<u8>> = Vec::with_capacity(size);
 
-### I/O 安全 (1条)
+    for i in 0..size {
+        buffer.push(MaybeUninit::new(0));
+    }
 
-| 规则 | 说明 |
-|-----|------|
-| I-01 | 使用原始句柄时确保 I/O 安全 |
+    // SAFETY: All elements have been initialized to 0.
+    unsafe { std::mem::transmute(buffer) }
+}
 
----
+// ❌ Avoid: deprecated pattern
+fn bad_buffer(size: usize) -> Vec<u8> {
+    let mut v = Vec::with_capacity(size);
+    unsafe { v.set_len(size); }  // UB if not initialized!
+    v
+}
+```
 
-## 常见错误与修复
+### Pattern 4: Repr(C) for FFI
 
-| 错误 | 修复 |
-|-----|------|
-| 空指针解引用 | 解引用前检查 null |
-| 使用后释放 | 确保生命周期有效性 |
-| 数据竞争 | 添加同步 |
-| 对齐违规 | 使用 `#[repr(C)]`，检查对齐 |
-| 无效位模式 | 使用 `MaybeUninit` |
-| 缺少 SAFETY 注释 | 添加注释 |
+```rust
+#[repr(C)]
+pub struct Point {
+    pub x: f64,
+    pub y: f64,
+}
+
+#[repr(C)]
+pub enum Status {
+    Success = 0,
+    Error = 1,
+}
+
+// SAFETY: Layout matches C struct exactly
+extern "C" {
+    fn process_point(p: *const Point) -> Status;
+}
+```
 
 ---
 
-## 废弃模式
+## 47 Unsafe Rules Reference
 
-| 废弃 | 替代 |
-|-----|------|
+### General Principles (3 rules)
+
+| Rule | Description |
+|------|-------------|
+| G-01 | Don't use unsafe to escape compiler safety checks |
+| G-02 | Don't blindly use unsafe for performance |
+| G-03 | Don't create "Unsafe" aliases for types/methods |
+
+### Memory Layout (6 rules)
+
+| Rule | Description |
+|------|-------------|
+| M-01 | Choose appropriate memory layout for struct/tuple/enum |
+| M-02 | Don't modify memory variables of other processes |
+| M-03 | Don't let String/Vec auto-deallocate memory from other processes |
+| M-04 | Prefer reentrant versions of C-API or syscalls |
+| M-05 | Use third-party crates for bit fields |
+| M-06 | Use `MaybeUninit<T>` for uninitialized memory |
+
+### Raw Pointers (6 rules)
+
+| Rule | Description |
+|------|-------------|
+| P-01 | Don't share raw pointers across threads |
+| P-02 | Prefer `NonNull<T>` over `*mut T` |
+| P-03 | Use `PhantomData<T>` to mark variance and ownership |
+| P-04 | Don't dereference pointers cast to misaligned types |
+| P-05 | Don't manually convert immutable pointers to mutable |
+| P-06 | Use `ptr::cast` instead of `as` for pointer casts |
+
+### Unions (2 rules)
+
+| Rule | Description |
+|------|-------------|
+| U-01 | Avoid unions except for C interop |
+| U-02 | Don't use union variants with different lifetimes |
+
+### FFI (18 rules)
+
+| Rule | Description |
+|------|-------------|
+| F-01 | Avoid passing strings directly to C |
+| F-02 | Carefully read `std::ffi` types documentation |
+| F-03 | Implement Drop for wrapped C pointers |
+| F-04 | Handle panics across FFI boundaries |
+| F-05 | Use portable type aliases from `std` or `libc` |
+| F-06 | Ensure C-ABI string compatibility |
+| F-07 | Don't implement Drop for types passed to extern code |
+| F-08 | Handle errors properly in FFI |
+| F-09 | Use references instead of raw pointers in safe wrappers |
+| F-10 | Exported functions must be thread-safe |
+| F-11 | Be careful with references to `repr(packed)` fields |
+| F-12 | Document invariant assumptions for C parameters |
+| F-13 | Ensure consistent data layout for custom types |
+| F-14 | FFI types should have stable layout |
+| F-15 | Validate robustness of external values |
+| F-16 | Separate data and code for C closures |
+| F-17 | Use opaque types instead of `c_void` |
+| F-18 | Avoid passing trait objects to C |
+
+### Safe Abstractions (11 rules)
+
+| Rule | Description |
+|------|-------------|
+| S-01 | Be aware of memory safety issues from panics |
+| S-02 | Unsafe code authors must verify safety invariants |
+| S-03 | Don't expose uninitialized memory in public APIs |
+| S-04 | Avoid double-free from panics |
+| S-05 | Consider safety when manually implementing Auto Traits |
+| S-06 | Don't expose raw pointers in public APIs |
+| S-07 | Provide safe alternatives for performance |
+| S-08 | Returning mutable reference from immutable parameter is wrong |
+| S-09 | Add SAFETY comment before each unsafe block |
+| S-10 | Add Safety section to public unsafe function docs |
+| S-11 | Use `assert!` instead of `debug_assert!` in unsafe functions |
+
+### I/O Safety (1 rule)
+
+| Rule | Description |
+|------|-------------|
+| I-01 | Ensure I/O safety when using raw handles |
+
+---
+
+## Workflow
+
+### Step 1: Question the Need
+
+```
+Do I really need unsafe?
+  → Can I use safe abstractions?
+  → Is this for FFI? (justified)
+  → Is this for measured performance? (profile first)
+  → Am I fighting the borrow checker? (redesign instead)
+```
+
+### Step 2: Write SAFETY Comments
+
+```
+For every unsafe block:
+1. Document preconditions
+2. Explain why they hold
+3. Reference invariants maintained
+
+For public unsafe functions:
+1. Add /// # Safety section
+2. List all requirements
+3. Document consequences of violations
+```
+
+### Step 3: Validate with Tools
+
+```bash
+# Detect undefined behavior
+cargo +nightly miri test
+
+# Memory leak detection
+valgrind ./target/release/program
+
+# Data race detection
+RUST_BACKTRACE=1 cargo test --features tsan
+```
+
+### Step 4: Build Safe Wrappers
+
+```
+Raw unsafe code
+  ↓
+Safe private functions (validate inputs)
+  ↓
+Safe public API (no unsafe visible)
+```
+
+---
+
+## Common Errors and Fixes
+
+| Error | Fix |
+|-------|-----|
+| Null pointer dereference | Check for null before dereferencing |
+| Use after free | Ensure lifetime validity |
+| Data race | Add synchronization |
+| Alignment violation | Use `#[repr(C)]`, check alignment |
+| Invalid bit pattern | Use `MaybeUninit` |
+| Missing SAFETY comment | Add comment |
+
+---
+
+## Deprecated Patterns
+
+| Deprecated | Modern Alternative |
+|-----------|-------------------|
 | `mem::uninitialized()` | `MaybeUninit<T>` |
-| `mem::zeroed()` (引用类型) | `MaybeUninit<T>` |
-| 原始指针运算 | `NonNull<T>`, `ptr::add` |
-| `CString::new().unwrap().as_ptr()` | 先存储 `CString` |
-| `static mut` | `AtomicT` 或 `Mutex` |
-| 手动 extern | `bindgen` |
+| `mem::zeroed()` (for reference types) | `MaybeUninit<T>` |
+| Raw pointer arithmetic | `NonNull<T>`, `ptr::add` |
+| `CString::new().unwrap().as_ptr()` | Store `CString` first |
+| `static mut` | `AtomicT` or `Mutex` |
+| Manual extern declarations | `bindgen` |
 
 ---
 
-## FFI 工具
+## FFI Tools
 
-| 方向 | 工具 |
-|-----|------|
+| Direction | Tool |
+|-----------|------|
 | C → Rust | `bindgen` |
 | Rust → C | `cbindgen` |
 | Python | `PyO3` |
 | Node.js | `napi-rs` |
+| C++ | `cxx` |
 
 ---
 
-## 调试工具
+## Review Checklist
+
+When reviewing unsafe code:
+
+- [ ] Unsafe usage is justified (FFI, low-level abstraction, measured perf)
+- [ ] Every unsafe block has SAFETY comment
+- [ ] Public unsafe functions document Safety requirements
+- [ ] Raw pointers are validated before dereferencing
+- [ ] No raw pointer sharing across threads without sync
+- [ ] FFI boundaries properly handle panics
+- [ ] Memory layout explicitly specified for FFI types
+- [ ] Uninitialized memory uses `MaybeUninit`
+- [ ] Safe public API wraps unsafe internals
+- [ ] Tested with Miri for undefined behavior
+
+---
+
+## Verification Commands
 
 ```bash
-# Miri 检测未定义行为
-cargo +nightly install miri
-cargo miri test
+# Check for undefined behavior
+cargo +nightly miri test
 
-# 内存问题检测
-cargo install valgrind
-valgrind ./target/release/my_program
+# Run with address sanitizer
+RUSTFLAGS="-Z sanitizer=address" cargo +nightly test
 
-# 竞态条件检测
-cargo install helgrind
-helgrind ./target/release/my_program
+# Check FFI bindings
+cargo check --features ffi
+
+# Verify memory safety
+valgrind --leak-check=full ./target/release/program
+
+# Documentation check
+cargo doc --no-deps --open
 ```
+
+---
+
+## Common Pitfalls
+
+### 1. Dangling Pointers
+
+**Symptom**: Use-after-free, segfault
+
+```rust
+// ❌ Bad: pointer outlives data
+fn bad() -> *const i32 {
+    let x = 42;
+    &x as *const i32  // Dangling!
+}
+
+// ✅ Good: proper lifetime management
+fn good(x: &i32) -> *const i32 {
+    x as *const i32  // Lifetime tied to input
+}
+```
+
+### 2. Uninitialized Memory
+
+**Symptom**: Undefined behavior, random values
+
+```rust
+// ❌ Bad: reading uninitialized memory
+let x: i32;
+unsafe { println!("{}", x); }  // UB!
+
+// ✅ Good: use MaybeUninit
+let mut x = MaybeUninit::<i32>::uninit();
+x.write(42);
+let x = unsafe { x.assume_init() };  // Safe
+```
+
+### 3. Invalid Repr
+
+**Symptom**: FFI crashes, data corruption
+
+```rust
+// ❌ Bad: default repr with FFI
+struct Point { x: f64, y: f64 }
+extern "C" { fn use_point(p: Point); }
+
+// ✅ Good: explicit C layout
+#[repr(C)]
+struct Point { x: f64, y: f64 }
+extern "C" { fn use_point(p: Point); }
+```
+
+---
+
+## Related Skills
+
+- **rust-ownership** - Lifetime and borrowing fundamentals
+- **rust-ffi** - Advanced FFI patterns
+- **rust-performance** - When unsafe optimization is justified
+- **rust-coding** - SAFETY comment conventions
+- **rust-concurrency** - Thread-safe unsafe patterns
+
+---
+
+## Localized Reference
+
+- **Chinese version**: [SKILL_ZH.md](./SKILL_ZH.md) - 完整中文版本，包含所有内容

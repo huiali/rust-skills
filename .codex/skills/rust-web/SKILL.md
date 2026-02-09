@@ -1,23 +1,47 @@
 ---
 name: rust-web
-description: Rust Web 开发专家。处理 axum, actix, HTTP, REST, API, 数据库, 状态管理等问题。触发词：web,HTTP, REST, API, axum, actix, handler, database, web开发, 服务器, 路由
+description: |
+  Rust web development expert covering HTTP frameworks (axum, actix), REST API design, handler
+  patterns, state management, middleware, database integration, and domain-driven architecture.
+triggers:
+  - web
+  - HTTP
+  - REST
+  - API
+  - axum
+  - actix
+  - handler
+  - router
+  - middleware
+  - endpoint
 ---
 
-# Rust Web 开发
+# Rust Web Development Expert
 
-## 主流框架选择
+## Core Question
 
-| 框架 | 特点 | 推荐场景 |
-|-----|------|---------|
-| **axum** | 现代、 Tokio 生态、类型安全 | 新项目首选 |
-| **actix-web** | 高性能、Actor 模式 | 高性能需求 |
-| **rocket** | 开发者友好、零配置 | 快速原型 |
+**How do we build reliable, performant web services in Rust?**
+
+Choose the right framework, design clean handlers, manage state safely, and structure code for maintainability.
 
 ---
 
-## Axum 快速上手
+## Framework Selection
 
-### 基础结构
+| Framework | Characteristics | Recommended For |
+|-----------|-----------------|-----------------|
+| **axum** | Modern, Tokio ecosystem, type-safe | New projects (default choice) |
+| **actix-web** | High performance, Actor model | Performance-critical services |
+| **rocket** | Developer-friendly, zero-config | Rapid prototyping |
+| **warp** | Filter-based, functional style | Niche use cases |
+
+**Recommendation**: Start with **axum** for most projects. It has excellent ergonomics, strong ecosystem integration, and active development.
+
+---
+
+## Solution Patterns
+
+### Pattern 1: Axum Basic Structure
 
 ```rust
 use axum::{routing::get, Router};
@@ -28,72 +52,111 @@ async fn main() {
         .route("/", get(root))
         .route("/users", get(list_users).post(create_user))
         .route("/users/:id", get(get_user).delete(delete_user))
-        .with_state(pool.clone());
+        .with_state(app_state());
 
-    axum::Server::bind(&"0.0.0.0:3000".parse().unwrap())
-        .serve(app.into_make_service())
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
+        .await
+        .unwrap();
+
+    axum::serve(listener, app)
         .await
         .unwrap();
 }
 ```
 
-### Handler 模式
+**Key insight**: Routes are type-safe, handlers are async functions.
+
+### Pattern 2: Handler Patterns
 
 ```rust
-// 从路径获取参数
-async fn get_user(Path(id): Path<u32>) -> Json<User> {
+use axum::{extract::{Path, Query, Json}, http::StatusCode};
+
+// Path parameters
+async fn get_user(Path(id): Path<u32>) -> Result<Json<User>, StatusCode> {
     User::find(id).await
         .map(Json)
-        .ok_or_else(|| StatusCode::NOT_FOUND)
+        .ok_or(StatusCode::NOT_FOUND)
 }
 
-// 从 JSON body 获取
-async fn create_user(Json(user): Json<CreateUserRequest>) -> Result<Json<User>, StatusCode> {
-    User::create(user).await
+// JSON body
+async fn create_user(
+    Json(payload): Json<CreateUserRequest>
+) -> Result<Json<User>, StatusCode> {
+    User::create(payload).await
         .map(Json)
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)
 }
 
-// 查询参数
-async fn list_users(Query(params): Query<ListUsersParams>) -> Json<Vec<User>> {
-    User::list(params).await
+// Query parameters
+async fn list_users(
+    Query(params): Query<ListUsersParams>
+) -> Json<Vec<User>> {
+    Json(User::list(params).await)
+}
+
+// Multiple extractors
+async fn update_user(
+    Path(id): Path<u32>,
+    State(db): State<DbPool>,
+    Json(update): Json<UserUpdate>,
+) -> Result<Json<User>, ApiError> {
+    User::update(&db, id, update).await
+        .map(Json)
 }
 ```
 
-### 状态管理
+**When to use**: Each extractor pattern for different input types.
+
+### Pattern 3: State Management
 
 ```rust
-// AppState 类型
-type AppState = Arc<Pool<Postgres>>;
+use std::sync::Arc;
+use sqlx::PgPool;
 
-// 提取状态
-async fn handler(state: State<AppState>) { ... }
+// Define shared state
+#[derive(Clone)]
+struct AppState {
+    db: PgPool,
+    config: Arc<Config>,
+}
 
-// 共享状态
-let pool = PgPoolOptions::new()
-    .max_connections(5)
-    .connect(&db_url)
-    .await?;
+// Extract state in handlers
+async fn handler(State(state): State<AppState>) -> Json<Response> {
+    let user = User::fetch(&state.db, 123).await?;
+    Json(Response { user })
+}
+
+// Setup
+let state = AppState {
+    db: PgPoolOptions::new()
+        .max_connections(5)
+        .connect(&db_url)
+        .await?,
+    config: Arc::new(load_config()),
+};
 
 let app = Router::new()
     .route("/", get(handler))
-    .with_state(Arc::new(pool));
+    .with_state(state);
 ```
 
----
+**When to use**: Share database pools, configuration, clients across handlers.
 
-## 错误处理
+**Trade-offs**: State must be `Clone + Send + Sync + 'static`.
+
+### Pattern 4: Error Handling
 
 ```rust
 use axum::{
     response::{IntoResponse, Response},
+    http::StatusCode,
     Json,
 };
 use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum ApiError {
-    #[error("user not found")]
+    #[error("resource not found")]
     NotFound,
 
     #[error("invalid input: {0}")]
@@ -101,129 +164,260 @@ pub enum ApiError {
 
     #[error("database error")]
     Database(#[from] sqlx::Error),
+
+    #[error("authentication required")]
+    Unauthorized,
 }
 
 impl IntoResponse for ApiError {
     fn into_response(self) -> Response {
-        match self {
-            ApiError::NotFound => (StatusCode::NOT_FOUND, self.to_string()).into_response(),
-            ApiError::Validation(msg) => (StatusCode::BAD_REQUEST, msg).into_response(),
+        let (status, message) = match self {
+            ApiError::NotFound => (StatusCode::NOT_FOUND, self.to_string()),
+            ApiError::Validation(msg) => (StatusCode::BAD_REQUEST, msg),
             ApiError::Database(e) => {
                 tracing::error!("database error: {}", e);
-                (StatusCode::INTERNAL_SERVER_ERROR, "internal error").into_response()
+                (StatusCode::INTERNAL_SERVER_ERROR, "internal error".to_string())
             }
-        }
+            ApiError::Unauthorized => (StatusCode::UNAUTHORIZED, self.to_string()),
+        };
+
+        (status, Json(serde_json::json!({
+            "error": message
+        }))).into_response()
     }
 }
 ```
 
+**When to use**: Custom error types for domain-specific failures.
+
 ---
 
-## 中间件模式
+## Workflow
+
+### Step 1: Choose Framework
+
+```
+Need high performance?
+  → actix-web
+
+Want modern ergonomics + Tokio ecosystem?
+  → axum (recommended)
+
+Rapid prototyping?
+  → rocket
+```
+
+### Step 2: Design Handler Signatures
+
+```
+What data comes from?
+  Path → Path<T>
+  Query string → Query<T>
+  JSON body → Json<T>
+  Headers → TypedHeader<T>
+  State → State<AppState>
+```
+
+### Step 3: Implement Error Handling
+
+```
+Library code?
+  → Custom error enum + IntoResponse
+
+Application code?
+  → anyhow::Error with context
+```
+
+### Step 4: Add Middleware
+
+```
+Logging → tower_http::trace
+CORS → tower_http::cors
+Rate limiting → tower::limit
+Authentication → custom middleware
+```
+
+---
+
+## Middleware Patterns
+
+### Logging Middleware
 
 ```rust
-// 记录请求日志
-async fn log_requests(req: Request, next: Next) -> Result<Response, Infallible> {
+use axum::{
+    middleware::{self, Next},
+    http::Request,
+    response::Response,
+};
+use std::time::Instant;
+
+async fn log_requests<B>(
+    req: Request<B>,
+    next: Next<B>,
+) -> Response {
     let start = Instant::now();
     let method = req.method().clone();
-    let path = req.uri().path().to_string();
+    let uri = req.uri().clone();
 
     let response = next.run(req).await;
 
     tracing::info!(
         "{} {} {} - {:?}",
         method,
-        path,
+        uri,
         response.status(),
         start.elapsed()
     );
 
-    Ok(response)
+    response
 }
 
-// 使用
+// Apply middleware
 let app = Router::new()
     .route("/", get(handler))
-    .layer(layer_fn(log_requests));
+    .layer(middleware::from_fn(log_requests));
+```
+
+### Authentication Middleware
+
+```rust
+use axum::{
+    middleware,
+    extract::Request,
+    http::{StatusCode, header},
+};
+
+async fn auth_middleware(
+    mut req: Request,
+    next: Next,
+) -> Result<Response, StatusCode> {
+    let auth_header = req.headers()
+        .get(header::AUTHORIZATION)
+        .and_then(|h| h.to_str().ok())
+        .ok_or(StatusCode::UNAUTHORIZED)?;
+
+    let user = validate_token(auth_header)
+        .ok_or(StatusCode::UNAUTHORIZED)?;
+
+    req.extensions_mut().insert(user);
+    Ok(next.run(req).await)
+}
 ```
 
 ---
 
-## 数据库集成
+## Database Integration
 
-### SQLx 示例
+### SQLx Pattern
 
 ```rust
-// 定义模型
+use sqlx::{PgPool, FromRow};
+use chrono::{DateTime, Utc};
+
+// Define model
 #[derive(Debug, FromRow)]
 struct User {
     id: i32,
     name: String,
     email: String,
-    created_at: chrono::DateTime<Utc>,
+    created_at: DateTime<Utc>,
 }
 
-// 查询
-async fn get_user(pool: &Pool<Postgres>, id: i32) -> Result<User, sqlx::Error> {
-    sqlx::query_as!(User, "SELECT * FROM users WHERE id = $1", id)
-        .fetch_one(pool)
-        .await
+// Query
+async fn get_user(pool: &PgPool, id: i32) -> Result<User, sqlx::Error> {
+    sqlx::query_as!(
+        User,
+        "SELECT id, name, email, created_at FROM users WHERE id = $1",
+        id
+    )
+    .fetch_one(pool)
+    .await
 }
 
-// 事务
-let mut tx = pool.begin().await?;
-sqlx::query!("INSERT INTO ...") .execute(&mut *tx).await?;
-tx.commit().await?;
+// Transaction
+async fn create_user_with_profile(
+    pool: &PgPool,
+    user: NewUser,
+) -> Result<User, sqlx::Error> {
+    let mut tx = pool.begin().await?;
+
+    let user_id = sqlx::query!(
+        "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id",
+        user.name,
+        user.email
+    )
+    .fetch_one(&mut *tx)
+    .await?
+    .id;
+
+    sqlx::query!(
+        "INSERT INTO profiles (user_id, bio) VALUES ($1, $2)",
+        user_id,
+        user.bio
+    )
+    .execute(&mut *tx)
+    .await?;
+
+    tx.commit().await?;
+
+    get_user(pool, user_id).await
+}
 ```
 
 ---
 
-## Web 开发最佳实践
+## Best Practices
 
-| 场景 | 推荐做法 |
-|-----|---------|
-| JSON 序列化 | `#[derive(Serialize, Deserialize)]` + serde |
-| 配置管理 | `config` crate + env 文件 |
-| 日志 | `tracing` + `tracing-subscriber` |
-| 健康检查 | `GET /health` 端点 |
-| CORS | `tower_http::cors` |
-| 限流 | `tower::limit` |
-| OpenAPI | `utoipa` |
-
----
-
-## 常见错误
-
-| 错误 | 原因 | 解决 |
-|-----|-----|-----|
-| 状态在 handler 之间共享 | Rc 非线程安全 | 用 `Arc` |
-| 异步 handler 持有锁 | 可能死锁 | 缩小锁范围 |
-| 错误没传播 | Handler 返回错误 | 实现 `IntoResponse` |
-| 大请求体 | 内存压力 | 设置大小限制 |
+| Concern | Recommendation |
+|---------|----------------|
+| JSON serialization | `#[derive(Serialize, Deserialize)]` + serde |
+| Configuration | `config` crate + environment variables |
+| Logging | `tracing` + `tracing-subscriber` |
+| Health check | `GET /health` endpoint returning 200 |
+| CORS | `tower_http::cors::CorsLayer` |
+| Rate limiting | `tower::limit::RateLimitLayer` |
+| OpenAPI | `utoipa` for API documentation |
+| Request validation | `validator` crate with #[validate] |
+| Graceful shutdown | `tokio::signal` for SIGTERM handling |
 
 ---
 
-## 项目结构参考（按领域聚合）
+## Common Pitfalls
+
+| Pitfall | Problem | Solution |
+|---------|---------|----------|
+| Using `Rc` for state | Not thread-safe | Use `Arc` |
+| Holding locks across `.await` | Potential deadlock | Minimize lock scope |
+| Not handling errors | Handler panics | Implement `IntoResponse` for errors |
+| Large request bodies | Memory pressure | Set body size limits with `DefaultBodyLimit` |
+| Missing CORS headers | Browser blocks requests | Add `CorsLayer` |
+| Synchronous blocking | Blocks executor | Use `spawn_blocking` for CPU work |
+
+---
+
+## Domain-Driven Project Structure
+
+**Recommended structure for medium-to-large projects:**
 
 ```text
 src/
-├── main.rs                              # 入口（加载配置、启动 HTTP 服务）
+├── main.rs                              # Entry point (load config, start HTTP)
 ├── bootstrap/
 │   ├── mod.rs
-│   └── app_builder.rs                   # 全局装配（DB/Cache/Telemetry）
+│   └── app_builder.rs                   # Global assembly (DB/Cache/Telemetry)
 ├── domains/
-│   ├── user/                            # 单领域目录：内部自带各层职责
+│   ├── user/                            # Domain directory with all layers
 │   │   ├── mod.rs
-│   │   ├── http.rs                      # 路由 + handler + DTO 映射
-│   │   ├── app.rs                       # UseCase / Command / Query 编排
-│   │   ├── entity.rs                    # 领域实体
-│   │   ├── value.rs                     # 值对象
-│   │   ├── policy.rs                    # 领域规则/策略
-│   │   ├── port.rs                      # 端口定义（trait）
-│   │   ├── repo.rs                      # 基础设施实现
-│   │   ├── cache.rs                     # 缓存适配
-│   │   ├── errors.rs                    # 领域错误
-│   │   └── tests.rs                     # 领域内测试
+│   │   ├── http.rs                      # Routes + handlers + DTO mapping
+│   │   ├── app.rs                       # Use cases / commands / queries
+│   │   ├── entity.rs                    # Domain entities
+│   │   ├── value.rs                     # Value objects
+│   │   ├── policy.rs                    # Domain rules/policies
+│   │   ├── port.rs                      # Port definitions (traits)
+│   │   ├── repo.rs                      # Infrastructure implementation
+│   │   ├── cache.rs                     # Caching adapter
+│   │   ├── errors.rs                    # Domain errors
+│   │   └── tests.rs                     # Domain tests
 │   ├── auth/
 │   │   ├── mod.rs
 │   │   ├── http.rs
@@ -247,17 +441,133 @@ src/
 │       └── tests.rs
 ├── shared/
 │   ├── mod.rs
-│   ├── error.rs                         # 通用错误模型
-│   ├── result.rs                        # 统一 Result 别名
-│   ├── types.rs                         # 通用类型（ID/时间）
-│   └── middleware.rs                    # 跨领域中间件
+│   ├── error.rs                         # Common error model
+│   ├── result.rs                        # Unified Result alias
+│   ├── types.rs                         # Common types (ID/Time)
+│   └── middleware.rs                    # Cross-domain middleware
 └── tests/
     ├── integration/
     └── fixtures/
 ```
 
-结构原则：
-- 以“领域目录”为主组织代码，每个领域目录内包含 interface/application/domain/infrastructure 职责。
-- 通过单词文件名区分职责（如 `app.rs`、`port.rs`、`repo.rs`、`http.rs`）。
-- 领域之间通过应用层接口协作，避免跨目录直接访问实现细节。
-- 公共能力下沉到 `shared/`，领域特有逻辑不外溢。
+**Structural Principles:**
+- **Domain-centric**: Each domain contains interface/application/domain/infrastructure concerns
+- **File naming**: Single-word filenames clarify responsibility (`app.rs`, `port.rs`, `repo.rs`, `http.rs`)
+- **Loose coupling**: Domains collaborate through application-layer interfaces, avoid direct access
+- **Shared utilities**: Common capabilities in `shared/`, domain-specific logic stays local
+
+**File Responsibilities:**
+- `http.rs` - HTTP routes, handlers, request/response DTOs
+- `app.rs` - Application services, use case orchestration
+- `entity.rs` - Domain entities with business logic
+- `port.rs` - Port trait definitions (hexagonal architecture)
+- `repo.rs` - Repository implementations (database, cache)
+- `errors.rs` - Domain-specific error types
+
+---
+
+## Review Checklist
+
+When reviewing web service code:
+
+- [ ] Handlers have appropriate extractors (Path, Query, Json)
+- [ ] Shared state uses `Arc` for thread safety
+- [ ] Error types implement `IntoResponse`
+- [ ] Database operations use connection pooling
+- [ ] Middleware is composable and reusable
+- [ ] API responses follow consistent JSON format
+- [ ] Authentication/authorization properly enforced
+- [ ] Request body size limits configured
+- [ ] CORS configured for browser clients
+- [ ] Health check endpoint exists
+- [ ] Logging/tracing properly instrumented
+- [ ] Graceful shutdown implemented
+
+---
+
+## Verification Commands
+
+```bash
+# Check compilation
+cargo check
+
+# Run tests
+cargo test
+
+# Integration tests
+cargo test --test integration
+
+# Check for common mistakes
+cargo clippy -- -D warnings
+
+# Run development server
+cargo run
+
+# Build optimized release
+cargo build --release
+
+# Run with environment variables
+DATABASE_URL=postgres://localhost cargo run
+```
+
+---
+
+## Performance Optimization
+
+### Connection Pooling
+
+```rust
+use sqlx::postgres::PgPoolOptions;
+
+let pool = PgPoolOptions::new()
+    .max_connections(100)
+    .min_connections(10)
+    .acquire_timeout(Duration::from_secs(5))
+    .idle_timeout(Duration::from_secs(600))
+    .connect(&database_url)
+    .await?;
+```
+
+### Response Compression
+
+```rust
+use tower_http::compression::CompressionLayer;
+
+let app = Router::new()
+    .route("/", get(handler))
+    .layer(CompressionLayer::new());
+```
+
+### Caching Headers
+
+```rust
+use axum::http::{header, HeaderMap};
+
+async fn cached_handler() -> (HeaderMap, Json<Data>) {
+    let mut headers = HeaderMap::new();
+    headers.insert(
+        header::CACHE_CONTROL,
+        "public, max-age=3600".parse().unwrap(),
+    );
+
+    (headers, Json(get_data()))
+}
+```
+
+---
+
+## Related Skills
+
+- **rust-async** - Async patterns for handlers
+- **rust-concurrency** - Thread safety in web services
+- **rust-database** - Database integration patterns
+- **rust-error** - Error handling strategies
+- **rust-auth** - Authentication and authorization
+- **rust-middleware** - Middleware patterns
+- **rust-observability** - Logging and metrics
+
+---
+
+## Localized Reference
+
+- **Chinese version**: [SKILL_ZH.md](./SKILL_ZH.md) - 完整中文版本，包含所有内容

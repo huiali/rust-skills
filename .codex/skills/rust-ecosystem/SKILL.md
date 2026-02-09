@@ -1,59 +1,164 @@
 ---
 name: rust-ecosystem
-description: Rust 生态专家。处理 crate 选择、库推荐、框架对比、async runtime 选择、序列化库、web 框架等。触发词：crate,
-  library, framework, ecosystem, async runtime, tokio, async-std, serde, reqwest,
-  axum, 库, 框架, 生态
+description: |
+  Rust ecosystem expert covering crate selection, library recommendations, framework
+  comparisons, async runtime choices (tokio, async-std), and common tools.
+triggers:
+  - crate
+  - library
+  - framework
+  - ecosystem
+  - async runtime
+  - tokio
+  - async-std
+  - serde
+  - reqwest
+  - axum
 ---
 
-# Rust 生态
+# Rust Ecosystem Expert
 
-## 核心问题
+## Core Question
 
-**用什么 crate 解决当前问题？**
+**Which crate should I use to solve this problem?**
 
-选择正确的库是高效 Rust 开发的关键。
+Choosing the right library is key to efficient Rust development.
 
 ---
 
-## 异步 Runtime
+## Async Runtimes
 
-| Runtime | 特点 | 适用场景 |
-|---------|------|---------|
-| **tokio** | 最流行、功能全 | 通用异步应用 |
-| **async-std** | 类似 std API | 偏好 std 风格 |
-| **actix** | 高性能 | 高性能 Web 服务 |
-| **async-executors** | 统一接口 | 需要切换 runtime |
+| Runtime | Characteristics | Use Case |
+|---------|----------------|----------|
+| **tokio** | Most popular, feature-rich | General async applications |
+| **async-std** | std-like API | Prefer std-style APIs |
+| **smol** | Minimal, embeddable | Lightweight applications |
+| **async-executors** | Unified interface | Need runtime portability |
 
 ```toml
-# Web 服务
+# Web services
 tokio = { version = "1", features = ["full"] }
 axum = "0.7"
 
-# 轻量级
+# Lightweight
 async-std = "1"
+
+# Minimal
+smol = "2"
 ```
 
 ---
 
-## Web 框架
+## Solution Patterns
 
-| 框架 | 特点 | 性能 |
-|-----|------|------|
-| **axum** | Tower 中间件、类型安全 | 高 |
-| **actix-web** | 最高性能 | 最高 |
-| **rocket** | 开发者友好 | 中 |
-| **warp** | 组合式、Filter | 高 |
+### Pattern 1: Web Service Stack
+
+```toml
+[dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# Web framework
+axum = "0.7"
+
+# Database
+sqlx = { version = "0.7", features = ["runtime-tokio", "postgres"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Error handling
+anyhow = "1"
+thiserror = "1"
+
+# Tracing
+tracing = "0.1"
+tracing-subscriber = "0.3"
+```
+
+### Pattern 2: CLI Tool Stack
+
+```toml
+[dependencies]
+# Argument parsing
+clap = { version = "4", features = ["derive"] }
+
+# Error handling
+anyhow = "1"
+
+# Config
+config = "0.13"
+dotenvy = "0.15"
+
+# Progress
+indicatif = "0.17"
+
+# Terminal colors
+colored = "2"
+```
+
+### Pattern 3: Data Processing
+
+```toml
+[dependencies]
+# Parallelism
+rayon = "1"
+
+# CSV
+csv = "1"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# HTTP client
+reqwest = { version = "0.11", features = ["json", "blocking"] }
+```
 
 ---
 
-## 序列化
+## Web Frameworks
 
-| 库 | 特点 | 性能 |
-|-----|------|------|
-| **serde** | 标准选择 | 高 |
-| **bincode** | 二进制、紧凑 | 最高 |
-| ** postcard** | 无 std、嵌入式 | 高 |
-| **ron** | 可读性好 | 中 |
+| Framework | Characteristics | Performance |
+|-----------|----------------|-------------|
+| **axum** | Tower middleware, type-safe | High |
+| **actix-web** | Highest performance | Highest |
+| **rocket** | Developer-friendly | Medium |
+| **warp** | Compositional, filters | High |
+
+```rust
+// axum example
+use axum::{Router, routing::get, Json};
+use serde::Serialize;
+
+#[derive(Serialize)]
+struct User {
+    id: u64,
+    name: String,
+}
+
+async fn get_user() -> Json<User> {
+    Json(User {
+        id: 1,
+        name: "Alice".to_string(),
+    })
+}
+
+let app = Router::new()
+    .route("/user", get(get_user));
+```
+
+---
+
+## Serialization
+
+| Library | Characteristics | Performance |
+|---------|----------------|-------------|
+| **serde** | Standard choice | High |
+| **bincode** | Binary, compact | Highest |
+| **postcard** | no_std, embedded | High |
+| **ron** | Readable format | Medium |
 
 ```rust
 use serde::{Serialize, Deserialize};
@@ -66,124 +171,319 @@ struct User {
 
 // JSON
 let json = serde_json::to_string(&user)?;
+let user: User = serde_json::from_str(&json)?;
 
-// 二进制
+// Binary (more efficient)
 let bytes = bincode::serialize(&user)?;
+let user: User = bincode::deserialize(&bytes)?;
 ```
 
 ---
 
-## HTTP 客户端
+## HTTP Clients
 
-| 库 | 特点 |
-|-----|------|
-| **reqwest** | 最流行、易用 |
-| **ureq** | 同步、简单 |
-| **surf** | 异步、modern |
+| Library | Characteristics |
+|---------|----------------|
+| **reqwest** | Most popular, easy to use |
+| **ureq** | Sync, simple |
+| **surf** | Async, modern |
+| **hyper** | Low-level, flexible |
 
 ```rust
-// reqwest
+// reqwest - async
 let response = reqwest::Client::new()
     .post("https://api.example.com")
     .json(&payload)
     .send()
+    .await?
+    .json::<Response>()
     .await?;
+
+// ureq - sync (no async runtime needed)
+let response: Response = ureq::post("https://api.example.com")
+    .send_json(&payload)?
+    .into_json()?;
 ```
 
 ---
 
-## 数据库
+## Databases
 
-| 类型 | 库 |
-|-----|------|
+| Type | Library |
+|------|---------|
 | ORM | **sqlx**, diesel, sea-orm |
 | Raw SQL | **sqlx**, tokio-postgres |
 | NoSQL | mongodb, redis |
-| 连接池 | **sqlx**, deadpool, r2d2 |
+| Connection pool | **sqlx**, deadpool, r2d2 |
 
----
+```rust
+// sqlx with compile-time checked queries
+use sqlx::PgPool;
 
-## 并发与并行
+let pool = PgPool::connect(&database_url).await?;
 
-| 场景 | 推荐 |
-|-----|------|
-| 数据并行 | **rayon** |
-| 工作窃取 | **crossbeam**, tokio |
-| 通道 | **tokio::sync**, crossbeam, flume |
-| 原子类型 | **std::sync::atomic** |
-
----
-
-## 错误处理
-
-| 库 | 用途 |
-|-----|------|
-| **thiserror** | 库错误类型 |
-| **anyhow** | 应用错误传播 |
-| **snafu** | 结构化错误 |
-
----
-
-## 常用工具库
-
-| 场景 | 库 |
-|-----|------|
-| 命令行 | **clap** (v4), structopt |
-| 日志 | **tracing**, log |
-| 配置 | **config**, dotenvy |
-| 测试 | **tempfile**, rstest |
-| 时间 | **chrono**, time |
-
----
-
-## Crate 选择原则
-
-1. **活跃维护**：看 GitHub 活跃度、最近更新
-2. **下载量**：crates.io 下载量参考
-3. **MSRV**：最小支持 Rust 版本
-4. **依赖**：依赖数量和安全性
-5. **文档**：完整文档和示例
-6. **License**：MIT/Apache2 兼容性
-
----
-
-## 废弃模式 → 推荐
-
-| 废弃 | 推荐 | 原因 |
-|-----|------|------|
-| `lazy_static` | `std::sync::OnceLock` | std 内置 |
-| `rand::thread_rng` | `rand::rng()` | 新 API |
-| `failure` | `thiserror` + `anyhow` | 更流行 |
-| `serde_derive` | `serde` | 统一导入 |
-| `parking_lot::Mutex` | std::sync::Mutex | 足够快，稳定性优先 |
-
----
-
-## 验证 Crate
-
-```bash
-# 检查安全性
-cargo audit
-
-# 检查许可证
-cargo deny check
-
-# 检查依赖
-cargo tree -i serde
+let user = sqlx::query_as!(
+    User,
+    "SELECT id, name FROM users WHERE id = $1",
+    user_id
+)
+.fetch_one(&pool)
+.await?;
 ```
 
 ---
 
-## 快速参考
+## Concurrency & Parallelism
 
-| 场景 | 推荐 Crate |
-|-----|-----------|
-| Web 服务 | axum + tokio + sqlx |
-| CLI 工具 | clap + anyhow |
-| 序列化 | serde + (json/bincode) |
-| 并行计算 | rayon |
-| 配置管理 | config + dotenvy |
-| 日志追踪 | tracing |
-| 测试 | tempfile + proptest |
-| 日期时间 | chrono |
+| Scenario | Recommendation |
+|----------|---------------|
+| Data parallelism | **rayon** |
+| Work stealing | **crossbeam**, tokio |
+| Channels | **tokio::sync**, crossbeam, flume |
+| Atomics | **std::sync::atomic** |
 
+```rust
+// rayon - easy parallelism
+use rayon::prelude::*;
+
+let sum: i32 = data
+    .par_iter()
+    .map(|x| expensive_computation(x))
+    .sum();
+```
+
+---
+
+## Error Handling
+
+| Library | Use Case |
+|---------|----------|
+| **thiserror** | Library error types |
+| **anyhow** | Application error propagation |
+| **snafu** | Structured errors |
+
+```rust
+// thiserror - for libraries
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+pub enum MyError {
+    #[error("I/O error: {0}")]
+    Io(#[from] std::io::Error),
+
+    #[error("Invalid data: {msg}")]
+    Invalid { msg: String },
+}
+
+// anyhow - for applications
+use anyhow::{Context, Result};
+
+fn load_config() -> Result<Config> {
+    let content = std::fs::read_to_string("config.toml")
+        .context("failed to read config file")?;
+
+    toml::from_str(&content)
+        .context("failed to parse config")
+}
+```
+
+---
+
+## Common Tools
+
+| Scenario | Library |
+|----------|---------|
+| CLI parsing | **clap** (v4), structopt |
+| Logging | **tracing**, log |
+| Config | **config**, dotenvy |
+| Testing | **tempfile**, rstest, proptest |
+| Time | **chrono**, time |
+| Random | **rand** |
+| Regex | **regex** |
+
+---
+
+## Crate Selection Principles
+
+1. **Active maintenance**: Check GitHub activity, recent updates
+2. **Download count**: Reference crates.io downloads
+3. **MSRV**: Minimum Supported Rust Version compatibility
+4. **Dependencies**: Number and security of dependencies
+5. **Documentation**: Complete docs and examples
+6. **License**: MIT/Apache2 compatibility
+
+```bash
+# Check crate info
+cargo info <crate-name>
+
+# Check dependencies
+cargo tree
+
+# Security audit
+cargo audit
+
+# License check
+cargo deny check licenses
+```
+
+---
+
+## Workflow
+
+### Step 1: Identify Need
+
+```
+What problem to solve?
+  → Web service? Choose framework (axum/actix)
+  → CLI tool? Use clap + anyhow
+  → Data processing? Use rayon
+  → Database access? Use sqlx
+```
+
+### Step 2: Evaluate Options
+
+```
+Check:
+  → crates.io download count
+  → GitHub stars and activity
+  → Documentation quality
+  → Recent releases
+  → Community support
+```
+
+### Step 3: Verify Safety
+
+```bash
+# Security audit
+cargo audit
+
+# License compatibility
+cargo deny check
+
+# Dependency tree
+cargo tree -i <crate>
+```
+
+---
+
+## Deprecated Patterns → Modern
+
+| Deprecated | Modern | Reason |
+|-----------|--------|--------|
+| `lazy_static` | `std::sync::OnceLock` | std built-in |
+| `rand::thread_rng` | `rand::rng()` | New API |
+| `failure` | `thiserror` + `anyhow` | More popular |
+| `serde_derive` | `serde` (unified) | Simpler imports |
+
+---
+
+## Quick Reference
+
+| Scenario | Recommended Stack |
+|----------|------------------|
+| Web service | axum + tokio + sqlx + serde |
+| CLI tool | clap + anyhow + config |
+| Serialization | serde + (json/bincode/postcard) |
+| Parallel compute | rayon |
+| Config management | config + dotenvy |
+| Logging | tracing + tracing-subscriber |
+| Testing | tempfile + rstest + proptest |
+| Date/time | chrono or time |
+
+---
+
+## Review Checklist
+
+When selecting crates:
+
+- [ ] Crate is actively maintained (updated within 6 months)
+- [ ] Good documentation and examples
+- [ ] Reasonable dependency count
+- [ ] No known security issues (cargo audit)
+- [ ] Compatible license (MIT/Apache2)
+- [ ] MSRV compatible with project
+- [ ] High download count and community usage
+- [ ] Stable API (1.0+ or widely used)
+
+---
+
+## Verification Commands
+
+```bash
+# Search crates
+cargo search <keyword>
+
+# Get crate info
+cargo info <crate-name>
+
+# Check dependencies
+cargo tree
+
+# Security audit
+cargo audit
+
+# License check
+cargo deny check
+
+# Check for updates
+cargo outdated
+```
+
+---
+
+## Common Pitfalls
+
+### 1. Too Many Dependencies
+
+**Symptom**: Long compile times, dependency conflicts
+
+```toml
+# ❌ Avoid: unnecessary dependencies
+[dependencies]
+# Don't need full tokio if only using channels
+tokio = { version = "1", features = ["full"] }
+
+# ✅ Better: minimal features
+tokio = { version = "1", features = ["sync"] }
+```
+
+### 2. Unmaintained Crates
+
+**Symptom**: Security vulnerabilities, incompatibilities
+
+```bash
+# Check last update
+cargo info <crate-name>
+
+# Check for alternatives
+cargo search <similar-crate>
+```
+
+### 3. Version Conflicts
+
+**Symptom**: Build failures, duplicate dependencies
+
+```bash
+# Diagnose conflicts
+cargo tree -d
+
+# Use same version across workspace
+[workspace.dependencies]
+serde = "1"
+```
+
+---
+
+## Related Skills
+
+- **rust-async** - Async runtime patterns
+- **rust-web** - Web framework usage
+- **rust-error** - Error handling libraries
+- **rust-testing** - Testing libraries
+- **rust-performance** - Performance-critical crates
+
+---
+
+## Localized Reference
+
+- **Chinese version**: [SKILL_ZH.md](./SKILL_ZH.md) - 完整中文版本，包含所有内容

@@ -1,55 +1,77 @@
 ---
 name: rust-concurrency
-description: 并发与异步专家。处理 Send, Sync, thread, async, await, tokio, channel, Mutex, deadlock,
-  race condition, 并发, 异步, 死锁等问题。触发词：thread, spawn, channel, mpsc, Mutex, RwLock, Atomic,
-  async, await, Future, tokio, deadlock, race condition
+description: |
+  Concurrency and async programming expert. Handles Send, Sync, threads, async/await, tokio,
+  channels, Mutex, RwLock, deadlock prevention, and race condition debugging.
+triggers:
+  - thread
+  - spawn
+  - channel
+  - mpsc
+  - Mutex
+  - RwLock
+  - Atomic
+  - async
+  - await
+  - Future
+  - tokio
+  - deadlock
+  - race condition
+  - Send
+  - Sync
 ---
 
-# 并发与异步专家
+# Concurrency & Async Programming Expert
 
-## 核心问题
+## Core Question
 
-**数据如何在线程间安全传递？**
+**How can data be safely shared and passed between threads?**
 
-这是并发的本质。Rust 的类型系统在这里发挥最大威力。
-
----
-
-## 并发 vs 异步
-
-| 维度 | 并发 (thread) | 异步 (async) |
-|-----|--------------|-------------|
-| 内存 | 每个线程有独立栈 | 单线程复用 |
-| 阻塞 | 阻塞 OS 线程 | 不阻塞，yield |
-| 适用 | CPU 密集型 | I/O 密集型 |
-| 复杂度 | 简单直接 | 需要运行时 |
-
----
-
-## Send/Sync 快速判断
-
-### Send - 可以在线程间转移所有权
-
-```
-基本类型 → 自动 Send
-包含引用 → 自动 Send
-Raw pointer → 非 Send
-Rc → 非 Send（引用计数非原子）
-```
-
-### Sync - 可以在线程间共享引用
-
-```
-&T where T: Sync → 自动 Sync
-RefCell → 非 Sync（运行时检查非线程安全）
-MutexGuard → 非 Sync（未实现）
-```
+This is the essence of concurrency. Rust's type system shines brightest here, preventing data races at compile time.
 
 ---
 
-## 常见模式
+## Concurrency vs Async
 
-### 1. 共享可变状态
+| Dimension | Concurrency (threads) | Async (async/await) |
+|-----------|----------------------|---------------------|
+| Memory | Each thread has separate stack | Single thread reused |
+| Blocking | Blocks OS thread | Doesn't block, yields |
+| Use case | CPU-intensive | I/O-intensive |
+| Complexity | Simple and direct | Requires runtime |
+
+**Key Insight**: Threads for parallelism, async for concurrency.
+
+---
+
+## Send/Sync Quick Reference
+
+### Send - Can Transfer Ownership Between Threads
+
+```
+Basic types → automatically Send
+Contains references → automatically Send
+Raw pointers → NOT Send
+Rc → NOT Send (non-atomic ref counting)
+```
+
+**Rule**: If all fields are Send, the type is Send.
+
+### Sync - Can Share References Between Threads
+
+```
+&T where T: Sync → automatically Sync
+RefCell → NOT Sync (runtime checking not thread-safe)
+MutexGuard → NOT Sync (intentionally)
+```
+
+**Rule**: `&T` is Send if `T` is Sync.
+
+---
+
+## Solution Patterns
+
+### Pattern 1: Shared Mutable State
 
 ```rust
 use std::sync::{Arc, Mutex};
@@ -71,7 +93,11 @@ for handle in handles {
 }
 ```
 
-### 2. 消息传递
+**When to use**: Multiple threads need to mutate shared data.
+
+**Trade-offs**: Lock contention can limit scalability.
+
+### Pattern 2: Message Passing
 
 ```rust
 use std::sync::mpsc;
@@ -85,7 +111,11 @@ thread::spawn(move || {
 println!("{}", rx.recv().unwrap());
 ```
 
-### 3. 异步运行时
+**When to use**: Threads communicate without shared state.
+
+**Trade-offs**: Copy/move overhead for messages.
+
+### Pattern 3: Async Runtime (Tokio)
 
 ```rust
 use tokio;
@@ -93,30 +123,290 @@ use tokio;
 #[tokio::main]
 async fn main() {
     let handle = tokio::spawn(async {
-        // 异步任务
+        // Async task
+        fetch_data().await
     });
-    
-    handle.await.unwrap();
+
+    let result = handle.await.unwrap();
+}
+```
+
+**When to use**: I/O-bound operations (network, filesystem).
+
+**Trade-offs**: Requires async runtime, function coloring.
+
+---
+
+## Workflow
+
+### Step 1: Choose Concurrency Model
+
+```
+CPU-intensive task?
+  → Use threads (rayon for data parallelism)
+
+I/O-intensive task?
+  → Use async/await (tokio, async-std)
+
+Both?
+  → Use async with spawn_blocking for CPU work
+```
+
+### Step 2: Determine Data Sharing Strategy
+
+```
+No shared state?
+  → Message passing (mpsc channels)
+
+Read-heavy shared state?
+  → Arc<RwLock<T>>
+
+Write-heavy shared state?
+  → Arc<Mutex<T>> or lock-free alternatives
+
+Simple counters/flags?
+  → Atomic types (AtomicUsize, AtomicBool)
+```
+
+### Step 3: Verify Thread Safety
+
+```
+Check Send bounds
+  → Can transfer ownership?
+
+Check Sync bounds
+  → Can share references?
+
+Test for data races
+  → Use miri, loom, or thread sanitizers
+```
+
+---
+
+## Common Errors & Solutions
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| E0277 Send not satisfied | Contains non-Send types | Check all fields, replace Rc with Arc |
+| E0277 Sync not satisfied | Shared reference type not Sync | Wrap with Mutex/RwLock |
+| Deadlock | Inconsistent lock ordering | Establish and follow lock hierarchy |
+| MutexGuard across await | Lock held while suspended | Scope lock before await point |
+| Data race (runtime) | Improper synchronization | Use proper sync primitives |
+
+---
+
+## Deadlock Prevention
+
+### Rule 1: Consistent Lock Ordering
+
+```rust
+// Always lock A before B
+let _lock_a = resource_a.lock();
+let _lock_b = resource_b.lock();
+// Never lock B before A elsewhere
+```
+
+### Rule 2: Minimize Lock Scope
+
+```rust
+// ❌ Bad: lock held too long
+let guard = data.lock();
+do_work(&guard);
+more_work();  // still locked
+
+// ✅ Good: release early
+{
+    let guard = data.lock();
+    do_work(&guard);
+}  // lock released
+more_work();
+```
+
+### Rule 3: Avoid Locks Across Await
+
+```rust
+// ❌ Bad: lock across await
+let guard = mutex.lock().unwrap();
+async_call().await;  // DEADLOCK RISK
+
+// ✅ Good: drop lock before await
+let value = {
+    let guard = mutex.lock().unwrap();
+    guard.clone()
+};  // lock dropped
+async_call().await;
+```
+
+---
+
+## Performance Considerations
+
+| Strategy | When to Use | Trade-offs |
+|----------|-------------|------------|
+| Fine-grained locking | Lock small portions | More complex, avoid contention |
+| RwLock | Read-heavy workloads | Slower writes than Mutex |
+| Atomics | Simple counters/flags | Limited operations, no compound ops |
+| Message passing | Avoid shared state | Copy/move overhead |
+| Lock-free structures | High contention | Complex, use crates (crossbeam) |
+
+---
+
+## Async-Specific Patterns
+
+### Spawning Tasks
+
+```rust
+// Spawn independent task
+tokio::spawn(async move {
+    process_data(data).await
+});
+
+// Spawn with 'static requirement
+tokio::spawn(async move {
+    let data = Arc::clone(&data);  // Share ownership
+    work_with(data).await
+});
+```
+
+### Concurrent Operations
+
+```rust
+use tokio::join;
+
+// Wait for all to complete
+let (result1, result2, result3) = tokio::join!(
+    fetch_user(),
+    fetch_posts(),
+    fetch_comments()
+);
+
+// First to complete
+let result = tokio::select! {
+    r = fetch_from_primary() => r,
+    r = fetch_from_backup() => r,
+};
+```
+
+### Timeout and Cancellation
+
+```rust
+use tokio::time::{timeout, Duration};
+
+match timeout(Duration::from_secs(5), long_operation()).await {
+    Ok(result) => result,
+    Err(_) => {
+        // Operation timed out
+    }
 }
 ```
 
 ---
 
-## 常见错误与解决
+## Review Checklist
 
-| 错误 | 原因 | 解决 |
-|-----|-----|-----|
-| E0277 Send not satisfied | 包含非 Send 类型 | 检查所有字段 |
-| E0277 Sync not satisfied | 共享引用类型非 Sync | 用 Mutex/RwLock 包装 |
-| Deadlock | 锁顺序不一致 | 统一加锁顺序 |
-| MutexGuard across await | 锁持有时挂起 | 缩小锁的作用域 |
+When reviewing concurrent code:
+
+- [ ] All shared data properly synchronized (Arc/Mutex/RwLock)
+- [ ] Send/Sync bounds satisfied for types crossing threads
+- [ ] No locks held across await points
+- [ ] Consistent lock ordering to prevent deadlocks
+- [ ] Appropriate choice between threads and async
+- [ ] Message passing channels used correctly (no deadlocks)
+- [ ] Atomic operations used for simple shared state
+- [ ] Thread pool sized appropriately for workload
+- [ ] Error handling for lock poisoning
+- [ ] Graceful shutdown and resource cleanup
 
 ---
 
-## 性能考量
+## Verification Commands
 
-- 锁的粒度要细（锁住必要部分，不是整个数据结构）
-- 读写锁适合读多写少场景
-- 原子操作比锁更轻量，但只适合简单操作
-- 消息传递避免共享状态，但有复制开销
+```bash
+# Check compilation with thread safety
+cargo check
 
+# Run tests with thread sanitizer (requires nightly)
+RUSTFLAGS="-Z sanitizer=thread" cargo +nightly test
+
+# Test with miri (detect undefined behavior)
+cargo +nightly miri test
+
+# Use loom for exhaustive concurrency testing
+cargo test --features loom
+
+# Check for race conditions
+cargo clippy -- -W clippy::mutex_atomic
+```
+
+---
+
+## Common Pitfalls
+
+### 1. Rc in Multi-threaded Context
+
+**Symptom**: E0277 error, Rc<T> cannot be sent between threads
+
+**Fix**: Replace `Rc` with `Arc`
+
+```rust
+// ❌ Bad
+let data = Rc::new(value);
+thread::spawn(move || { /* use data */ });
+
+// ✅ Good
+let data = Arc::new(value);
+thread::spawn(move || { /* use data */ });
+```
+
+### 2. Lock Across Await Points
+
+**Symptom**: Deadlock or "future cannot be sent between threads safely"
+
+**Fix**: Drop lock before await
+
+```rust
+// ❌ Bad
+let guard = mutex.lock().unwrap();
+async_fn().await;
+
+// ✅ Good
+let value = mutex.lock().unwrap().clone();
+drop(guard);  // Explicit drop
+async_fn().await;
+```
+
+### 3. Missing Arc Clone
+
+**Symptom**: Borrow checker errors when spawning threads
+
+**Fix**: Clone Arc before moving into closure
+
+```rust
+// ❌ Bad
+let data = Arc::new(vec![1, 2, 3]);
+thread::spawn(move || { /* data moved */ });
+// data is gone
+
+// ✅ Good
+let data = Arc::new(vec![1, 2, 3]);
+let data_clone = Arc::clone(&data);
+thread::spawn(move || { /* data_clone moved */ });
+// data still available
+```
+
+---
+
+## Related Skills
+
+- **rust-async** - Advanced async patterns (Stream, select, backpressure)
+- **rust-async-pattern** - Async architecture and design patterns
+- **rust-ownership** - Understanding ownership for thread safety
+- **rust-mutability** - Interior mutability patterns (Cell, RefCell)
+- **rust-performance** - Concurrency performance optimization
+- **rust-unsafe** - Writing safe concurrent abstractions
+
+---
+
+## Localized Reference
+
+- **Chinese version**: [SKILL_ZH.md](./SKILL_ZH.md) - 完整中文版本，包含所有内容
