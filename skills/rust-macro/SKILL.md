@@ -1,9 +1,13 @@
 ---
 name: rust-macro
-description: |
-  Macro and procedural metaprogramming expert covering macro_rules!, derive macros,
+description: 'Macro and procedural metaprogramming expert covering macro_rules!, derive
+  macros,
+
   proc-macros, compile-time computation, and code generation patterns.
-triggers:
+
+  '
+metadata:
+  triggers:
   - macro
   - derive
   - proc-macro

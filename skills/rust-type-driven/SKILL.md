@@ -1,9 +1,13 @@
 ---
 name: rust-type-driven
-description: |
-  Type-driven design expert covering newtype pattern, type state, PhantomData, marker traits,
+description: 'Type-driven design expert covering newtype pattern, type state, PhantomData,
+  marker traits,
+
   builder pattern, compile-time validation, sealed traits, and zero-sized types (ZST).
-triggers:
+
+  '
+metadata:
+  triggers:
   - type-driven
   - newtype
   - type state

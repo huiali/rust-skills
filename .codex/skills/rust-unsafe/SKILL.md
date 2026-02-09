@@ -1,9 +1,13 @@
 ---
 name: rust-unsafe
-description: |
-  Unsafe code and FFI expert covering raw pointers (*mut, *const), FFI patterns, transmute,
+description: 'Unsafe code and FFI expert covering raw pointers (*mut, *const), FFI
+  patterns, transmute,
+
   union, #[repr(C)], SAFETY comments, soundness rules, and undefined behavior prevention.
-triggers:
+
+  '
+metadata:
+  triggers:
   - unsafe
   - raw pointer
   - FFI

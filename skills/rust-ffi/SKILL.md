@@ -1,9 +1,13 @@
 ---
 name: rust-ffi
-description: |
-  FFI cross-language interop expert covering C/C++ bindings, bindgen, cbindgen, PyO3,
+description: 'FFI cross-language interop expert covering C/C++ bindings, bindgen,
+  cbindgen, PyO3,
+
   JNI, memory layout, data conversion, and safe FFI patterns.
-triggers:
+
+  '
+metadata:
+  triggers:
   - FFI
   - C interop
   - C++ interop

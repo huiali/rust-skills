@@ -1,9 +1,13 @@
 ---
 name: rust-learner
-description: |
-  Rust learning and ecosystem tracking expert covering version updates, new features, RFC tracking,
+description: 'Rust learning and ecosystem tracking expert covering version updates,
+  new features, RFC tracking,
+
   crate updates, best practice evolution, and learning resources.
-triggers:
+
+  '
+metadata:
+  triggers:
   - learning
   - latest version
   - what's new

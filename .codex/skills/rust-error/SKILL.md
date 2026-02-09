@@ -1,13 +1,17 @@
 ---
 name: rust-error
-description: |
-  Error handling expert covering Result, Option, panic strategies, custom error types with
+description: 'Error handling expert covering Result, Option, panic strategies, custom
+  error types with
+
   thiserror/anyhow, error propagation patterns, and context-rich error chains.
-triggers:
+
+  '
+metadata:
+  triggers:
   - Result
   - Error
   - panic
-  - "?"
+  - '?'
   - unwrap
   - expect
   - anyhow

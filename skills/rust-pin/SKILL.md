@@ -1,9 +1,13 @@
 ---
 name: rust-pin
-description: |
-  Pin and self-referential types expert covering Pin, Unpin, Future, async state machines,
+description: 'Pin and self-referential types expert covering Pin, Unpin, Future, async
+  state machines,
+
   pinning projection, and memory stability guarantees.
-triggers:
+
+  '
+metadata:
+  triggers:
   - Pin
   - Unpin
   - self-referential

@@ -1,9 +1,13 @@
 ---
 name: rust-ecosystem
-description: |
-  Rust ecosystem expert covering crate selection, library recommendations, framework
+description: 'Rust ecosystem expert covering crate selection, library recommendations,
+  framework
+
   comparisons, async runtime choices (tokio, async-std), and common tools.
-triggers:
+
+  '
+metadata:
+  triggers:
   - crate
   - library
   - framework

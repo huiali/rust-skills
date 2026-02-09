@@ -1,9 +1,13 @@
 ---
 name: rust-ownership
-description: |
-  Ownership, borrowing, and lifetime expert. Handles compiler errors E0382, E0597, E0506, E0507,
+description: 'Ownership, borrowing, and lifetime expert. Handles compiler errors E0382,
+  E0597, E0506, E0507,
+
   E0515, E0716, E0106 and provides systematic solutions for memory safety patterns.
-triggers:
+
+  '
+metadata:
+  triggers:
   - ownership
   - borrow
   - lifetime

@@ -1,11 +1,19 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git push)",
+      "Bash(git commit:*)",
+      "Bash(ls:*)",
+      "Bash(while read dir)",
+      "Bash(do if [ -f \"skills/$dir/SKILL.md\" ])",
+      "Bash(then head -20 \"skills/$dir/SKILL.md\")",
+      "Bash(fi)",
+      "Bash(done)"
+    ]
+  },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "rust-skill"
-  ],
-  "permissions": {
-    "allow": [
-      "Bash(git add:*)"
-    ]
-  }
+  ]
 }

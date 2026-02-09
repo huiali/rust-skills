@@ -1,9 +1,13 @@
 ---
 name: rust-concurrency
-description: |
-  Concurrency and async programming expert. Handles Send, Sync, threads, async/await, tokio,
+description: 'Concurrency and async programming expert. Handles Send, Sync, threads,
+  async/await, tokio,
+
   channels, Mutex, RwLock, deadlock prevention, and race condition debugging.
-triggers:
+
+  '
+metadata:
+  triggers:
   - thread
   - spawn
   - channel

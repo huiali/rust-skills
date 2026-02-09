@@ -1,9 +1,14 @@
 ---
 name: rust-web
-description: |
-  Rust web development expert covering HTTP frameworks (axum, actix), REST API design, handler
-  patterns, state management, middleware, database integration, and domain-driven architecture.
-triggers:
+description: 'Rust web development expert covering HTTP frameworks (axum, actix),
+  REST API design, handler
+
+  patterns, state management, middleware, database integration, and domain-driven
+  architecture.
+
+  '
+metadata:
+  triggers:
   - web
   - HTTP
   - REST

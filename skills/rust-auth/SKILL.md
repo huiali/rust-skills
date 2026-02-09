@@ -1,9 +1,13 @@
 ---
 name: rust-auth
-description: |
-  Authentication and authorization expert covering JWT, API keys, OAuth, RBAC, password hashing,
+description: 'Authentication and authorization expert covering JWT, API keys, OAuth,
+  RBAC, password hashing,
+
   distributed token storage, and session management patterns.
-triggers:
+
+  '
+metadata:
+  triggers:
   - authentication
   - authorization
   - JWT

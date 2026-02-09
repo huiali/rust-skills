@@ -1,9 +1,13 @@
 ---
 name: rust-async
-description: |
-  Advanced async patterns expert. Handles Stream processing, backpressure control, select/join
+description: 'Advanced async patterns expert. Handles Stream processing, backpressure
+  control, select/join
+
   operations, cancellation, Future trait implementation, and async runtime optimization.
-triggers:
+
+  '
+metadata:
+  triggers:
   - async
   - Stream
   - backpressure

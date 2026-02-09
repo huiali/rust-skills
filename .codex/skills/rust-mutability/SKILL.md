@@ -1,9 +1,13 @@
 ---
 name: rust-mutability
-description: |
-  Interior mutability expert covering Cell, RefCell, Mutex, RwLock patterns, borrow conflicts
+description: 'Interior mutability expert covering Cell, RefCell, Mutex, RwLock patterns,
+  borrow conflicts
+
   (E0596, E0499, E0502), and thread-safe mutation strategies.
-triggers:
+
+  '
+metadata:
+  triggers:
   - mutability
   - mut
   - Cell

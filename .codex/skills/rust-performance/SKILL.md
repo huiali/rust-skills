@@ -1,9 +1,13 @@
 ---
 name: rust-performance
-description: |
-  Performance optimization expert covering profiling, benchmarking, memory allocation, SIMD, cache
+description: 'Performance optimization expert covering profiling, benchmarking, memory
+  allocation, SIMD, cache
+
   optimization, false sharing, lock contention, and NUMA-aware programming.
-triggers:
+
+  '
+metadata:
+  triggers:
   - performance
   - optimization
   - benchmark

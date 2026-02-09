@@ -1,9 +1,13 @@
 ---
 name: rust-coding
-description: |
-  Rust coding conventions expert covering naming, formatting, comments, clippy, rustfmt,
+description: 'Rust coding conventions expert covering naming, formatting, comments,
+  clippy, rustfmt,
+
   lints, code style, best practices, and idiomatic patterns.
-triggers:
+
+  '
+metadata:
+  triggers:
   - coding convention
   - naming
   - formatting

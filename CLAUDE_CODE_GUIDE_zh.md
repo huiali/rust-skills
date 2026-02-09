@@ -23,7 +23,7 @@
 ```bash
 git clone https://github.com/huiali/rust-skills.git
 cd rust-skills
-```
+```   
 
 ### 2. 配置 Claude Code
 

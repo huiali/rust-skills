@@ -1,9 +1,13 @@
 ---
 name: rust-anti-pattern
-description: |
-  Rust anti-patterns and common mistakes expert. Handles code review issues with clone abuse,
+description: 'Rust anti-patterns and common mistakes expert. Handles code review issues
+  with clone abuse,
+
   unwrap in production, String misuse, index loops, and refactoring guidance.
-triggers:
+
+  '
+metadata:
+  triggers:
   - anti-pattern
   - common mistake
   - clone abuse
